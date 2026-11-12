@@ -23,4 +23,8 @@ return [
     'saved' => 'Saved',
     'password_changed' => 'Password changed',
     'session_expired' => 'Session expired. Sign in again.',
+    'menu' => 'Menu',
+    'breadcrumb' => 'Breadcrumb',
+    'brand_mark' => 'CS',
+    'password_hint' => 'At least 8 characters',
 ];

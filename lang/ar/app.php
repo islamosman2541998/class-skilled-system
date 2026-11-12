@@ -23,4 +23,8 @@ return [
     'saved' => 'تم الحفظ',
     'password_changed' => 'تم تغيير كلمة المرور',
     'session_expired' => 'انتهت الجلسة. سجّل الدخول من جديد.',
+    'menu' => 'القائمة',
+    'breadcrumb' => 'مسار التنقل',
+    'brand_mark' => 'CS',
+    'password_hint' => '8 أحرف على الأقل',
 ];

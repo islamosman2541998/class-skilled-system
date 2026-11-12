@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\IdleTimeout;
@@ -16,6 +17,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::get('/', HomeController::class)->name('home');
+    Route::post('/locale/{locale}', LocaleController::class)->whereIn('locale', ['ar', 'en'])->name('locale.switch');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');

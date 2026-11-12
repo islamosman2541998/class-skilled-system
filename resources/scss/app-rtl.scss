@@ -1,0 +1,3 @@
+// Same source as app-ltr.scss. The Vite config runs rtlcss on this entry only,
+// which mirrors Bootstrap's physical rules. Our own rules use logical properties.
+@import 'app';

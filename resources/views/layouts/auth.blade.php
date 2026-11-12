@@ -1,12 +1,28 @@
+@php
+    $company = app(\App\Settings\CompanySettings::class);
+    $companyName = app()->getLocale() === 'ar' ? $company->name_ar : ($company->name_en ?: $company->name_ar);
+    $logo = $company->login_logo_path ?: $company->logo_path;
+@endphp
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+<html lang="{{ app()->getLocale() }}" dir="{{ $dir }}">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', __('app.name'))</title>
+    @include('partials.head')
 </head>
 <body>
-    <main>@yield('content')</main>
+    <main class="auth-page">
+        <div class="auth-card">
+            <div class="auth-brand">
+                @if ($logo)
+                    <img src="{{ Storage::disk('public')->url($logo) }}" alt="">
+                @else
+                    <span class="brand-mark" aria-hidden="true">{{ __('app.brand_mark') }}</span>
+                @endif
+                <span>{{ $companyName }}</span>
+            </div>
+
+            @yield('content')
+        </div>
+    </main>
+    @include('partials.flash')
 </body>
 </html>

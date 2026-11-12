@@ -1,0 +1,99 @@
+// Below 992px the sidebar leaves the grid and slides in from the start side.
+
+.sidebar-backdrop {
+    display: none;
+}
+
+@media (max-width: 991.98px) {
+    .app,
+    .app.is-collapsed {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .app-sidebar {
+        position: fixed;
+        inset-block: 0;
+        inset-inline-start: calc(-1 * var(--sidebar-w) - 8px);
+        z-index: 1045;
+        width: var(--sidebar-w);
+        transition: inset-inline-start .2s ease;
+    }
+
+    .app.is-collapsed {
+        .brand-name,
+        .side-link span:not(.icon) {
+            display: inline;
+        }
+
+        .nav-heading {
+            display: flex;
+        }
+
+        .sidebar-brand,
+        .side-link {
+            justify-content: flex-start;
+            padding-inline: .625rem;
+        }
+
+        .sidebar-brand {
+            padding-inline: 1rem;
+        }
+    }
+
+    .app.sidebar-open {
+        .app-sidebar {
+            inset-inline-start: 0;
+        }
+
+        .sidebar-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 1040;
+            background: rgba(12, 18, 43, .4);
+        }
+    }
+
+    .app-topbar {
+        padding-inline: .75rem;
+    }
+
+    .app-content {
+        padding: 1rem .75rem 1.5rem;
+    }
+
+    .user-chip .user-name {
+        display: none;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .page-title {
+        font-size: 1.1875rem;
+    }
+
+    .page-actions {
+        width: 100%;
+    }
+
+    .sticky-actions {
+        margin-inline: -.75rem;
+        border-radius: 0;
+        border-inline: 0;
+    }
+
+    .sticky-actions .btn {
+        flex: 1;
+    }
+
+    #toast-container > div {
+        width: calc(100vw - 24px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+}
