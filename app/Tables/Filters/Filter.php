@@ -4,7 +4,6 @@ namespace App\Tables\Filters;
 
 use Closure;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 
 /**
  * A filter shown above a DataTable. The value lives in DataTable::$filters[$key].
@@ -43,9 +42,6 @@ abstract class Filter
         return __($this->labelKey);
     }
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     public function apply(Builder $query, mixed $value): void
     {
         if ($this->isBlank($value)) {
@@ -72,14 +68,8 @@ abstract class Filter
     /** Text of the chip shown while the filter is active. */
     abstract public function describe(mixed $value): string;
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     abstract protected function constrain(Builder $query, mixed $value): void;
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     protected function qualified(Builder $query): string
     {
         $column = $this->column ?? $this->key;

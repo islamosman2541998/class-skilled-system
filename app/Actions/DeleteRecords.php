@@ -14,9 +14,6 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DeleteRecords
 {
-    /**
-     * @param  Builder<Model>  $query
-     */
     public function handle(Builder $query, User $by): DeleteResult
     {
         $result = new DeleteResult;

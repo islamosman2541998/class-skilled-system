@@ -8,4 +8,5 @@ return [
     'confirm_mismatch' => 'The value does not match',
     'unsaved_changes' => 'There are unsaved changes.',
     'no_results' => 'No results',
+    'request_failed' => 'The request could not be completed.',
 ];

@@ -21,7 +21,7 @@ export function initForms() {
     document.addEventListener('submit', (event) => {
         const form = event.target;
 
-        if (!(form instanceof HTMLFormElement) || event.defaultPrevented) {
+        if (!(form instanceof HTMLFormElement) || event.defaultPrevented || form.hasAttribute('data-ajax')) {
             return;
         }
 

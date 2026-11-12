@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Tables\Column;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Spatie\SimpleExcel\SimpleExcelWriter;
@@ -16,7 +15,6 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 class TableExporter
 {
     /**
-     * @param  Builder<Model>  $query
      * @param  list<Column>  $columns
      */
     public function download(string $fileName, Builder $query, array $columns): BinaryFileResponse
@@ -32,7 +30,6 @@ class TableExporter
     }
 
     /**
-     * @param  Builder<Model>  $query
      * @param  list<Column>  $columns
      * @return int number of data rows written
      */

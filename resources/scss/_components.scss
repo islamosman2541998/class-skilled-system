@@ -687,3 +687,67 @@ tr.is-selected > td,
         justify-content: space-between;
     }
 }
+
+// List switcher and drag ordering
+.list-switch {
+    display: flex;
+    gap: .35rem;
+    margin-bottom: .75rem;
+    padding-bottom: .25rem;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.list-switch-item {
+    flex-shrink: 0;
+    padding: .3rem .75rem;
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    background: #fff;
+    color: var(--c-ink);
+    font-size: .84375rem;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &:hover {
+        border-color: #B9C3D1;
+        color: var(--c-navy);
+        text-decoration: none;
+    }
+
+    &.is-active {
+        border-color: var(--c-navy);
+        background: var(--c-navy);
+        color: #fff;
+    }
+}
+
+.sort-list {
+    display: grid;
+    gap: .35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.sort-item {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .45rem .6rem;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: #fff;
+    font-size: .875rem;
+
+    &.is-dragging {
+        background: var(--c-paper);
+        border-style: dashed;
+    }
+}
+
+.sort-handle {
+    color: var(--c-muted);
+    cursor: grab;
+    touch-action: none;
+}

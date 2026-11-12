@@ -34,7 +34,7 @@ class UsersTable extends DataTable
             Column::make('name', 'app.full_name')->sortable()->onCard(),
             Column::make('email', 'app.email')->sortable()->onCard(),
             Column::make('phone', 'app.phone'),
-            Column::make('roles', 'users.roles')->format(fn (User $user) => $user->roles->map(fn (Role $role) => $role->label)->implode('، '))->onCard(),
+            Column::make('roles', 'users.roles')->format(fn (User $user) => $user->roles->pluck('label')->implode('، '))->onCard(),
             Column::make('is_active', 'users.status')->sortable()->view('users.partials.status')
                 ->exportAs(fn (User $user) => $user->is_active ? __('users.active') : __('users.inactive'))->onCard(),
             Column::make('last_login_at', 'users.last_login')->sortable()

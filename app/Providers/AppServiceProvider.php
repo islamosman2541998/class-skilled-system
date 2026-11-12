@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Lookup;
 use App\Models\User;
 use App\Support\Menu;
 use App\Support\TrashRegistry;
@@ -26,11 +27,13 @@ class AppServiceProvider extends ServiceProvider
         $this->registerNavigation();
 
         TrashRegistry::register(User::class);
+        TrashRegistry::register(Lookup::class);
     }
 
     private function registerNavigation(): void
     {
         Menu::register('admin', ['label' => 'users.users', 'icon' => 'users', 'route' => 'users.index', 'permission' => 'users.view']);
         Menu::register('admin', ['label' => 'users.roles', 'icon' => 'shield-lock', 'route' => 'roles.index', 'permission' => 'roles.view']);
+        Menu::register('admin', ['label' => 'settings.lists_title', 'icon' => 'list-details', 'route' => 'lookups.index', 'params' => ['type' => 'service'], 'permission' => 'lookups.view']);
     }
 }

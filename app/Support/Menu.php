@@ -87,20 +87,7 @@ class Menu
             return $request->routeIs('home');
         }
 
-        $base = explode('.', $item['route'])[0];
-
-        if (! $request->routeIs($base.'.*')) {
-            return false;
-        }
-
-        foreach ($item['params'] ?? [] as $name => $value) {
-            $current = $request->route($name);
-
-            if ((string) ($current instanceof \BackedEnum ? $current->value : $current) !== (string) $value) {
-                return false;
-            }
-        }
-
-        return true;
+        // A section stays highlighted on all of its pages (index, create, edit, other lists).
+        return $request->routeIs(explode('.', $item['route'])[0].'.*');
     }
 }

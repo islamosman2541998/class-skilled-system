@@ -58,8 +58,6 @@ abstract class DataTable extends Component
 
     /**
      * The unfiltered query with its eager loads.
-     *
-     * @return Builder<Model>
      */
     abstract protected function query(): Builder;
 
@@ -247,8 +245,6 @@ abstract class DataTable extends Component
 
     /**
      * Search, filters, date range and trash applied; no ordering and no paging.
-     *
-     * @return Builder<Model>
      */
     protected function filteredQuery(): Builder
     {
@@ -365,9 +361,6 @@ abstract class DataTable extends Component
         return null;
     }
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     private function applySearch(Builder $query): void
     {
         $term = trim($this->search);
@@ -395,9 +388,6 @@ abstract class DataTable extends Component
         });
     }
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     private function applyDateRange(Builder $query): void
     {
         $column = $this->dateColumn();

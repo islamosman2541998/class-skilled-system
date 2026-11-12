@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\LookupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -30,4 +31,11 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
+
+    Route::prefix('settings')->group(function () {
+        Route::get('/lists/{type}', [LookupController::class, 'index'])->name('lookups.index');
+        Route::post('/lists/{type}', [LookupController::class, 'store'])->name('lookups.store');
+        Route::post('/lists/{type}/reorder', [LookupController::class, 'reorder'])->name('lookups.reorder');
+        Route::put('/lists/{type}/{lookup}', [LookupController::class, 'update'])->name('lookups.update');
+    });
 });

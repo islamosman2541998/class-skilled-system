@@ -311,9 +311,6 @@ trait WithTableActions
         $this->preferenceLoaded = true;
     }
 
-    /**
-     * @return Builder<Model>
-     */
     private function trashedQuery(): Builder
     {
         abort_unless($this->usesSoftDeletes(), 403);
@@ -321,17 +318,11 @@ trait WithTableActions
         return $this->query()->onlyTrashed(); // @phpstan-ignore method.notFound
     }
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     private function deleteQuery(Builder $query): DeleteResult
     {
         return app(DeleteRecords::class)->handle($query, auth()->user());
     }
 
-    /**
-     * @param  Builder<Model>  $query
-     */
     private function exportQuery(Builder $query): BinaryFileResponse
     {
         return app(TableExporter::class)->download(

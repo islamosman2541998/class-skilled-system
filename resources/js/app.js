@@ -7,6 +7,8 @@ import { initForms } from './ui/forms';
 import { initSelects } from './ui/select';
 import { initDatepickers } from './ui/datepicker';
 import { initSidebar } from './ui/sidebar';
+import { initAjaxForms } from './ui/ajax-form';
+import { initSortables } from './ui/sortable';
 
 window.$ = window.jQuery = $;
 window.bootstrap = { Dropdown, Collapse, Modal };
@@ -22,6 +24,8 @@ $(() => {
     initConfirm();
     initForms();
     initSidebar();
+    initAjaxForms();
+    initSortables();
     window.initUi();
 });
 
