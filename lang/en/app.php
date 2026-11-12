@@ -30,4 +30,5 @@ return [
     'add' => 'Add',
     'back' => 'Back',
     'optional' => 'Optional',
+    'comma' => ', ',
 ];

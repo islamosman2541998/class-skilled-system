@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreRoleRequest;
 use App\Http\Requests\UpdateRoleRequest;
 use App\Models\Role;
+use App\Services\ActivityLogger;
 use App\Support\PermissionRegistry;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -41,7 +42,7 @@ class RoleController extends Controller
             'is_system' => false,
         ])->save();
 
-        $role->syncPermissions($request->validated('permissions', []));
+        $this->syncPermissions($role, $request->validated('permissions', []));
 
         return redirect()->route('roles.index')->with('success', __('app.saved'));
     }
@@ -70,10 +71,25 @@ class RoleController extends Controller
         $role->save();
 
         if (! $role->is_system) {
-            $role->syncPermissions($request->validated('permissions', []));
+            $this->syncPermissions($role, $request->validated('permissions', []));
         }
 
         return redirect()->route('roles.index')->with('success', __('app.saved'));
+    }
+
+    /**
+     * @param  list<string>  $permissions
+     */
+    private function syncPermissions(Role $role, array $permissions): void
+    {
+        $before = $role->permissions()->pluck('name')->sort()->values()->all();
+        $after = collect($permissions)->sort()->values()->all();
+
+        $role->syncPermissions($permissions);
+
+        if ($before !== $after) {
+            ActivityLogger::record('permissions_changed', $role, ['old' => $before, 'attributes' => $after], 'roles');
+        }
     }
 
     private function form(Role $role): View

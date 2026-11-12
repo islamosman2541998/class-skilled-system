@@ -35,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
         Menu::register('admin', ['label' => 'users.users', 'icon' => 'users', 'route' => 'users.index', 'permission' => 'users.view']);
         Menu::register('admin', ['label' => 'users.roles', 'icon' => 'shield-lock', 'route' => 'roles.index', 'permission' => 'roles.view']);
         Menu::register('admin', ['label' => 'settings.lists_title', 'icon' => 'list-details', 'route' => 'lookups.index', 'params' => ['type' => 'service'], 'permission' => 'lookups.view']);
+        Menu::register('admin', ['label' => 'settings.groups.activity', 'icon' => 'history', 'route' => 'activity.index', 'permission' => 'activity.view']);
         Menu::register('admin', ['label' => 'settings.settings', 'icon' => 'settings', 'route' => 'settings.index', 'permission' => 'settings.manage']);
     }
 }

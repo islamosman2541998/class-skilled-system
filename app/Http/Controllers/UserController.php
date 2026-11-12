@@ -7,6 +7,7 @@ use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -54,7 +55,14 @@ class UserController extends Controller
             'is_active' => $request->boolean('is_active', $user->is_active),
         ]);
 
-        $user->syncRoles($request->validated('roles', []));
+        $before = $user->getRoleNames()->sort()->values()->all();
+        $after = collect($request->validated('roles', []))->sort()->values()->all();
+
+        $user->syncRoles($after);
+
+        if ($before !== $after) {
+            ActivityLogger::record('roles_changed', $user, ['old' => $before, 'attributes' => $after], 'users');
+        }
 
         return redirect()->route('users.index')->with('success', __('app.saved'));
     }

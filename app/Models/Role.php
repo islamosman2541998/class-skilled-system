@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\GuardsDeletion;
+use App\Models\Concerns\LogsModelActivity;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
@@ -16,9 +17,14 @@ use Spatie\Permission\Models\Role as SpatieRole;
  */
 class Role extends SpatieRole implements GuardsDeletion
 {
+    use LogsModelActivity;
+
     public const SCOPE_ALL = 'all';
 
     public const SCOPE_ASSIGNED = 'assigned';
+
+    /** @var list<string> */
+    protected array $activityAttributes = ['name', 'label_ar', 'label_en', 'scope'];
 
     protected function casts(): array
     {

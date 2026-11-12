@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\GuardsDeletion;
 use App\Enums\LookupType;
 use App\Models\Concerns\HasLocalizedName;
+use App\Models\Concerns\LogsModelActivity;
 use App\Support\LookupUsage;
 use Database\Factories\LookupFactory;
 use Illuminate\Database\Eloquent\Builder;
@@ -35,7 +36,7 @@ use Illuminate\Support\Facades\Cache;
 class Lookup extends Model implements GuardsDeletion
 {
     /** @use HasFactory<LookupFactory> */
-    use HasFactory, HasLocalizedName, SoftDeletes;
+    use HasFactory, HasLocalizedName, LogsModelActivity, SoftDeletes;
 
     public const COLORS = ['success', 'warning', 'danger', 'info', 'neutral'];
 

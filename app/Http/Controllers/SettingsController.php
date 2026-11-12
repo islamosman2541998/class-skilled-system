@@ -9,6 +9,7 @@ use App\Http\Requests\Settings\FinanceSettingsRequest;
 use App\Http\Requests\Settings\SettingsRequest;
 use App\Http\Requests\Settings\SystemSettingsRequest;
 use App\Http\Requests\Settings\UploadSettingsRequest;
+use App\Services\ActivityLogger;
 use App\Settings\AppearanceSettings;
 use App\Settings\CompanySettings;
 use App\Settings\FinanceSettings;
@@ -53,6 +54,7 @@ class SettingsController extends Controller
         /** @var SettingsRequest $request */
         $request = app(self::GROUPS[$group][1]);
         $settings = $this->settings($group);
+        $before = $settings->toArray();
 
         foreach ($request->values() as $key => $value) {
             $settings->{$key} = $value;
@@ -63,6 +65,8 @@ class SettingsController extends Controller
         }
 
         $settings->save();
+
+        ActivityLogger::recordChange('settings_updated', $before, $settings->toArray(), null, ['group' => $group], 'settings');
 
         return redirect()->route('settings.edit', $group)->with('success', __('app.saved'));
     }

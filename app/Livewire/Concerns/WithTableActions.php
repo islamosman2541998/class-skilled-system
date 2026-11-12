@@ -5,6 +5,7 @@ namespace App\Livewire\Concerns;
 use App\Actions\DeleteRecords;
 use App\Models\SavedFilter;
 use App\Models\TablePreference;
+use App\Services\ActivityLogger;
 use App\Services\TableExporter;
 use App\Tables\Column;
 use App\Tables\DeleteResult;
@@ -325,6 +326,8 @@ trait WithTableActions
 
     private function exportQuery(Builder $query): BinaryFileResponse
     {
+        ActivityLogger::record('exported', null, ['table' => $this->tableKey()], $this->permissionPrefix() ?? 'system');
+
         return app(TableExporter::class)->download(
             $this->tableKey().'.xlsx',
             $query,

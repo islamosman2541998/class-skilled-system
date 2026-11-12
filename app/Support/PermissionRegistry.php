@@ -19,7 +19,7 @@ class PermissionRegistry
         'roles' => ['view', 'create', 'update', 'delete'],
         'lookups' => ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export'],
         'settings' => ['manage'],
-        'activity' => ['view'],
+        'activity' => ['view', 'export'],
         'translations' => ['manage'],
     ];
 

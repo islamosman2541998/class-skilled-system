@@ -20,7 +20,7 @@ class MultiSelectFilter extends SelectFilter
     {
         $options = $this->resolveOptions();
 
-        return collect((array) $value)->map(fn ($item) => $options[$item] ?? $item)->implode('، ');
+        return collect((array) $value)->map(fn ($item) => $options[$item] ?? $item)->implode(__('app.comma'));
     }
 
     protected function constrain(Builder $query, mixed $value): void

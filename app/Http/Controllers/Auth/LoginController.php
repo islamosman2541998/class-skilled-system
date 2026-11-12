@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,11 +24,15 @@ class LoginController extends Controller
 
         $request->user()->forceFill(['last_login_at' => now()])->saveQuietly();
 
+        ActivityLogger::record('login', null, [], 'auth');
+
         return redirect()->intended(route('home'));
     }
 
     public function destroy(Request $request): RedirectResponse
     {
+        ActivityLogger::record('logout', null, [], 'auth');
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\DocumentType;
+use App\Models\Concerns\LogsModelActivity;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -19,7 +20,17 @@ use Illuminate\Database\Eloquent\Model;
  */
 class DocumentSequence extends Model
 {
+    use LogsModelActivity;
+
     protected $fillable = ['type', 'prefix', 'padding', 'next_number', 'include_year', 'reset_yearly', 'year'];
+
+    /** The counter moves with every issued document, so only the rule itself is logged. */
+    protected array $activityAttributes = ['prefix', 'padding', 'include_year', 'reset_yearly'];
+
+    public function activityModule(): string
+    {
+        return 'numbering';
+    }
 
     protected function casts(): array
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
@@ -33,6 +34,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
 
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
+
+    Route::get('/activity', ActivityController::class)->name('activity.index');
 
     Route::prefix('settings')->group(function () {
         Route::get('/lists/{type}', [LookupController::class, 'index'])->name('lookups.index');

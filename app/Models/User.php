@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\GuardsDeletion;
+use App\Models\Concerns\LogsModelActivity;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -27,7 +28,10 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable implements GuardsDeletion
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable, SoftDeletes;
+    use HasFactory, HasRoles, LogsModelActivity, Notifiable, SoftDeletes;
+
+    /** @var list<string> */
+    protected array $activityHidden = ['password', 'remember_token'];
 
     protected $fillable = ['name', 'email', 'phone', 'password', 'locale', 'is_active'];
 
