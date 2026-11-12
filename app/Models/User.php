@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Spatie\Permission\Traits\HasRoles;
 
 /**
  * @property int $id
@@ -25,7 +26,7 @@ use Illuminate\Support\Carbon;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, SoftDeletes;
+    use HasFactory, HasRoles, Notifiable, SoftDeletes;
 
     protected $fillable = ['name', 'email', 'phone', 'password', 'locale', 'is_active'];
 
@@ -38,5 +39,13 @@ class User extends Authenticatable
             'is_active' => 'boolean',
             'last_login_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Whether the user sees every record or only the ones assigned to them (spec §6).
+     */
+    public function seesAllRecords(): bool
+    {
+        return $this->roles->contains(fn (Role $role) => $role->scope === Role::SCOPE_ALL);
     }
 }

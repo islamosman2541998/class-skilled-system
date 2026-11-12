@@ -16,7 +16,8 @@ class SetLocale
 
     public function handle(Request $request, Closure $next): Response
     {
-        $locale = $request->user()?->locale ?? $this->appearance->default_locale;
+        $user = $request->user();
+        $locale = $user ? $user->locale : $this->appearance->default_locale;
 
         if (! in_array($locale, self::SUPPORTED, true)) {
             $locale = 'ar';
