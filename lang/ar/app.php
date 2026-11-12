@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'name' => 'نظام كلاس سكيلد',
+    'home' => 'الرئيسية',
+    'login' => 'تسجيل الدخول',
+    'logout' => 'تسجيل الخروج',
+    'email' => 'البريد الإلكتروني',
+    'password' => 'كلمة المرور',
+    'remember' => 'تذكرني',
+    'profile' => 'الملف الشخصي',
+    'full_name' => 'الاسم',
+    'phone' => 'الهاتف',
+    'language' => 'اللغة',
+    'arabic' => 'العربية',
+    'english' => 'English',
+    'current_password' => 'كلمة المرور الحالية',
+    'new_password' => 'كلمة المرور الجديدة',
+    'confirm_password' => 'تأكيد كلمة المرور',
+    'change_password' => 'تغيير كلمة المرور',
+    'save' => 'حفظ',
+    'cancel' => 'إلغاء',
+    'saved' => 'تم الحفظ',
+    'password_changed' => 'تم تغيير كلمة المرور',
+    'session_expired' => 'انتهت الجلسة. سجّل الدخول من جديد.',
+];

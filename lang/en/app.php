@@ -1,0 +1,26 @@
+<?php
+
+return [
+    'name' => 'Class Skilled System',
+    'home' => 'Home',
+    'login' => 'Sign in',
+    'logout' => 'Sign out',
+    'email' => 'Email',
+    'password' => 'Password',
+    'remember' => 'Remember me',
+    'profile' => 'Profile',
+    'full_name' => 'Name',
+    'phone' => 'Phone',
+    'language' => 'Language',
+    'arabic' => 'العربية',
+    'english' => 'English',
+    'current_password' => 'Current password',
+    'new_password' => 'New password',
+    'confirm_password' => 'Confirm password',
+    'change_password' => 'Change password',
+    'save' => 'Save',
+    'cancel' => 'Cancel',
+    'saved' => 'Saved',
+    'password_changed' => 'Password changed',
+    'session_expired' => 'Session expired. Sign in again.',
+];
