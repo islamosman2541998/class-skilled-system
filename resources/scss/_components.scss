@@ -480,3 +480,137 @@ kbd {
     background: var(--c-paper);
     font-weight: 700;
 }
+
+// Data table: tabs, selection, bulk bar, row actions, menus
+.dt-tabs {
+    display: flex;
+    gap: .25rem;
+    padding: .5rem 1rem 0;
+    border-bottom: 1px solid var(--c-line);
+}
+
+.dt-tab {
+    padding: .4rem .75rem;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    background: none;
+    color: var(--c-muted);
+    font-size: .875rem;
+    font-weight: 600;
+
+    &.is-active {
+        border-bottom-color: var(--c-sky);
+        color: var(--c-navy);
+    }
+}
+
+.dt-check {
+    width: 36px;
+}
+
+tr.is-selected > td,
+.row-card.is-selected {
+    background: rgba(var(--c-sky-rgb), .08);
+}
+
+.dt-bulk {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    padding: .5rem 1rem;
+    background: rgba(var(--c-sky-rgb), .1);
+    border-bottom: 1px solid var(--c-line);
+}
+
+.dt-bulk-count {
+    color: var(--c-navy);
+    font-size: .84375rem;
+    font-weight: 700;
+    margin-inline-end: .25rem;
+}
+
+.dt-actions,
+.dt-actions-head {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.dt-row-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: .125rem;
+
+    .btn-icon {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.btn-icon-danger:hover,
+.btn-icon-danger:focus-visible {
+    background: var(--c-danger-bg);
+    color: var(--c-danger);
+}
+
+.dt-menu {
+    min-width: 220px;
+    padding: .35rem;
+}
+
+.dt-menu-title {
+    padding: .25rem .5rem;
+    color: var(--c-muted);
+    font-size: .75rem;
+    font-weight: 600;
+}
+
+.dt-menu-check {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.dt-menu-row {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+
+    .dropdown-item {
+        border-radius: 6px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.dt-menu-empty {
+    padding: .25rem .5rem .5rem;
+    color: var(--c-muted);
+    font-size: .8125rem;
+}
+
+.dt-menu-form {
+    display: flex;
+    gap: .35rem;
+    margin-top: .35rem;
+    padding: .5rem .25rem .15rem;
+    border-top: 1px solid var(--c-line);
+}
+
+.row-card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: .625rem;
+}
+
+.row-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.row-card .dt-row-actions {
+    margin-top: .35rem;
+}

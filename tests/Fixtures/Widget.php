@@ -2,6 +2,8 @@
 
 namespace Tests\Fixtures;
 
+use App\Contracts\GuardsDeletion;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,9 +19,14 @@ use Illuminate\Support\Facades\Schema;
  * @property bool $is_featured
  * @property string $amount
  */
-class Widget extends Model
+class Widget extends Model implements GuardsDeletion
 {
     use SoftDeletes;
+
+    public function deletionBlockedReason(User $by): ?string
+    {
+        return $this->is_featured ? 'featured widgets are kept' : null;
+    }
 
     protected $guarded = [];
 

@@ -2,13 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Livewire\Concerns\WithTableActions;
 use App\Tables\Column;
 use App\Tables\Filters\Filter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -22,7 +22,7 @@ use Throwable;
  */
 abstract class DataTable extends Component
 {
-    use WithPagination;
+    use WithPagination, WithTableActions;
 
     public const PAGE_SIZES = [15, 25, 50, 100];
 
@@ -106,15 +106,45 @@ abstract class DataTable extends Component
         return null;
     }
 
+    /** Link opened by the edit action of a row; null hides the action. */
+    protected function editUrl(Model $row): ?string
+    {
+        return null;
+    }
+
+    /** Blade partial (receives $row) with extra row actions, shown before edit and delete. */
+    protected function rowActionsView(): ?string
+    {
+        return null;
+    }
+
     public function mount(): void
     {
+        if (! request()->has('per') && ($stored = $this->preference()?->per_page)) {
+            $this->perPage = $stored;
+        }
+
         $this->normalisePerPage();
+
+        if ($this->trashed && ! $this->canSeeTrash()) {
+            $this->trashed = false;
+        }
     }
 
     public function updated(string $property): void
     {
         if ($property === 'perPage') {
             $this->normalisePerPage();
+            $this->savePreference(['per_page' => $this->perPage]);
+        }
+
+        if ($property === 'trashed' && $this->trashed && ! $this->canSeeTrash()) {
+            $this->trashed = false;
+        }
+
+        // A selection made under other filters must not leak into the next bulk action.
+        if ($property !== 'selected' && $property !== 'perPage' && ! str_starts_with($property, 'selected.')) {
+            $this->selected = [];
         }
 
         if ($property === 'search' || $property === 'perPage' || $property === 'trashed'
@@ -187,13 +217,29 @@ abstract class DataTable extends Component
     public function render(): View
     {
         $columns = $this->columns();
+        $visible = $this->visibleColumns($columns);
+        $rows = $this->rows();
+        $canDelete = $this->canTable('delete');
+        $showTrash = $this->canSeeTrash();
 
         return view('livewire.data-table', [
             'columns' => $columns,
+            'visibleColumns' => $visible,
+            'hiddenKeys' => $this->hiddenColumnKeys($columns),
+            'savedFilters' => $this->savedFilters(),
+            'canDelete' => $canDelete && ! $this->trashed,
+            'canRestore' => $showTrash && $this->trashed,
+            'canForceDelete' => $this->trashed && $this->canTable('force-delete'),
+            'canExport' => $this->canTable('export'),
+            'showTrash' => $showTrash,
+            'selectable' => $canDelete || $showTrash || $this->canTable('export'),
+            'pageIds' => array_map('strval', $rows->getCollection()->modelKeys()),
+            'editUrl' => fn (Model $row) => $this->trashed ? null : $this->editUrl($row),
+            'rowActionsView' => $this->rowActionsView(),
             'filterDefinitions' => $this->filterDefinitions(),
             'activeFilters' => $this->activeFilters(),
-            'rows' => $this->rows(),
-            'totals' => $this->totals($columns),
+            'rows' => $rows,
+            'totals' => $this->totals($visible),
             'hasDateRange' => $this->dateColumn() !== null,
             'hasSearch' => $this->searchColumns() !== [],
         ]);
@@ -208,7 +254,7 @@ abstract class DataTable extends Component
     {
         $query = $this->query();
 
-        if ($this->trashed && in_array(SoftDeletes::class, class_uses_recursive($query->getModel()), true)) {
+        if ($this->trashed && $this->canSeeTrash()) {
             $query->onlyTrashed(); // @phpstan-ignore method.notFound
         }
 
