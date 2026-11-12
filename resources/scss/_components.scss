@@ -276,3 +276,207 @@ kbd {
     font-family: inherit;
     font-size: .75rem;
 }
+
+// Data table (spec §5.1)
+.dt-toolbar {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--c-line);
+}
+
+.dt-search {
+    position: relative;
+    flex: 1 1 240px;
+    max-width: 360px;
+
+    .icon {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: .65rem;
+        transform: translateY(-50%);
+        color: var(--c-muted);
+        pointer-events: none;
+    }
+
+    .form-control {
+        padding-inline-start: 2.1rem;
+    }
+}
+
+.dt-tools {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    flex-wrap: wrap;
+    margin-inline-start: auto;
+}
+
+.dt-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 18px;
+    height: 18px;
+    padding-inline: 4px;
+    border-radius: 999px;
+    background: var(--c-navy);
+    color: #fff;
+    font-size: .6875rem;
+    line-height: 1;
+}
+
+.dt-filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: .75rem 1rem;
+    padding: .75rem 1rem;
+    background: var(--c-paper);
+    border-bottom: 1px solid var(--c-line);
+}
+
+.dt-filter-date {
+    grid-column: span 2;
+    min-width: 0;
+}
+
+.dt-chips {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    flex-wrap: wrap;
+    padding: .5rem 1rem;
+    border-bottom: 1px solid var(--c-line);
+}
+
+.dt-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .1rem .3rem .1rem .6rem;
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    background: #fff;
+    font-size: .8125rem;
+}
+
+[dir='rtl'] .dt-chip {
+    padding: .1rem .6rem .1rem .3rem;
+}
+
+.dt-chip-label {
+    color: var(--c-muted);
+}
+
+.dt-chip-remove {
+    display: inline-grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--c-muted);
+
+    &:hover,
+    &:focus-visible {
+        background: var(--c-paper);
+        color: var(--c-danger);
+    }
+}
+
+.th-sort {
+    display: inline-flex;
+    align-items: center;
+    gap: .25rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: 600;
+
+    &:hover {
+        color: var(--c-navy);
+    }
+}
+
+.th-sort-idle {
+    opacity: .35;
+}
+
+.is-loading {
+    opacity: .55;
+    transition: opacity .1s;
+}
+
+.dt-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .75rem;
+    flex-wrap: wrap;
+    padding: .6rem 1rem;
+    border-top: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: .8125rem;
+}
+
+.dt-footer-info {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.dt-per-page {
+    width: auto;
+}
+
+.page-link {
+    color: var(--c-ink);
+}
+
+.page-item.active .page-link {
+    background: var(--c-navy);
+    border-color: var(--c-navy);
+    color: #fff;
+}
+
+// Rows as cards on small screens
+.row-card {
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--c-line);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.row-card-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .75rem;
+    font-size: .875rem;
+
+    & + & {
+        margin-top: .2rem;
+    }
+}
+
+.row-card-title {
+    color: var(--c-navy);
+    font-weight: 700;
+}
+
+.row-card-label {
+    color: var(--c-muted);
+    font-size: .8125rem;
+}
+
+.row-card-total {
+    background: var(--c-paper);
+    font-weight: 700;
+}

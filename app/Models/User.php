@@ -46,6 +46,6 @@ class User extends Authenticatable
      */
     public function seesAllRecords(): bool
     {
-        return $this->roles->contains(fn (Role $role) => $role->scope === Role::SCOPE_ALL);
+        return $this->roles->where('scope', Role::SCOPE_ALL)->isNotEmpty();
     }
 }
