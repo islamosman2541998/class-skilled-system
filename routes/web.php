@@ -6,6 +6,7 @@ use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\IdleTimeout;
@@ -37,5 +38,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
         Route::post('/lists/{type}', [LookupController::class, 'store'])->name('lookups.store');
         Route::post('/lists/{type}/reorder', [LookupController::class, 'reorder'])->name('lookups.reorder');
         Route::put('/lists/{type}/{lookup}', [LookupController::class, 'update'])->name('lookups.update');
+
+        Route::get('/', [SettingsController::class, 'index'])->name('settings.index');
+        Route::get('/{group}', [SettingsController::class, 'edit'])->whereIn('group', array_keys(SettingsController::GROUPS))->name('settings.edit');
+        Route::put('/{group}', [SettingsController::class, 'update'])->whereIn('group', array_keys(SettingsController::GROUPS))->name('settings.update');
     });
 });
