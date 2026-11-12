@@ -838,3 +838,17 @@ tr.is-selected > td,
         background: #fff;
     }
 }
+
+.numbering-table {
+    min-width: 760px;
+
+    th[scope='row'] {
+        color: var(--c-navy);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .form-control {
+        min-width: 84px;
+    }
+}
