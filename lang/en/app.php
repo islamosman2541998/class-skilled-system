@@ -27,4 +27,7 @@ return [
     'breadcrumb' => 'Breadcrumb',
     'brand_mark' => 'CS',
     'password_hint' => 'At least 8 characters',
+    'add' => 'Add',
+    'back' => 'Back',
+    'optional' => 'Optional',
 ];

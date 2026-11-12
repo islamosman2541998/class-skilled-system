@@ -27,4 +27,7 @@ return [
     'breadcrumb' => 'مسار التنقل',
     'brand_mark' => 'CS',
     'password_hint' => '8 أحرف على الأقل',
+    'add' => 'إضافة',
+    'back' => 'رجوع',
+    'optional' => 'اختياري',
 ];

@@ -124,7 +124,7 @@ trait WithTableActions
     /** Selects every row of the current page, or clears them when all are already selected. */
     public function togglePageSelection(): void
     {
-        $pageIds = array_map('strval', $this->rows()->getCollection()->modelKeys());
+        $pageIds = array_map(fn (Model $row) => (string) $row->getKey(), $this->rows()->items());
         $allSelected = $pageIds !== [] && array_diff($pageIds, $this->selected) === [];
 
         $this->selected = $allSelected

@@ -233,7 +233,7 @@ abstract class DataTable extends Component
             'canExport' => $this->canTable('export'),
             'showTrash' => $showTrash,
             'selectable' => $canDelete || $showTrash || $this->canTable('export'),
-            'pageIds' => array_map('strval', $rows->getCollection()->modelKeys()),
+            'pageIds' => array_map(fn (Model $row) => (string) $row->getKey(), $rows->items()),
             'editUrl' => fn (Model $row) => $this->trashed ? null : $this->editUrl($row),
             'rowActionsView' => $this->rowActionsView(),
             'filterDefinitions' => $this->filterDefinitions(),

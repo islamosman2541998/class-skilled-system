@@ -614,3 +614,76 @@ tr.is-selected > td,
 .row-card .dt-row-actions {
     margin-top: .35rem;
 }
+
+// Check lists and the permission matrix
+.check-list {
+    display: grid;
+    gap: .35rem;
+}
+
+.perm-matrix {
+    display: grid;
+    gap: 0;
+}
+
+.perm-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: .75rem;
+    align-items: start;
+    margin: 0;
+    padding: .65rem 0;
+    border-bottom: 1px solid var(--c-line);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.perm-module {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    float: none;
+    width: auto;
+    margin: 0;
+    color: var(--c-navy);
+    font-size: .875rem;
+    font-weight: 700;
+}
+
+.perm-all {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    color: var(--c-muted);
+    font-size: .78125rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.perm-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem 1.1rem;
+}
+
+.perm-action {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    font-size: .875rem;
+    cursor: pointer;
+}
+
+@media (max-width: 575.98px) {
+    .perm-row {
+        grid-template-columns: 1fr;
+        gap: .4rem;
+    }
+
+    .perm-module {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\GuardsDeletion;
 use Spatie\Permission\Models\Role as SpatieRole;
 
 /**
@@ -13,7 +14,7 @@ use Spatie\Permission\Models\Role as SpatieRole;
  * @property bool $is_system
  * @property-read string $label
  */
-class Role extends SpatieRole
+class Role extends SpatieRole implements GuardsDeletion
 {
     public const SCOPE_ALL = 'all';
 
@@ -33,5 +34,14 @@ class Role extends SpatieRole
         }
 
         return $this->label_ar ?: $this->name;
+    }
+
+    public function deletionBlockedReason(User $by): ?string
+    {
+        if ($this->is_system) {
+            return __('users.role_is_system');
+        }
+
+        return $this->users()->exists() ? __('users.role_in_use') : null;
     }
 }

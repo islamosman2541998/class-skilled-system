@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Contracts\GuardsDeletion;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -23,7 +24,7 @@ use Spatie\Permission\Traits\HasRoles;
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
  */
-class User extends Authenticatable
+class User extends Authenticatable implements GuardsDeletion
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, Notifiable, SoftDeletes;
@@ -47,5 +48,26 @@ class User extends Authenticatable
     public function seesAllRecords(): bool
     {
         return $this->roles->where('scope', Role::SCOPE_ALL)->isNotEmpty();
+    }
+
+    public function deletionBlockedReason(User $by): ?string
+    {
+        if ($this->is($by)) {
+            return __('users.cannot_delete_self');
+        }
+
+        return $this->isLastActiveSuperAdmin() ? __('users.last_admin') : null;
+    }
+
+    /**
+     * True when removing or deactivating this user would leave the system without an administrator.
+     */
+    public function isLastActiveSuperAdmin(): bool
+    {
+        if (! $this->is_active || ! $this->hasRole('super-admin')) {
+            return false;
+        }
+
+        return ! self::query()->role('super-admin')->where('is_active', true)->whereKeyNot($this->getKey())->exists();
     }
 }

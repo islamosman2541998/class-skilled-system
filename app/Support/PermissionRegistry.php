@@ -16,7 +16,7 @@ class PermissionRegistry
     /** @var array<string, list<string>> */
     private static array $modules = [
         'users' => ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export'],
-        'roles' => ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export'],
+        'roles' => ['view', 'create', 'update', 'delete'],
         'lookups' => ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export'],
         'settings' => ['manage'],
         'activity' => ['view'],
