@@ -1,5 +1,10 @@
 <?php
 
+use App\Settings\AppearanceSettings;
+use App\Settings\CompanySettings;
+use App\Settings\FinanceSettings;
+use App\Settings\SystemSettings;
+use App\Settings\UploadSettings;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelSettings\SettingsCasts\DataCast;
 use Spatie\LaravelSettings\SettingsCasts\DateTimeInterfaceCast;
@@ -14,7 +19,11 @@ return [
      * put them (manually) here.
      */
     'settings' => [
-
+        CompanySettings::class,
+        AppearanceSettings::class,
+        FinanceSettings::class,
+        UploadSettings::class,
+        SystemSettings::class,
     ],
 
     /*
@@ -68,7 +77,7 @@ return [
      * additional prefix.
      */
     'cache' => [
-        'enabled' => (bool) env('SETTINGS_CACHE_ENABLED', false),
+        'enabled' => (bool) env('SETTINGS_CACHE_ENABLED', true),
         'store' => null,
         'prefix' => null,
         'ttl' => null,
