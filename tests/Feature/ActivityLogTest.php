@@ -85,6 +85,7 @@ it('logs a settings update with the changed keys only', function () {
 it('logs role permission changes', function () {
     $this->seed(RolesSeeder::class);
     $role = Role::findByName('sales');
+    $before = $role->permissions->pluck('name')->all();
 
     actingAs(userWith(['roles.view', 'roles.update']))->put(route('roles.update', $role), [
         'label_ar' => 'مبيعات', 'scope' => 'all', 'permissions' => ['users.view'],
@@ -94,7 +95,7 @@ it('logs role permission changes', function () {
 
     expect($activity->subject_id)->toBe($role->id)
         ->and($activity->properties['attributes'])->toBe(['users.view'])
-        ->and($activity->properties['old'])->toBe(['lookups.view']);
+        ->and($activity->properties['old'])->toEqualCanonicalizing($before);
 });
 
 it('logs an export with the table key', function () {

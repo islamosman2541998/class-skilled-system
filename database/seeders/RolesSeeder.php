@@ -15,10 +15,28 @@ class RolesSeeder extends Seeder
      */
     private const ROLES = [
         'super-admin' => ['مدير النظام', 'System administrator', 'all', true, []],
-        'management' => ['الإدارة', 'Management', 'all', false, ['users.view', 'roles.view', 'lookups.view', 'activity.view']],
-        'sales' => ['مبيعات', 'Sales', 'all', false, ['lookups.view']],
-        'engineer' => ['مهندس مشروع', 'Project engineer', 'assigned', false, []],
-        'accountant' => ['محاسب', 'Accountant', 'all', false, ['lookups.view']],
+        'management' => ['الإدارة', 'Management', 'all', false, [
+            'users.view', 'roles.view', 'lookups.view', 'activity.view',
+            'clients.view', 'clients.create', 'clients.update', 'clients.delete', 'clients.restore', 'clients.export', 'clients.print',
+            'leads.view', 'leads.create', 'leads.update', 'leads.delete', 'leads.restore', 'leads.export', 'leads.print',
+            'site_visits.view', 'site_visits.create', 'site_visits.update', 'site_visits.delete', 'site_visits.restore', 'site_visits.export',
+            'price_items.view', 'price_items.create', 'price_items.update', 'price_items.delete', 'price_items.restore', 'price_items.export',
+            'quotations.view', 'quotations.create', 'quotations.update', 'quotations.delete', 'quotations.restore', 'quotations.export', 'quotations.print', 'quotations.approve',
+        ]],
+        'sales' => ['مبيعات', 'Sales', 'all', false, [
+            'lookups.view',
+            'clients.view', 'clients.create', 'clients.update', 'clients.export',
+            'leads.view', 'leads.create', 'leads.update', 'leads.export',
+            'site_visits.view', 'site_visits.create', 'site_visits.update',
+            'price_items.view',
+            'quotations.view', 'quotations.create', 'quotations.update', 'quotations.export', 'quotations.print',
+        ]],
+        'engineer' => ['مهندس مشروع', 'Project engineer', 'assigned', false, [
+            'clients.view', 'leads.view', 'site_visits.view', 'site_visits.update', 'quotations.view',
+        ]],
+        'accountant' => ['محاسب', 'Accountant', 'all', false, [
+            'lookups.view', 'clients.view', 'price_items.view', 'quotations.view', 'quotations.export', 'quotations.print',
+        ]],
     ];
 
     public function run(): void

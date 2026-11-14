@@ -13,6 +13,7 @@ use App\Services\NumberGenerator;
 use App\Services\QuotationCalculator;
 use App\Settings\FinanceSettings;
 use App\Support\QuotationTotals;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -47,7 +48,8 @@ class SaveQuotation
                 unset($data['lead_id'], $data['client_id']);
             }
 
-            $quotation->fill($data);
+            // Only header fields; items and payments are saved as rows (also when models are unguarded).
+            $quotation->fill(Arr::only($data, $quotation->getFillable()));
 
             if ($creating) {
                 $quotation->number = $this->numbers->next(DocumentType::Quotation);
