@@ -4,6 +4,7 @@ use App\Http\Controllers\ConvertQuotationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectInstallmentController;
 use App\Http\Controllers\ProjectStageController;
+use App\Http\Controllers\VariationController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +26,12 @@ Route::delete('/projects/{project}/installments/{installment}', [ProjectInstallm
 
 Route::get('/quotations/{quotation}/convert', [ConvertQuotationController::class, 'create'])->name('quotations.convert.create');
 Route::post('/quotations/{quotation}/convert', [ConvertQuotationController::class, 'store'])->name('quotations.convert');
+
+Route::get('/projects/{project}/variations/create', [VariationController::class, 'create'])->name('projects.variations.create');
+Route::post('/projects/{project}/variations', [VariationController::class, 'store'])->name('projects.variations.store');
+Route::get('/projects/{project}/variations/{variation}', [VariationController::class, 'show'])->name('projects.variations.show');
+Route::get('/projects/{project}/variations/{variation}/edit', [VariationController::class, 'edit'])->name('projects.variations.edit');
+Route::put('/projects/{project}/variations/{variation}', [VariationController::class, 'update'])->name('projects.variations.update');
+Route::patch('/projects/{project}/variations/{variation}/approve', [VariationController::class, 'approve'])->name('projects.variations.approve');
+Route::patch('/projects/{project}/variations/{variation}/reject', [VariationController::class, 'reject'])->name('projects.variations.reject');
+Route::post('/projects/{project}/variations/{variation}/attachments', [VariationController::class, 'attach'])->name('projects.variations.attachments.store');

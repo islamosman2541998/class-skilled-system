@@ -143,6 +143,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(ProjectInstallment::class)->orderBy('sort_order')->orderBy('id');
     }
 
+    /** @return HasMany<Variation, $this> */
+    public function variations(): HasMany
+    {
+        return $this->hasMany(Variation::class)->latest('id');
+    }
+
     /** @return HasMany<ProjectItem, $this> */
     public function items(): HasMany
     {
