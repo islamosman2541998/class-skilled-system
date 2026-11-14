@@ -127,4 +127,9 @@ return [
             'stage' => 'When a stage is done',
         ],
     ],
+    'convert' => 'Convert to project',
+    'from_quotation' => 'From the quotation',
+    'convert_hint' => 'Items, contract value and payment schedule come from the quotation; stages come from the service stage template.',
+    'convert_not_accepted' => 'Only an accepted quotation becomes a project',
+    'converted' => 'Project :number created',
 ];

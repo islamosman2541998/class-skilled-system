@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConvertQuotationController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectInstallmentController;
 use App\Http\Controllers\ProjectStageController;
@@ -21,3 +22,6 @@ Route::post('/projects/{project}/stages/{stage}/attachments', [ProjectStageContr
 Route::post('/projects/{project}/installments', [ProjectInstallmentController::class, 'store'])->name('projects.installments.store');
 Route::put('/projects/{project}/installments/{installment}', [ProjectInstallmentController::class, 'update'])->name('projects.installments.update');
 Route::delete('/projects/{project}/installments/{installment}', [ProjectInstallmentController::class, 'destroy'])->name('projects.installments.destroy');
+
+Route::get('/quotations/{quotation}/convert', [ConvertQuotationController::class, 'create'])->name('quotations.convert.create');
+Route::post('/quotations/{quotation}/convert', [ConvertQuotationController::class, 'store'])->name('quotations.convert');

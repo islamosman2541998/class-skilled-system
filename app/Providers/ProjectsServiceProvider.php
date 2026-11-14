@@ -9,6 +9,7 @@ use App\Enums\LookupType;
 use App\Enums\NotificationType;
 use App\Enums\StageStatus;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\QuotationController;
 use App\Models\Client;
 use App\Models\Lookup;
 use App\Models\Project;
@@ -58,6 +59,7 @@ class ProjectsServiceProvider extends ServiceProvider
         ));
         ClientController::$figureProviders['projects'] = fn (Client $client) => (string) $client->projects()->visibleTo(auth()->user())->count();
         ClientController::$actionViews[] = 'projects.partials.client-action';
+        QuotationController::$primaryActionViews[] = 'quotations.partials.convert-action';
 
         $usedBy = fn (string $column) => fn (Lookup $lookup) => Project::withTrashed()->where($column, $lookup->id)->exists();
         LookupUsage::register(LookupType::Service, $usedBy('service_id'));

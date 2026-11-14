@@ -11,6 +11,7 @@ use App\Http\Requests\StoreAttachmentsRequest;
 use App\Models\Client;
 use App\Models\Lookup;
 use App\Models\Project;
+use App\Models\Quotation;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -37,9 +38,14 @@ class ProjectController extends Controller
         return view('projects.index');
     }
 
-    public function create(Request $request): View
+    public function create(Request $request): View|RedirectResponse
     {
         Gate::authorize('projects.create');
+
+        // Opened from an accepted quotation: the short conversion form instead.
+        if ($request->integer('quotation')) {
+            return app(ConvertQuotationController::class)->create($request, Quotation::query()->findOrFail($request->integer('quotation')));
+        }
 
         return $this->form(new Project([
             'client_id' => $request->integer('client') ?: null,
