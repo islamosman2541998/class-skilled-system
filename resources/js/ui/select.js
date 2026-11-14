@@ -24,8 +24,12 @@ export function initSelects(root = document) {
                 return;
             }
 
+            // An empty option is a real choice only when it has a label ("Unassigned"); a blank one
+            // would hide the placeholder, so it is left out.
+            const empty = select.querySelector('option[value=""]');
+
             const options = {
-                allowEmptyOption: true,
+                allowEmptyOption: !!(empty && empty.textContent.trim() !== ''),
                 maxOptions: 500,
                 plugins: select.multiple ? ['remove_button'] : [],
                 placeholder: select.dataset.placeholder || '',
