@@ -46,6 +46,7 @@ use Spatie\MediaLibrary\HasMedia;
  * @property string $progress
  * @property string|null $description
  * @property string $invoiced_total
+ * @property string $invoiced_net
  * @property string $collected_total
  * @property string $cost_total
  * @property int|null $created_by
@@ -80,6 +81,7 @@ class Project extends Model implements GuardsDeletion, HasMedia
             'vat_rate' => 'decimal:2',
             'progress' => 'decimal:2',
             'invoiced_total' => 'decimal:2',
+            'invoiced_net' => 'decimal:2',
             'collected_total' => 'decimal:2',
             'cost_total' => 'decimal:2',
         ];
@@ -142,6 +144,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
     public function installments(): HasMany
     {
         return $this->hasMany(ProjectInstallment::class)->orderBy('sort_order')->orderBy('id');
+    }
+
+    /** @return HasMany<Invoice, $this> */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     /** @return HasMany<Variation, $this> */

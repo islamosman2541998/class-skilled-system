@@ -29,6 +29,7 @@ class ClientController extends Controller
         'visits' => 'site-visits.index',
         'quotations' => 'quotations.index',
         'projects' => 'projects.index',
+        'invoices' => 'invoices.index',
         'attachments' => null,
         'activity' => null,
     ];
@@ -194,8 +195,11 @@ class ClientController extends Controller
     {
         $figures = ['contacts' => (string) $client->contacts->count()];
 
+        // A provider returns an empty string when the user may not see its figure.
         foreach (self::$figureProviders as $key => $provider) {
-            $figures[$key] = $provider($client);
+            if (($value = $provider($client)) !== '') {
+                $figures[$key] = $value;
+            }
         }
 
         return $figures;

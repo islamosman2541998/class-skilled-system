@@ -58,6 +58,8 @@ return [
         'stages' => 'Stages',
         'payments' => 'Payments',
         'variations' => 'Variations',
+        'invoices' => 'Invoices and receipts',
+        'expenses' => 'Expenses',
         'attachments' => 'Attachments',
         'handover' => 'Handover and warranty',
         'activity' => 'Activity',

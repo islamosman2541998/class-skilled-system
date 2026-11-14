@@ -58,6 +58,8 @@ return [
         'stages' => 'المراحل',
         'payments' => 'الدفعات',
         'variations' => 'أوامر التغيير',
+        'invoices' => 'الفواتير والمقبوضات',
+        'expenses' => 'المصروفات',
         'attachments' => 'المرفقات',
         'handover' => 'التسليم والضمان',
         'activity' => 'النشاط',

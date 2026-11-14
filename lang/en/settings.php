@@ -180,6 +180,11 @@ return [
         'js' => 'Interface messages',
     ],
     'templates' => [
+        'invoice' => 'Invoice',
+        'whatsapp_invoice_ar' => 'Invoice message in Arabic',
+        'whatsapp_invoice_en' => 'Invoice message in English',
+        'whatsapp_receipt_ar' => 'Receipt message in Arabic',
+        'whatsapp_receipt_en' => 'Receipt message in English',
         'quotation' => 'Quotation',
         'terms_ar' => 'Arabic terms and conditions',
         'terms_en' => 'English terms and conditions',

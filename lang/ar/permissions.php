@@ -2,6 +2,8 @@
 
 return [
     'modules' => [
+        'invoices' => 'الفواتير',
+        'finance' => 'المالية العامة',
         'projects' => 'المشاريع',
         'maintenance' => 'طلبات الصيانة',
         'clients' => 'العملاء',
@@ -17,6 +19,9 @@ return [
         'translations' => 'الترجمة',
     ],
     'actions' => [
+        'cancel' => 'إلغاء',
+        'costs' => 'رؤية المبالغ والتكاليف',
+        'profitability' => 'رؤية الربحية',
         'approve' => 'اعتماد',
         'view' => 'عرض',
         'create' => 'إضافة',

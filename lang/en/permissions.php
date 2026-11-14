@@ -2,6 +2,8 @@
 
 return [
     'modules' => [
+        'invoices' => 'Invoices',
+        'finance' => 'Finance',
         'projects' => 'Projects',
         'maintenance' => 'Maintenance requests',
         'clients' => 'Clients',
@@ -17,6 +19,9 @@ return [
         'translations' => 'Translation',
     ],
     'actions' => [
+        'cancel' => 'Cancel',
+        'costs' => 'See amounts and costs',
+        'profitability' => 'See profitability',
         'approve' => 'Approve',
         'view' => 'View',
         'create' => 'Add',

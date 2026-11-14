@@ -27,6 +27,7 @@ return [
         'roles_changed' => 'تعديل أدوار',
     ],
     'modules' => [
+        'invoices' => 'الفواتير',
         'users' => 'المستخدمون',
         'roles' => 'الأدوار',
         'lookups' => 'القوائم',

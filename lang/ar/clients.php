@@ -35,6 +35,7 @@ return [
     'has_records' => 'العميل مرتبط بسجلات أخرى',
     'quick_add' => 'إضافة عميل',
     'figures' => [
+        'invoiced' => 'المفوتر',
         'projects' => 'المشاريع',
         'contacts' => 'جهات الاتصال',
         'quotations' => 'عروض الأسعار',
@@ -42,6 +43,7 @@ return [
         'leads' => 'الطلبات',
     ],
     'tabs' => [
+        'invoices' => 'الفواتير',
         'projects' => 'المشاريع',
         'overview' => 'نظرة عامة',
         'contacts' => 'جهات الاتصال',

@@ -15,6 +15,14 @@ function templatesPayload(array $overrides = []): array
         'quotation_footer_en' => '',
         'whatsapp_quotation_ar' => $s->whatsapp_quotation_ar,
         'whatsapp_quotation_en' => $s->whatsapp_quotation_en,
+        'invoice_terms_ar' => $s->invoice_terms_ar,
+        'invoice_terms_en' => $s->invoice_terms_en,
+        'invoice_footer_ar' => '',
+        'invoice_footer_en' => '',
+        'whatsapp_invoice_ar' => $s->whatsapp_invoice_ar,
+        'whatsapp_invoice_en' => $s->whatsapp_invoice_en,
+        'whatsapp_receipt_ar' => $s->whatsapp_receipt_ar,
+        'whatsapp_receipt_en' => $s->whatsapp_receipt_en,
         'payment_templates' => $s->payment_templates,
     ], $overrides);
 }

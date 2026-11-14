@@ -23,6 +23,24 @@ class TemplateSettings extends Settings
 
     public string $whatsapp_quotation_en;
 
+    public string $invoice_terms_ar;
+
+    public string $invoice_terms_en;
+
+    public ?string $invoice_footer_ar;
+
+    public ?string $invoice_footer_en;
+
+    /** Placeholders :client, :number, :total, :due, :link. */
+    public string $whatsapp_invoice_ar;
+
+    public string $whatsapp_invoice_en;
+
+    /** Placeholders :client, :number, :total, :link. */
+    public string $whatsapp_receipt_ar;
+
+    public string $whatsapp_receipt_en;
+
     // Payment schedule templates: name_ar, name_en and lines of label_ar, label_en, percent (sum 100).
     // No @var on purpose: spatie/laravel-settings cannot read nested array shapes in docblocks.
     public array $payment_templates;

@@ -30,6 +30,23 @@
             </div>
         </x-panel>
 
+        <x-panel :title="__('settings.templates.invoice')">
+            <div class="form-grid">
+                <x-field name="invoice_terms_ar" :label="__('settings.templates.terms_ar')" required>
+                    <textarea id="invoice_terms_ar" name="invoice_terms_ar" @class(['form-control', 'is-invalid' => $errors->has('invoice_terms_ar')]) rows="4" dir="rtl">{{ old('invoice_terms_ar', $settings->invoice_terms_ar) }}</textarea>
+                </x-field>
+                <x-field name="invoice_terms_en" :label="__('settings.templates.terms_en')" required>
+                    <textarea id="invoice_terms_en" name="invoice_terms_en" @class(['form-control', 'is-invalid' => $errors->has('invoice_terms_en')]) rows="4" dir="ltr">{{ old('invoice_terms_en', $settings->invoice_terms_en) }}</textarea>
+                </x-field>
+                <x-field name="invoice_footer_ar" :label="__('settings.templates.footer_ar')">
+                    <textarea id="invoice_footer_ar" name="invoice_footer_ar" @class(['form-control', 'is-invalid' => $errors->has('invoice_footer_ar')]) rows="2" dir="rtl">{{ old('invoice_footer_ar', $settings->invoice_footer_ar) }}</textarea>
+                </x-field>
+                <x-field name="invoice_footer_en" :label="__('settings.templates.footer_en')">
+                    <textarea id="invoice_footer_en" name="invoice_footer_en" @class(['form-control', 'is-invalid' => $errors->has('invoice_footer_en')]) rows="2" dir="ltr">{{ old('invoice_footer_en', $settings->invoice_footer_en) }}</textarea>
+                </x-field>
+            </div>
+        </x-panel>
+
         <x-panel :title="__('settings.templates.whatsapp')">
             <p class="form-text mt-0">{{ __('settings.templates.whatsapp_hint') }}</p>
             <div class="form-grid">
@@ -38,6 +55,18 @@
                 </x-field>
                 <x-field name="whatsapp_quotation_en" :label="__('settings.templates.whatsapp_en')" required>
                     <textarea id="whatsapp_quotation_en" name="whatsapp_quotation_en" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_quotation_en')]) rows="3" dir="ltr">{{ old('whatsapp_quotation_en', $settings->whatsapp_quotation_en) }}</textarea>
+                </x-field>
+                <x-field name="whatsapp_invoice_ar" :label="__('settings.templates.whatsapp_invoice_ar')" required>
+                    <textarea id="whatsapp_invoice_ar" name="whatsapp_invoice_ar" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_invoice_ar')]) rows="3" dir="rtl">{{ old('whatsapp_invoice_ar', $settings->whatsapp_invoice_ar) }}</textarea>
+                </x-field>
+                <x-field name="whatsapp_invoice_en" :label="__('settings.templates.whatsapp_invoice_en')" required>
+                    <textarea id="whatsapp_invoice_en" name="whatsapp_invoice_en" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_invoice_en')]) rows="3" dir="ltr">{{ old('whatsapp_invoice_en', $settings->whatsapp_invoice_en) }}</textarea>
+                </x-field>
+                <x-field name="whatsapp_receipt_ar" :label="__('settings.templates.whatsapp_receipt_ar')" required>
+                    <textarea id="whatsapp_receipt_ar" name="whatsapp_receipt_ar" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_receipt_ar')]) rows="3" dir="rtl">{{ old('whatsapp_receipt_ar', $settings->whatsapp_receipt_ar) }}</textarea>
+                </x-field>
+                <x-field name="whatsapp_receipt_en" :label="__('settings.templates.whatsapp_receipt_en')" required>
+                    <textarea id="whatsapp_receipt_en" name="whatsapp_receipt_en" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_receipt_en')]) rows="3" dir="ltr">{{ old('whatsapp_receipt_en', $settings->whatsapp_receipt_en) }}</textarea>
                 </x-field>
             </div>
         </x-panel>

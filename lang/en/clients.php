@@ -35,6 +35,7 @@ return [
     'has_records' => 'The client is linked to other records',
     'quick_add' => 'Add client',
     'figures' => [
+        'invoiced' => 'Invoiced',
         'projects' => 'Projects',
         'contacts' => 'Contacts',
         'quotations' => 'Quotations',
@@ -42,6 +43,7 @@ return [
         'leads' => 'Requests',
     ],
     'tabs' => [
+        'invoices' => 'Invoices',
         'projects' => 'Projects',
         'overview' => 'Overview',
         'contacts' => 'Contacts',

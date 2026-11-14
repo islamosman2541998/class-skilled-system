@@ -36,6 +36,13 @@
                             <input type="number" step="any" inputmode="decimal" class="form-control form-control-sm" wire:model.live.debounce.400ms="filters.{{ $filter->key }}.max" placeholder="{{ __('table.to') }}" aria-label="{{ $filter->label() }} {{ __('table.to') }}" dir="ltr">
                         </div>
                         @break
+
+                    @case('dates')
+                        <div class="d-flex gap-2">
+                            <input type="date" class="form-control form-control-sm" id="f-{{ $this->getId() }}-{{ $filter->key }}" wire:model.live="filters.{{ $filter->key }}.from" aria-label="{{ $filter->label() }} {{ __('table.from') }}" dir="ltr">
+                            <input type="date" class="form-control form-control-sm" wire:model.live="filters.{{ $filter->key }}.to" aria-label="{{ $filter->label() }} {{ __('table.to') }}" dir="ltr">
+                        </div>
+                        @break
                 @endswitch
             </div>
         @endforeach

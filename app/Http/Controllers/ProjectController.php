@@ -22,7 +22,17 @@ use Illuminate\View\View;
 class ProjectController extends Controller
 {
     /** Tabs of the project page; a tab appears once its view exists (spec §8.6, built stage by stage). */
-    public const TABS = ['overview', 'stages', 'payments', 'variations', 'attachments', 'handover', 'activity'];
+    public const TABS = [
+        'overview', 'stages', 'payments', 'variations', 'invoices', 'expenses', 'daily_reports', 'claims',
+        'purchases', 'resources', 'attachments', 'handover', 'activity',
+    ];
+
+    /**
+     * Permissions a tab needs besides projects.view, added by the stages that build the tab.
+     *
+     * @var array<string, list<string>>
+     */
+    public static array $tabPermissions = [];
 
     /**
      * Header buttons added by later tasks and stages, each receiving $project.
@@ -69,6 +79,7 @@ class ProjectController extends Controller
 
         $tabs = collect(self::TABS)
             ->filter(fn (string $tab) => in_array($tab, ['overview', 'attachments', 'activity'], true) || ViewFactory::exists('projects.tabs.'.$tab))
+            ->filter(fn (string $tab) => collect(self::$tabPermissions[$tab] ?? [])->every(fn (string $permission) => $request->user()->can($permission)))
             ->mapWithKeys(fn (string $tab) => [$tab => __('projects.tabs.'.$tab)])
             ->all();
         $active = array_key_exists((string) $request->query('tab'), $tabs) ? (string) $request->query('tab') : 'overview';
