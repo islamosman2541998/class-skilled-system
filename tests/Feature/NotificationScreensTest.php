@@ -45,6 +45,13 @@ it('never redirects to another host', function () {
     actingAs($user)->post(route('notifications.read', $user->notifications()->first()->id))->assertRedirect(route('notifications.index'));
 });
 
+it('treats a backslash path as another host', function () {
+    $user = userWith();
+    notify($user, '/\\evil.example/x');
+
+    actingAs($user)->post(route('notifications.read', $user->notifications()->first()->id))->assertRedirect(route('notifications.index'));
+});
+
 it('returns 404 for a notification of another user', function () {
     $owner = userWith();
     notify($owner);

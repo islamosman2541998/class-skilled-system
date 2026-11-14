@@ -42,7 +42,8 @@ class NotificationController extends Controller
     /** Only paths inside this application are followed. */
     private function safeUrl(string $url): string
     {
-        if (str_starts_with($url, '/') && ! str_starts_with($url, '//')) {
+        // Browsers read "//host" and "/\host" as another host.
+        if (str_starts_with($url, '/') && ! str_starts_with($url, '//') && ! str_starts_with($url, '/\\')) {
             return $url;
         }
 
