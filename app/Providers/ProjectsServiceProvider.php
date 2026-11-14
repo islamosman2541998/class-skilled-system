@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Actions\Projects\SaveProject;
+use App\Enums\InstallmentDueType;
+use App\Enums\InstallmentStatus;
 use App\Enums\LookupType;
 use App\Enums\NotificationType;
 use App\Enums\StageStatus;
@@ -10,13 +12,17 @@ use App\Http\Controllers\ClientController;
 use App\Models\Client;
 use App\Models\Lookup;
 use App\Models\Project;
+use App\Models\ProjectInstallment;
 use App\Models\ProjectStage;
 use App\Models\StageTemplate;
 use App\Models\User;
 use App\Search\ProjectSearchProvider;
 use App\Search\SearchRegistry;
 use App\Services\DueTasks;
+use App\Services\InstallmentSchedule;
 use App\Services\Notifier;
+use App\Services\ProjectProgress;
+use App\Settings\NotificationSettings;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
@@ -75,6 +81,9 @@ class ProjectsServiceProvider extends ServiceProvider
             }
         };
 
+        // A stage reaching "done" makes its installments due at once (spec §8.8).
+        ProjectProgress::$afterRefresh[] = fn (Project $project) => InstallmentSchedule::markDue($project);
+
         self::registerDueTasks();
     }
 
@@ -97,6 +106,25 @@ class ProjectsServiceProvider extends ServiceProvider
                     $notifier->toRoles(NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id);
                     $notifier->toUser($project->manager, NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id.'-manager');
                 });
+        });
+
+        // Installments reaching their date become due; those due within the rule days are announced once.
+        DueTasks::register('installments-due', 1440, function () {
+            InstallmentSchedule::markDue();
+
+            $days = (int) (app(NotificationSettings::class)->rule(NotificationType::InstallmentDue)['days'] ?? 3);
+            $notifier = app(Notifier::class);
+
+            ProjectInstallment::query()->with('project')
+                ->whereIn('status', [InstallmentStatus::NotDue->value, InstallmentStatus::Due->value])
+                ->where('due_type', InstallmentDueType::Date->value)
+                ->whereBetween('due_date', [today(), today()->addDays($days)])
+                ->whereHas('project')
+                ->each(fn (ProjectInstallment $installment) => $notifier->toRoles(
+                    NotificationType::InstallmentDue, $installment->project,
+                    ['number' => $installment->project->number, 'date' => fmt_date($installment->due_date)],
+                    route('projects.show', [$installment->project, 'tab' => 'payments']), 'due-'.$installment->id,
+                ));
         });
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectInstallmentController;
 use App\Http\Controllers\ProjectStageController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,3 +17,7 @@ Route::post('/projects/{project}/stages/reorder', [ProjectStageController::class
 Route::put('/projects/{project}/stages/{stage}', [ProjectStageController::class, 'update'])->name('projects.stages.update');
 Route::delete('/projects/{project}/stages/{stage}', [ProjectStageController::class, 'destroy'])->name('projects.stages.destroy');
 Route::post('/projects/{project}/stages/{stage}/attachments', [ProjectStageController::class, 'attach'])->name('projects.stages.attachments.store');
+
+Route::post('/projects/{project}/installments', [ProjectInstallmentController::class, 'store'])->name('projects.installments.store');
+Route::put('/projects/{project}/installments/{installment}', [ProjectInstallmentController::class, 'update'])->name('projects.installments.update');
+Route::delete('/projects/{project}/installments/{installment}', [ProjectInstallmentController::class, 'destroy'])->name('projects.installments.destroy');
