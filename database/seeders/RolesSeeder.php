@@ -22,6 +22,8 @@ class RolesSeeder extends Seeder
             'site_visits.view', 'site_visits.create', 'site_visits.update', 'site_visits.delete', 'site_visits.restore', 'site_visits.export',
             'price_items.view', 'price_items.create', 'price_items.update', 'price_items.delete', 'price_items.restore', 'price_items.export',
             'quotations.view', 'quotations.create', 'quotations.update', 'quotations.delete', 'quotations.restore', 'quotations.export', 'quotations.print', 'quotations.approve',
+            'projects.view', 'projects.create', 'projects.update', 'projects.delete', 'projects.restore', 'projects.export', 'projects.print', 'projects.approve',
+            'maintenance.view', 'maintenance.create', 'maintenance.update', 'maintenance.delete', 'maintenance.restore', 'maintenance.export',
         ]],
         'sales' => ['مبيعات', 'Sales', 'all', false, [
             'lookups.view',
@@ -33,9 +35,11 @@ class RolesSeeder extends Seeder
         ]],
         'engineer' => ['مهندس مشروع', 'Project engineer', 'assigned', false, [
             'clients.view', 'leads.view', 'site_visits.view', 'site_visits.update', 'quotations.view',
+            'projects.view', 'projects.update', 'maintenance.view', 'maintenance.create', 'maintenance.update',
         ]],
         'accountant' => ['محاسب', 'Accountant', 'all', false, [
             'lookups.view', 'clients.view', 'price_items.view', 'quotations.view', 'quotations.export', 'quotations.print',
+            'projects.view', 'projects.print',
         ]],
     ];
 

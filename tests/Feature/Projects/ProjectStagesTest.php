@@ -111,3 +111,9 @@ it('shows the stages tab with the timeline', function () {
 
     actingAs($this->user)->get(route('projects.show', [$this->project, 'tab' => 'stages']))->assertOk()->assertSee('مرحلة العزل')->assertSee('timeline', false);
 });
+
+it('loads the stages script through Vite, not a bare module import', function () {
+    $response = actingAs($this->user)->get(route('projects.show', [$this->project, 'tab' => 'stages']))->assertOk();
+
+    $response->assertDontSee("import('sortablejs')", false);
+});

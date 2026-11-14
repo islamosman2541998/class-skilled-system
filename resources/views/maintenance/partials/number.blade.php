@@ -1,1 +1,1 @@
-<a href="{{ route('maintenance.show', $row) }}" class="fw-semibold"><bdi dir="ltr">{{ $row->number }}</bdi></a>
+<a href="{{ route('maintenance.show', $row) }}" class="fw-semibold text-nowrap"><bdi dir="ltr">{{ $row->number }}</bdi></a>

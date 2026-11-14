@@ -98,6 +98,12 @@
     padding: 0;
 }
 
+// Absolutely positioned children (visually hidden labels) stay inside the scroll box,
+// otherwise they widen the page on phones.
+.table-responsive {
+    position: relative;
+}
+
 // Forms
 .field {
     margin-bottom: 1rem;

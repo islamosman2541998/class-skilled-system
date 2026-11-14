@@ -33,6 +33,7 @@ export default defineConfig({
                 'resources/js/translations.js',
                 'resources/js/clients.js',
                 'resources/js/quotation-form.js',
+                'resources/js/project-stages.js',
             ],
             refresh: true,
         }),

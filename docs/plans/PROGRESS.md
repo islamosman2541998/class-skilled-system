@@ -62,6 +62,22 @@ Visual pass: every Stage 1 screen checked at 375 px in Arabic and English (no ho
 
 Final self-review (no separate reviewer) fixed: assigned-only users could link a hidden client by its id and so reveal it; client page figures counted records the user cannot see; searchable selects hid their placeholder. Deferred: the "see amounts and costs" permission of §6 is not implemented yet; the Tajawal OFL licence text is not yet shipped with the font.
 
-Next: Stage 2 plan (projects).
+Next: Stage 2 plan (projects) — done, see below.
 
 Known gaps: PDFs use Tajawal also when Cairo is chosen (user decision); the OFL licence text of Tajawal is not yet added next to the font files; the website project change is documented in `docs/integration/website-link.md`, not applied.
+
+## Stage 2 — Projects (complete)
+
+Plan: `docs/plans/2026-11-14-stage-2-projects.md`. Ledger of decisions: `.superpowers/sdd/2026-11-14-stage-2-projects/progress.md` (local, git-ignored).
+
+Delivered: stage templates per service, projects (team, record scope by manager or member, client page tab), stages with weights, dates, drag order and progress (weights normalised, late stages flagged), payment schedule from percentages with the last line taking the remainder and installments due by date or by stage, conversion of an accepted quotation into one project only, variation orders (signed amounts, approval adds to the contract value once and adds an installment), handover with month-end safe warranty and a handover record PDF in Arabic / English / both, maintenance requests (MR numbers, inside / outside warranty from the request date, assigned user and project team see them), periodic notifications (late stage, project ending, warranty ending, installment due), projects demo data, default role permissions.
+
+Gate run on MySQL: `migrate:fresh --seed` and `DemoSeeder` succeed (18 projects, 6 variations, 3 handovers, 10 maintenance requests); Pint and PHPStan clean; 430 tests pass; build succeeds; no log errors.
+
+Visual pass: projects list, every project tab, stage modal, variation form, maintenance list / page / form, stage templates checked at 375 px (no horizontal scroll) and 1440 px, Arabic and English.
+
+Final self-review (no separate reviewer) fixed: the stages tab imported SortableJS by its bare name from an inline script, so drag ordering failed in the browser (now a Vite entry `resources/js/project-stages.js`); hidden table header labels widened the payments tab on phones (`.table-responsive` is now positioned); maintenance numbers wrapped in the list.
+
+Known gaps: starting role permissions apply to new installs only (existing roles keep their set, as in Stage 1); "see amounts and costs" permission still deferred; the Tajawal OFL licence text is still to add.
+
+Next: Stage 3 plan (finance).
