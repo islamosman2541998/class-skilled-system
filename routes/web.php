@@ -16,6 +16,7 @@ use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StageTemplateController;
 use App\Http\Controllers\TemplateSettingsController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\UploadController;
@@ -87,6 +88,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
         Route::get('/integration', [IntegrationController::class, 'edit'])->name('settings.integration');
         Route::put('/integration', [IntegrationController::class, 'update'])->name('settings.integration.update');
         Route::post('/integration/key', [IntegrationController::class, 'generateKey'])->name('settings.integration.key');
+        Route::get('/stage-templates', [StageTemplateController::class, 'edit'])->name('settings.stage-templates');
+        Route::put('/stage-templates', [StageTemplateController::class, 'update'])->name('settings.stage-templates.update');
         Route::get('/templates', [TemplateSettingsController::class, 'edit'])->name('settings.templates');
         Route::put('/templates', [TemplateSettingsController::class, 'update'])->name('settings.templates.update');
         Route::get('/numbering', [NumberingController::class, 'edit'])->name('settings.numbering');

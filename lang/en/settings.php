@@ -37,6 +37,7 @@ return [
     'lookup_has_children' => 'Other items belong to it.',
     'lookup_in_use' => 'The item is used in records; it can be deactivated, not deleted.',
     'groups' => [
+        'stage_templates' => 'Stage templates',
         'integration' => 'Website link',
         'templates' => 'Document templates',
         'company' => 'Company',

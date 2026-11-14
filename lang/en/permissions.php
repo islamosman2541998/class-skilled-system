@@ -2,6 +2,8 @@
 
 return [
     'modules' => [
+        'projects' => 'Projects',
+        'maintenance' => 'Maintenance requests',
         'clients' => 'Clients',
         'leads' => 'Requests',
         'site_visits' => 'Site visits',

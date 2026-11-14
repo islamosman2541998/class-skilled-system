@@ -2,6 +2,8 @@
 
 return [
     'modules' => [
+        'projects' => 'المشاريع',
+        'maintenance' => 'طلبات الصيانة',
         'clients' => 'العملاء',
         'leads' => 'الطلبات',
         'site_visits' => 'المعاينات',

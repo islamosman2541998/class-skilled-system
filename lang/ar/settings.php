@@ -37,6 +37,7 @@ return [
     'lookup_has_children' => 'توجد عناصر تابعة له.',
     'lookup_in_use' => 'العنصر مستخدم في سجلات؛ يمكن إيقافه لا حذفه.',
     'groups' => [
+        'stage_templates' => 'قوالب المراحل',
         'integration' => 'الربط بالموقع',
         'templates' => 'قوالب المستندات',
         'company' => 'بيانات الشركة',
