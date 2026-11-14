@@ -10,6 +10,7 @@ use App\Http\Controllers\LeadController;
 use App\Models\Client;
 use App\Models\Lead;
 use App\Models\Lookup;
+use App\Models\PriceItem;
 use App\Models\SiteVisit;
 use App\Search\ClientSearchProvider;
 use App\Search\LeadSearchProvider;
@@ -37,6 +38,10 @@ class SalesServiceProvider extends ServiceProvider
         TrashRegistry::register(Client::class);
         TrashRegistry::register(Lead::class);
         TrashRegistry::register(SiteVisit::class);
+        TrashRegistry::register(PriceItem::class);
+
+        LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => PriceItem::withTrashed()->where('service_id', $lookup->id)->exists());
+        LookupUsage::register(LookupType::Unit, fn (Lookup $lookup) => PriceItem::withTrashed()->where('unit_id', $lookup->id)->exists());
 
         $this->registerLeads();
         $this->registerSiteVisits();
@@ -101,6 +106,7 @@ class SalesServiceProvider extends ServiceProvider
         PermissionRegistry::register('clients');
         PermissionRegistry::register('leads');
         PermissionRegistry::register('site_visits');
+        PermissionRegistry::register('price_items', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
     }
 
     private function registerMenu(): void
@@ -108,6 +114,7 @@ class SalesServiceProvider extends ServiceProvider
         Menu::register('sales', ['label' => 'leads.leads', 'icon' => 'inbox', 'route' => 'leads.index', 'permission' => 'leads.view']);
         Menu::register('sales', ['label' => 'visits.visits', 'icon' => 'map-pin', 'route' => 'site-visits.index', 'permission' => 'site_visits.view']);
         Menu::register('sales', ['label' => 'visits.my_visits', 'icon' => 'calendar', 'route' => 'my-visits', 'permission' => 'site_visits.view']);
+        Menu::register('sales', ['label' => 'price_items.price_items', 'icon' => 'list-numbers', 'route' => 'price-items.index', 'permission' => 'price_items.view']);
         Menu::register('sales', ['label' => 'clients.clients', 'icon' => 'users-group', 'route' => 'clients.index', 'permission' => 'clients.view']);
     }
 }

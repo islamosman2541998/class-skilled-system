@@ -5,6 +5,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MyVisitsController;
+use App\Http\Controllers\PriceItemController;
 use App\Http\Controllers\SiteVisitController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +35,10 @@ Route::resource('site-visits', SiteVisitController::class)->except(['destroy']);
 Route::get('/site-visits/{site_visit}/result', [SiteVisitController::class, 'result'])->name('site-visits.result');
 Route::put('/site-visits/{site_visit}/result', [SiteVisitController::class, 'storeResult'])->name('site-visits.result.store');
 Route::post('/site-visits/{site_visit}/attachments', [SiteVisitController::class, 'attach'])->name('site-visits.attachments.store');
+
+Route::get('/price-items', [PriceItemController::class, 'index'])->name('price-items.index');
+Route::post('/price-items', [PriceItemController::class, 'store'])->name('price-items.store');
+Route::get('/price-items/search', [PriceItemController::class, 'search'])->name('price-items.search');
+Route::get('/price-items/import-template', [PriceItemController::class, 'template'])->name('price-items.import-template');
+Route::post('/price-items/import', [PriceItemController::class, 'import'])->name('price-items.import');
+Route::put('/price-items/{price_item}', [PriceItemController::class, 'update'])->name('price-items.update');
