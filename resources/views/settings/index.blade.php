@@ -11,6 +11,7 @@
         ['route' => 'users.index', 'label' => 'users.users', 'icon' => 'users', 'permission' => 'users.view'],
         ['route' => 'roles.index', 'label' => 'users.roles', 'icon' => 'shield-lock', 'permission' => 'roles.view'],
         ['route' => 'activity.index', 'label' => 'settings.groups.activity', 'icon' => 'history', 'permission' => 'activity.view'],
+        ['route' => 'design.index', 'label' => 'design.title', 'icon' => 'layout', 'permission' => 'settings.manage'],
     ];
 @endphp
 

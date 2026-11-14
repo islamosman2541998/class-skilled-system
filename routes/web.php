@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LookupController;
@@ -55,6 +56,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
 
     Route::get('/activity', ActivityController::class)->name('activity.index');
+    Route::get('/design', [DesignController::class, 'index'])->name('design.index');
+    Route::get('/design/record', [DesignController::class, 'record'])->name('design.record');
     Route::get('/search', SearchController::class)->middleware('throttle:60,1')->name('search');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');

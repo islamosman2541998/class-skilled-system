@@ -36,4 +36,5 @@ return [
     'search_shortcut' => 'Ctrl K',
     'search_hint' => 'Type at least two characters',
     'close' => 'Close',
+    'sections' => 'Sections',
 ];

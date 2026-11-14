@@ -162,6 +162,8 @@ return [
     'reset_translation' => 'استعادة النص الأصلي',
     'translation_reset_done' => 'تمت استعادة النص الأصلي',
     'translation_groups' => [
+        'home' => 'الرئيسية',
+        'design' => 'الشاشات المرجعية',
         'app' => 'عام',
         'auth' => 'الدخول',
         'menu' => 'القائمة',

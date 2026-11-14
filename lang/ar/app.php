@@ -36,4 +36,5 @@ return [
     'search_shortcut' => 'Ctrl K',
     'search_hint' => 'اكتب حرفين على الأقل',
     'close' => 'إغلاق',
+    'sections' => 'الأقسام',
 ];

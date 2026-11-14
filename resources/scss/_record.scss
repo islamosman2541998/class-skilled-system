@@ -1,0 +1,192 @@
+// Record page: fixed summary, tabs (spec §4.3)
+.record-header {
+    margin-bottom: 1rem;
+    padding: 1rem 1.25rem;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
+}
+
+.record-header-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: .75rem;
+}
+
+.record-header-title {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .25rem .75rem;
+    min-width: 0;
+
+    .page-title {
+        margin: 0;
+    }
+}
+
+.record-header-subtitle {
+    flex-basis: 100%;
+    margin: 0;
+    color: var(--c-muted);
+}
+
+.record-figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: .75rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--c-line);
+}
+
+.figure {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+}
+
+.figure-label {
+    color: var(--c-muted);
+    font-size: .8rem;
+}
+
+.figure-value {
+    color: var(--c-ink);
+    font-size: 1.05rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.record-tabs {
+    display: flex;
+    gap: .25rem;
+    margin-bottom: 1rem;
+    overflow-x: auto;
+    border-bottom: 1px solid var(--c-line);
+    scrollbar-width: none;
+}
+
+.record-tab {
+    flex: 0 0 auto;
+    padding: .6rem .9rem;
+    border-bottom: 2px solid transparent;
+    color: var(--c-muted);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+
+    &:hover {
+        color: var(--c-navy);
+    }
+
+    &.is-active {
+        border-bottom-color: var(--c-sky);
+        color: var(--c-navy);
+    }
+}
+
+// Home: my recent activity
+.activity-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .25rem .75rem;
+        padding: .55rem 0;
+        border-bottom: 1px solid var(--c-line);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+.activity-event {
+    font-weight: 600;
+}
+
+.activity-module,
+.activity-time {
+    color: var(--c-muted);
+}
+
+.activity-time {
+    margin-inline-start: auto;
+    font-size: .85rem;
+}
+
+// Translation editor
+.translations-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--c-line);
+
+    .form-control {
+        flex: 1 1 220px;
+    }
+
+    .form-select {
+        flex: 0 1 200px;
+    }
+}
+
+.translations-table {
+    margin: 0;
+
+    td {
+        word-break: break-word;
+    }
+
+    .t-key {
+        color: var(--c-muted);
+        font-size: .8rem;
+    }
+
+    tr[hidden] {
+        display: none;
+    }
+}
+
+// Below md the editor rows become cards, like every other table (spec §4.4).
+@media (max-width: 767.98px) {
+    .translations-table {
+        thead {
+            display: none;
+        }
+
+        tbody,
+        tr,
+        td {
+            display: block;
+            width: 100%;
+        }
+
+        tr {
+            position: relative;
+            padding: .65rem 1rem;
+            padding-inline-end: 3rem;
+            border-bottom: 1px solid var(--c-line);
+        }
+
+        td {
+            padding: .1rem 0;
+            border: 0;
+        }
+
+        .dt-actions {
+            position: absolute;
+            inset-block-start: .5rem;
+            inset-inline-end: .5rem;
+            width: auto;
+        }
+    }
+}
