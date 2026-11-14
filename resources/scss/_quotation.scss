@@ -1,0 +1,183 @@
+// Quotation form and page (spec §8.5)
+.q-picker {
+    min-width: min(360px, 60vw);
+}
+
+.q-items-head,
+.q-item-fields {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 110px 100px 120px 120px;
+    gap: .5rem;
+    align-items: start;
+}
+
+.q-items-head {
+    margin-inline: 2.25rem;
+    padding-bottom: .35rem;
+    border-bottom: 1px solid var(--c-line);
+    color: var(--c-muted);
+    font-size: .8rem;
+    font-weight: 600;
+
+    > span:first-child,
+    > span:last-child {
+        display: none;
+    }
+
+    > span:nth-child(n + 4) {
+        text-align: end;
+    }
+}
+
+.q-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .25rem;
+    padding: .5rem 0;
+    border-bottom: 1px solid var(--c-line);
+
+    &.sortable-ghost {
+        opacity: .5;
+    }
+}
+
+.q-handle {
+    cursor: grab;
+    color: var(--c-muted);
+}
+
+.q-item-fields {
+    flex: 1;
+    min-width: 0;
+    grid-template-areas:
+        'section section section section section'
+        'desc unit qty price total'
+        'desc-en desc-en desc-en desc-en desc-en';
+}
+
+.q-section {
+    grid-area: section;
+    max-width: 320px;
+    background: var(--c-paper);
+}
+
+.q-desc {
+    grid-area: desc;
+    resize: vertical;
+}
+
+.q-desc-en {
+    grid-area: desc-en;
+    resize: vertical;
+}
+
+.q-unit {
+    grid-area: unit;
+}
+
+.q-qty {
+    grid-area: qty;
+}
+
+.q-price {
+    grid-area: price;
+}
+
+.q-line-total {
+    grid-area: total;
+    padding-top: .45rem;
+    font-weight: 600;
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+}
+
+.q-totals {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--c-line);
+}
+
+.q-discount {
+    flex: 1 1 320px;
+    max-width: 480px;
+}
+
+.q-summary {
+    flex: 0 1 340px;
+    margin: 0;
+
+    > div {
+        display: flex;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: .3rem 0;
+    }
+
+    dt {
+        color: var(--c-muted);
+        font-weight: 500;
+    }
+
+    dd {
+        margin: 0;
+        font-variant-numeric: tabular-nums;
+    }
+}
+
+.q-grand {
+    border-top: 1px solid var(--c-line);
+    font-size: 1.05rem;
+    font-weight: 700;
+
+    dt,
+    th {
+        color: var(--c-ink);
+    }
+}
+
+.q-view {
+    .num {
+        text-align: end;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-section-row th {
+        background: var(--c-paper);
+        color: var(--c-navy);
+    }
+
+    tfoot th {
+        font-weight: 500;
+    }
+}
+
+.detail-list-1 {
+    grid-template-columns: 1fr;
+}
+
+// Below md each item becomes a stacked card.
+@media (max-width: 767.98px) {
+    .q-items-head {
+        display: none;
+    }
+
+    .q-item-fields {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas:
+            'section section'
+            'desc desc'
+            'desc-en desc-en'
+            'unit qty'
+            'price total';
+    }
+
+    .q-section {
+        max-width: none;
+    }
+}

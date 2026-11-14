@@ -6,6 +6,7 @@ use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MyVisitsController;
 use App\Http\Controllers\PriceItemController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SiteVisitController;
 use Illuminate\Support\Facades\Route;
 
@@ -42,3 +43,6 @@ Route::get('/price-items/search', [PriceItemController::class, 'search'])->name(
 Route::get('/price-items/import-template', [PriceItemController::class, 'template'])->name('price-items.import-template');
 Route::post('/price-items/import', [PriceItemController::class, 'import'])->name('price-items.import');
 Route::put('/price-items/{price_item}', [PriceItemController::class, 'update'])->name('price-items.update');
+
+Route::resource('quotations', QuotationController::class)->except(['destroy']);
+Route::post('/quotations/{quotation}/attachments', [QuotationController::class, 'attach'])->name('quotations.attachments.store');

@@ -200,6 +200,12 @@ class Lead extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(SiteVisit::class);
     }
 
+    /** @return HasMany<Quotation, $this> */
+    public function quotations(): HasMany
+    {
+        return $this->hasMany(Quotation::class);
+    }
+
     /** @return HasMany<LeadFollowUp, $this> */
     public function followUps(): HasMany
     {

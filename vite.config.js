@@ -32,6 +32,7 @@ export default defineConfig({
                 'resources/js/attachments.js',
                 'resources/js/translations.js',
                 'resources/js/clients.js',
+                'resources/js/quotation-form.js',
             ],
             refresh: true,
         }),
