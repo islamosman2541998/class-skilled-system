@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ConvertQuotationController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectHandoverController;
 use App\Http\Controllers\ProjectInstallmentController;
 use App\Http\Controllers\ProjectStageController;
 use App\Http\Controllers\VariationController;
@@ -35,3 +36,7 @@ Route::put('/projects/{project}/variations/{variation}', [VariationController::c
 Route::patch('/projects/{project}/variations/{variation}/approve', [VariationController::class, 'approve'])->name('projects.variations.approve');
 Route::patch('/projects/{project}/variations/{variation}/reject', [VariationController::class, 'reject'])->name('projects.variations.reject');
 Route::post('/projects/{project}/variations/{variation}/attachments', [VariationController::class, 'attach'])->name('projects.variations.attachments.store');
+
+Route::put('/projects/{project}/handover', [ProjectHandoverController::class, 'update'])->name('projects.handover.update');
+Route::get('/projects/{project}/handover/pdf', [ProjectHandoverController::class, 'pdf'])->name('projects.handover.pdf');
+Route::post('/projects/{project}/handover/attachments', [ProjectHandoverController::class, 'attach'])->name('projects.handover.attachments.store');

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
@@ -147,6 +148,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
     public function variations(): HasMany
     {
         return $this->hasMany(Variation::class)->latest('id');
+    }
+
+    /** @return HasOne<ProjectHandover, $this> */
+    public function handover(): HasOne
+    {
+        return $this->hasOne(ProjectHandover::class);
     }
 
     /** @return HasMany<ProjectItem, $this> */

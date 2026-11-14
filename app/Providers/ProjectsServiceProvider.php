@@ -7,12 +7,14 @@ use App\Enums\InstallmentDueType;
 use App\Enums\InstallmentStatus;
 use App\Enums\LookupType;
 use App\Enums\NotificationType;
+use App\Enums\ProjectStatus;
 use App\Enums\StageStatus;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\QuotationController;
 use App\Models\Client;
 use App\Models\Lookup;
 use App\Models\Project;
+use App\Models\ProjectHandover;
 use App\Models\ProjectInstallment;
 use App\Models\ProjectStage;
 use App\Models\StageTemplate;
@@ -108,6 +110,36 @@ class ProjectsServiceProvider extends ServiceProvider
                     $notifier->toRoles(NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id);
                     $notifier->toUser($project->manager, NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id.'-manager');
                 });
+        });
+
+        // A running project whose planned end is near: the manager is told once per planned date.
+        DueTasks::register('project-ending', 1440, function () {
+            $days = (int) (app(NotificationSettings::class)->rule(NotificationType::ProjectEnding)['days'] ?? 7);
+            $notifier = app(Notifier::class);
+
+            Project::query()->with('manager')
+                ->whereIn('status', [ProjectStatus::NotStarted->value, ProjectStatus::InProgress->value, ProjectStatus::OnHold->value])
+                ->whereBetween('planned_end_date', [today(), today()->addDays($days)])
+                ->each(fn (Project $project) => $notifier->toUser(
+                    $project->manager, NotificationType::ProjectEnding, $project,
+                    ['number' => $project->number, 'date' => fmt_date($project->planned_end_date)],
+                    route('projects.show', $project), 'ending-'.$project->planned_end_date->format('Y-m-d'),
+                ));
+        });
+
+        // A warranty ending within the rule days: the configured roles, once per end date.
+        DueTasks::register('warranty-ending', 1440, function () {
+            $days = (int) (app(NotificationSettings::class)->rule(NotificationType::WarrantyEnding)['days'] ?? 30);
+            $notifier = app(Notifier::class);
+
+            ProjectHandover::query()->with('project')
+                ->whereBetween('warranty_end', [today(), today()->addDays($days)])
+                ->whereHas('project')
+                ->each(fn (ProjectHandover $handover) => $notifier->toRoles(
+                    NotificationType::WarrantyEnding, $handover->project,
+                    ['number' => $handover->project->number, 'date' => fmt_date($handover->warranty_end)],
+                    route('projects.show', [$handover->project, 'tab' => 'handover']), 'warranty-'.$handover->warranty_end->format('Y-m-d'),
+                ));
         });
 
         // Installments reaching their date become due; those due within the rule days are announced once.
