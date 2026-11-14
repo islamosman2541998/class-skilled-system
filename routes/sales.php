@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,3 +21,8 @@ Route::delete('/clients/{client}/contacts/{contact}', [ClientContactController::
 
 Route::resource('leads', LeadController::class)->except(['destroy']);
 Route::post('/leads/{lead}/attachments', [LeadController::class, 'attach'])->name('leads.attachments.store');
+Route::post('/leads/{lead}/follow-ups', [LeadActionController::class, 'followUp'])->name('leads.follow-ups.store');
+Route::patch('/leads/{lead}/assign', [LeadActionController::class, 'assign'])->name('leads.assign');
+Route::patch('/leads/{lead}/schedule', [LeadActionController::class, 'schedule'])->name('leads.schedule');
+Route::patch('/leads/{lead}/close', [LeadActionController::class, 'close'])->name('leads.close');
+Route::patch('/leads/{lead}/reopen', [LeadActionController::class, 'reopen'])->name('leads.reopen');

@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Enums\LookupType;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\LeadController;
 use App\Models\Client;
 use App\Models\Lead;
 use App\Models\Lookup;
@@ -44,6 +45,7 @@ class SalesServiceProvider extends ServiceProvider
 
         ClientController::$figureProviders['leads'] = fn (Client $client) => (string) $client->leads()->count();
         ClientController::$actionViews[] = 'leads.partials.client-action';
+        LeadController::$showViews[] = 'leads.partials.follow-ups';
 
         $usedByLeads = fn (string $column) => fn (Lookup $lookup) => Lead::withTrashed()->where($column, $lookup->id)->exists();
         LookupUsage::register(LookupType::Service, $usedByLeads('service_id'));

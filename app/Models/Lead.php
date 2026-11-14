@@ -13,6 +13,7 @@ use Database\Factories\LeadFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\HasMedia;
@@ -178,6 +179,25 @@ class Lead extends Model implements GuardsDeletion, HasMedia
         $this->load('status');
 
         ActivityLogger::record('status_changed', $this, ['old' => ['status' => $old], 'attributes' => ['status' => $code]], 'leads');
+    }
+
+    /** Brings a lost lead back to "contacted" and clears the rejection. */
+    public function reopen(User $by): void
+    {
+        if ($this->statusCode() !== 'lost') {
+            return;
+        }
+
+        $this->forceFill(['status_id' => self::statusIdFor('contacted'), 'rejection_reason_id' => null, 'rejection_note' => null])->save();
+        $this->load('status');
+
+        ActivityLogger::record('status_changed', $this, ['old' => ['status' => 'lost'], 'attributes' => ['status' => 'contacted']], 'leads');
+    }
+
+    /** @return HasMany<LeadFollowUp, $this> */
+    public function followUps(): HasMany
+    {
+        return $this->hasMany(LeadFollowUp::class)->latest('happened_at')->latest('id');
     }
 
     public function deletionBlockedReason(User $by): ?string

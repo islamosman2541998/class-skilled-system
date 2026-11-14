@@ -262,3 +262,57 @@
 .contact-add {
     margin-top: 1rem;
 }
+
+// Follow-up timeline
+.follow-up-form {
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--c-line);
+
+    .btn-group {
+        margin-bottom: .75rem;
+    }
+}
+
+.timeline {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    > li {
+        display: flex;
+        gap: .75rem;
+        padding: .6rem 0;
+        border-bottom: 1px solid var(--c-line);
+
+        &:last-child {
+            border-bottom: 0;
+        }
+    }
+}
+
+.timeline-icon {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--c-paper);
+    color: var(--c-navy);
+}
+
+.timeline-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .15rem .6rem;
+    margin-bottom: .15rem;
+    color: var(--c-muted);
+    font-size: .8rem;
+}

@@ -35,6 +35,13 @@ class LeadController extends Controller
      */
     public static array $indexActionViews = [];
 
+    /**
+     * Buttons added to the lead page header by later modules ("book visit", "new quotation"), each receiving $lead.
+     *
+     * @var list<string>
+     */
+    public static array $headerActionViews = [];
+
     public function __construct(private readonly AssignLead $assign) {}
 
     public function index(): View

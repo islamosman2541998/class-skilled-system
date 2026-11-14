@@ -63,7 +63,8 @@ class DemoSeeder extends Seeder
                     'name_ar' => $words[$i % count($words)].' '.($i + 1),
                     'name_en' => 'Reason '.($i + 1),
                     'code' => 'demo-'.($i + 1),
-                    'is_active' => $i % 9 !== 0,
+                    // Inactive: the rows exist for the table speed check and must not fill the form dropdowns.
+                    'is_active' => false,
                     'is_system' => false,
                     'sort_order' => 1000 + $i,
                     'created_at' => $now->copy()->subMinutes($count - $i),
