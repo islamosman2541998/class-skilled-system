@@ -24,7 +24,10 @@ function finishedUpload(User $owner, string $name, string $bytes): TemporaryUplo
 
 function imageBytes(int $width = 800, int $height = 600, string $name = 'photo.jpg'): string
 {
-    return file_get_contents(UploadedFile::fake()->image($name, $width, $height)->getPathname());
+    // Keep the fake in a variable: its temp file is removed as soon as the object is freed.
+    $file = UploadedFile::fake()->image($name, $width, $height);
+
+    return file_get_contents($file->getPathname());
 }
 
 function mp4Bytes(int $padding = 2048): string

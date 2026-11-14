@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\AttachUploads;
 use App\Http\Requests\ResetUserPasswordRequest;
+use App\Http\Requests\StoreAttachmentsRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
@@ -89,6 +91,15 @@ class UserController extends Controller
         $user->update(['password' => $request->validated('password')]);
 
         return back()->with('success', __('users.password_reset_done'));
+    }
+
+    public function attach(StoreAttachmentsRequest $request, User $user, AttachUploads $attach): RedirectResponse
+    {
+        Gate::authorize('users.update');
+
+        $attach->handle($user, $request->validated('uploads'), $request->user(), $request->meta());
+
+        return back()->with('success', __('uploads.attached'));
     }
 
     private function form(User $user): View

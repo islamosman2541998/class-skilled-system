@@ -28,6 +28,8 @@ export default defineConfig({
                 'resources/css/font-cairo.css',
                 'resources/css/font-tajawal.css',
                 'resources/js/app.js',
+                'resources/js/uploader.js',
+                'resources/js/attachments.js',
             ],
             refresh: true,
         }),

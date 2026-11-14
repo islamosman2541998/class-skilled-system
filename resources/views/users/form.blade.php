@@ -103,6 +103,10 @@
                     </form>
                 </x-panel>
             </div>
+
+            <div class="col-12">
+                <x-attachments :model="$user" :action="route('users.attachments.store', $user)" />
+            </div>
         </div>
     @endif
 @endsection

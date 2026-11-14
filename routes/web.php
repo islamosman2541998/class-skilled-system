@@ -5,10 +5,12 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LookupController;
+use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NumberingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\IdleTimeout;
@@ -32,6 +34,19 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::resource('users', UserController::class)->except(['show', 'destroy']);
     Route::patch('/users/{user}/toggle-active', [UserController::class, 'toggleActive'])->name('users.toggle-active');
     Route::put('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->name('users.reset-password');
+
+    Route::post('/users/{user}/attachments', [UserController::class, 'attach'])->name('users.attachments.store');
+
+    Route::post('/uploads', [UploadController::class, 'store'])->name('uploads.store');
+    Route::match(['HEAD', 'GET'], '/uploads/{id}', [UploadController::class, 'head'])->whereUuid('id')->name('uploads.head');
+    Route::patch('/uploads/{id}', [UploadController::class, 'patch'])->whereUuid('id')->name('uploads.patch');
+    Route::delete('/uploads/{id}', [UploadController::class, 'destroy'])->whereUuid('id')->name('uploads.destroy');
+    Route::post('/uploads/{id}/poster', [UploadController::class, 'poster'])->whereUuid('id')->name('uploads.poster');
+
+    Route::get('/media/{media}', [MediaController::class, 'show'])->name('media.show');
+    Route::get('/media/{media}/thumb', [MediaController::class, 'thumb'])->name('media.thumb');
+    Route::patch('/media/{media}', [MediaController::class, 'update'])->name('media.update');
+    Route::delete('/media/{media}', [MediaController::class, 'destroy'])->name('media.destroy');
 
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
 

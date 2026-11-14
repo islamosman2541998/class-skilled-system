@@ -50,7 +50,8 @@ return [
      * The maximum file size of an item in bytes.
      * Adding a larger file will result in an exception.
      */
-    'max_file_size' => 1024 * 1024 * 10, // 10MB
+    // Per-kind limits are enforced by App\Services\Uploads\UploadValidator from the upload settings.
+    'max_file_size' => 1024 * 1024 * 1024,
 
     /*
      * Uploads whose file name contains any of these extensions will be rejected.
@@ -89,7 +90,7 @@ return [
     /*
      * By default all conversions will be performed on a queue.
      */
-    'queue_conversions_by_default' => env('QUEUE_CONVERSIONS_BY_DEFAULT', true),
+    'queue_conversions_by_default' => env('QUEUE_CONVERSIONS_BY_DEFAULT', false),
 
     /*
      * Should database transactions be run after database commits?

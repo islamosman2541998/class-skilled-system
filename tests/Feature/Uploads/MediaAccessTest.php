@@ -12,7 +12,8 @@ beforeEach(fn () => Storage::fake('private'));
 
 function attachedPhoto(User $record, User $by)
 {
-    $bytes = file_get_contents(UploadedFile::fake()->image('photo.jpg', 800, 600)->getPathname());
+    $file = UploadedFile::fake()->image('photo.jpg', 800, 600);
+    $bytes = file_get_contents($file->getPathname());
     $upload = TemporaryUpload::create($by->id, strlen($bytes), 'photo.jpg');
     file_put_contents($upload->path(), $bytes);
     $upload->saveMeta(['offset' => strlen($bytes)]);
@@ -65,7 +66,8 @@ it('attaches uploads from the user form and shows them', function () {
     $actor = userWith(['users.view', 'users.update']);
     $record = User::factory()->create();
 
-    $bytes = file_get_contents(UploadedFile::fake()->image('id-card.jpg', 800, 600)->getPathname());
+    $file = UploadedFile::fake()->image('id-card.jpg', 800, 600);
+    $bytes = file_get_contents($file->getPathname());
     $upload = TemporaryUpload::create($actor->id, strlen($bytes), 'id-card.jpg');
     file_put_contents($upload->path(), $bytes);
     $upload->saveMeta(['offset' => strlen($bytes)]);
