@@ -28,6 +28,7 @@ class ClientController extends Controller
         'leads' => 'leads.index',
         'visits' => 'site-visits.index',
         'quotations' => 'quotations.index',
+        'projects' => 'projects.index',
         'attachments' => null,
         'activity' => null,
     ];

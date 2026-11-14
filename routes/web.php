@@ -64,6 +64,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
 
     Route::get('/activity', ActivityController::class)->name('activity.index');
     require __DIR__.'/sales.php';
+    require __DIR__.'/projects.php';
 
     Route::get('/design', [DesignController::class, 'index'])->name('design.index');
     Route::get('/design/record', [DesignController::class, 'record'])->name('design.record');

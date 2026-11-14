@@ -35,12 +35,14 @@ return [
     'has_records' => 'The client is linked to other records',
     'quick_add' => 'Add client',
     'figures' => [
+        'projects' => 'Projects',
         'contacts' => 'Contacts',
         'quotations' => 'Quotations',
         'accepted_total' => 'Accepted quotations total',
         'leads' => 'Requests',
     ],
     'tabs' => [
+        'projects' => 'Projects',
         'overview' => 'Overview',
         'contacts' => 'Contacts',
         'leads' => 'Requests',

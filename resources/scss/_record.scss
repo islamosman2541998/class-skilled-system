@@ -392,3 +392,21 @@
     gap: .5rem;
     margin-top: .5rem;
 }
+
+// Progress bars (projects, stages)
+.progress-line {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 60px;
+    block-size: 6px;
+    margin-block: .25rem;
+    border-radius: 3px;
+    background: var(--c-line);
+    overflow: hidden;
+
+    > span {
+        display: block;
+        block-size: 100%;
+        background: var(--c-sky);
+    }
+}

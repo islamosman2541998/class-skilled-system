@@ -35,12 +35,14 @@ return [
     'has_records' => 'العميل مرتبط بسجلات أخرى',
     'quick_add' => 'إضافة عميل',
     'figures' => [
+        'projects' => 'المشاريع',
         'contacts' => 'جهات الاتصال',
         'quotations' => 'عروض الأسعار',
         'accepted_total' => 'إجمالي العروض المقبولة',
         'leads' => 'الطلبات',
     ],
     'tabs' => [
+        'projects' => 'المشاريع',
         'overview' => 'نظرة عامة',
         'contacts' => 'جهات الاتصال',
         'leads' => 'الطلبات',
