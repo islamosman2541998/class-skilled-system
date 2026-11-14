@@ -117,7 +117,6 @@ return [
         'matches' => 'The schedule equals the contract value',
         'locked' => 'The installment is invoiced and cannot be changed',
         'delete' => 'Delete this installment?',
-        'invoice_soon' => 'Creating the invoice comes with the finance stage',
         'statuses' => [
             'not_due' => 'Not due',
             'due' => 'Due',

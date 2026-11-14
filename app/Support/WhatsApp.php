@@ -2,6 +2,8 @@
 
 namespace App\Support;
 
+use App\Models\Client;
+use App\Models\Invoice;
 use App\Models\Quotation;
 use App\Settings\FinanceSettings;
 use App\Settings\TemplateSettings;
@@ -23,15 +25,39 @@ final class WhatsApp
     {
         $templates = app(TemplateSettings::class);
         $template = $language === 'en' ? $templates->whatsapp_quotation_en : $templates->whatsapp_quotation_ar;
-        $finance = app(FinanceSettings::class);
-        $symbol = $language === 'en' ? $finance->currency_symbol_en : $finance->currency_symbol_ar;
-        $client = $language === 'en' && filled($quotation->client->name_en) ? (string) $quotation->client->name_en : $quotation->client->name_ar;
 
         return strtr($template, [
-            ':client' => $client,
+            ':client' => self::clientName($quotation->client, $language),
             ':number' => $quotation->number,
-            ':total' => money($quotation->total, false)."\u{00A0}".$symbol,
+            ':total' => self::amount((string) $quotation->total, $language),
             ':link' => $url,
         ]);
+    }
+
+    public static function invoiceMessage(Invoice $invoice, string $language, string $url): string
+    {
+        $templates = app(TemplateSettings::class);
+        $template = $language === 'en' ? $templates->whatsapp_invoice_en : $templates->whatsapp_invoice_ar;
+
+        return strtr($template, [
+            ':client' => self::clientName($invoice->client, $language),
+            ':number' => (string) $invoice->number,
+            ':total' => self::amount((string) $invoice->total, $language),
+            ':due' => fmt_date($invoice->due_date),
+            ':link' => $url,
+        ]);
+    }
+
+    /** An amount with the currency symbol of the language, kept on one line. */
+    public static function amount(string $value, string $language): string
+    {
+        $finance = app(FinanceSettings::class);
+
+        return money($value, false)."\u{00A0}".($language === 'en' ? $finance->currency_symbol_en : $finance->currency_symbol_ar);
+    }
+
+    public static function clientName(Client $client, string $language): string
+    {
+        return $language === 'en' && filled($client->name_en) ? (string) $client->name_en : $client->name_ar;
     }
 }

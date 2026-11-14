@@ -49,7 +49,10 @@
                                     <bdi dir="ltr">{{ $row->due_date ? fmt_date($row->due_date) : '' }}</bdi>
                                 @endif
                             </td>
-                            <td><x-status-badge :color="$row->status->color()">{{ $row->status->label() }}</x-status-badge></td>
+                            <td>
+                                <x-status-badge :color="$row->status->color()">{{ $row->status->label() }}</x-status-badge>
+                                @includeIf('projects.partials.installment-invoice-action', ['row' => $row, 'project' => $project])
+                            </td>
                             @if ($canEdit)
                                 <td class="dt-actions">
                                     @unless ($row->status->isLocked())
@@ -81,7 +84,6 @@
             </table>
         </div>
     @endif
-    <p class="form-text px-3 pb-3 mb-0">{{ __('projects.installments.invoice_soon') }}</p>
 </x-panel>
 
 @if ($canEdit)

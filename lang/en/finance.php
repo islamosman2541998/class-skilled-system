@@ -21,6 +21,8 @@ return [
     'reason' => 'Reason',
     'invoices' => [
         'invoices' => 'Invoices',
+        'create_from_installment' => 'Create invoice',
+        'installment_not_due' => 'The installment is not due yet.',
         'invoice' => 'Invoice',
         'new' => 'New invoice',
         'edit' => 'Edit invoice',

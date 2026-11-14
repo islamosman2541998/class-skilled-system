@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Quotation;
 use App\Services\Pdf\PdfRenderer;
 use Illuminate\Http\Request;
@@ -18,5 +19,13 @@ class PublicDocumentController extends Controller
         $language = (string) $request->query('lang', 'ar');
 
         return QuotationPdfController::pdfResponse($quotation, $pdf, in_array($language, PdfRenderer::LANGUAGES, true) ? $language : 'ar');
+    }
+
+    public function invoice(Request $request, Invoice $invoice, PdfRenderer $pdf): Response
+    {
+        abort_if($invoice->isDraft(), 404);
+        $language = (string) $request->query('lang', 'ar');
+
+        return InvoicePdfController::pdfResponse($invoice, $pdf, in_array($language, PdfRenderer::LANGUAGES, true) ? $language : 'ar');
     }
 }

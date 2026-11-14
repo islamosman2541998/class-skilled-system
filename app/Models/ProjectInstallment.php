@@ -7,6 +7,7 @@ use App\Enums\InstallmentStatus;
 use App\Models\Concerns\LogsModelActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Carbon;
 
@@ -65,5 +66,11 @@ class ProjectInstallment extends Model
     public function activityModule(): string
     {
         return 'projects';
+    }
+
+    /** @return HasMany<Invoice, $this> */
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class, 'installment_id');
     }
 }

@@ -21,6 +21,8 @@ return [
     'reason' => 'السبب',
     'invoices' => [
         'invoices' => 'الفواتير',
+        'create_from_installment' => 'إنشاء فاتورة',
+        'installment_not_due' => 'الدفعة غير مستحقة بعد.',
         'invoice' => 'الفاتورة',
         'new' => 'فاتورة جديدة',
         'edit' => 'تعديل الفاتورة',
