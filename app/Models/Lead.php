@@ -194,6 +194,12 @@ class Lead extends Model implements GuardsDeletion, HasMedia
         ActivityLogger::record('status_changed', $this, ['old' => ['status' => 'lost'], 'attributes' => ['status' => 'contacted']], 'leads');
     }
 
+    /** @return HasMany<SiteVisit, $this> */
+    public function siteVisits(): HasMany
+    {
+        return $this->hasMany(SiteVisit::class);
+    }
+
     /** @return HasMany<LeadFollowUp, $this> */
     public function followUps(): HasMany
     {

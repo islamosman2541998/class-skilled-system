@@ -4,6 +4,8 @@ use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\MyVisitsController;
+use App\Http\Controllers\SiteVisitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +28,9 @@ Route::patch('/leads/{lead}/assign', [LeadActionController::class, 'assign'])->n
 Route::patch('/leads/{lead}/schedule', [LeadActionController::class, 'schedule'])->name('leads.schedule');
 Route::patch('/leads/{lead}/close', [LeadActionController::class, 'close'])->name('leads.close');
 Route::patch('/leads/{lead}/reopen', [LeadActionController::class, 'reopen'])->name('leads.reopen');
+
+Route::get('/my/visits', MyVisitsController::class)->name('my-visits');
+Route::resource('site-visits', SiteVisitController::class)->except(['destroy']);
+Route::get('/site-visits/{site_visit}/result', [SiteVisitController::class, 'result'])->name('site-visits.result');
+Route::put('/site-visits/{site_visit}/result', [SiteVisitController::class, 'storeResult'])->name('site-visits.result.store');
+Route::post('/site-visits/{site_visit}/attachments', [SiteVisitController::class, 'attach'])->name('site-visits.attachments.store');

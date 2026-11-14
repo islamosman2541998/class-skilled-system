@@ -316,3 +316,63 @@
     color: var(--c-muted);
     font-size: .8rem;
 }
+
+// Engineer screens (spec §4.4)
+.visit-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: .75rem;
+    margin-bottom: 1.25rem;
+}
+
+.visit-card {
+    padding: 1rem;
+    background: #fff;
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
+}
+
+.visit-card-time {
+    color: var(--c-navy);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.visit-card-title {
+    margin: .25rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.visit-card-meta {
+    color: var(--c-muted);
+    font-size: .875rem;
+}
+
+.visit-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: .75rem;
+
+    .btn {
+        flex: 1 1 auto;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .sticky-actions-mobile {
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        margin: 0;
+        border-radius: 0;
+        border-inline: 0;
+        border-bottom: 0;
+    }
+
+    .field-form {
+        padding-bottom: 5rem;
+    }
+}

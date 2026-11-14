@@ -12,7 +12,7 @@ use Spatie\TranslationLoader\LanguageLine;
  */
 class TranslationCatalog
 {
-    public const GROUPS = ['app', 'auth', 'menu', 'home', 'table', 'users', 'permissions', 'settings', 'activity', 'notifications', 'uploads', 'design', 'clients', 'leads', 'js'];
+    public const GROUPS = ['app', 'auth', 'menu', 'home', 'table', 'users', 'permissions', 'settings', 'activity', 'notifications', 'uploads', 'design', 'clients', 'leads', 'visits', 'js'];
 
     public const LOCALES = ['ar', 'en'];
 

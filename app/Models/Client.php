@@ -83,6 +83,12 @@ class Client extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Lead::class);
     }
 
+    /** @return HasMany<SiteVisit, $this> */
+    public function siteVisits(): HasMany
+    {
+        return $this->hasMany(SiteVisit::class);
+    }
+
     /** @return HasMany<ClientContact, $this> */
     public function contacts(): HasMany
     {
