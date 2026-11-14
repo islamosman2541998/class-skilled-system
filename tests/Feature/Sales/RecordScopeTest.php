@@ -1,10 +1,13 @@
 <?php
 
 use App\Actions\AttachUploads;
+use App\Enums\LookupType;
 use App\Livewire\Tables\ClientsTable;
 use App\Livewire\Tables\LeadsTable;
 use App\Models\Client;
 use App\Models\Lead;
+use App\Models\Lookup;
+use App\Models\Quotation;
 use App\Services\Uploads\TemporaryUpload;
 use Database\Seeders\DocumentSequenceSeeder;
 use Database\Seeders\LookupSeeder;
@@ -80,6 +83,31 @@ it('shows a client only through a lead assigned to the user', function () {
 
     expect(Livewire::test(ClientsTable::class)->viewData('rows')->total())->toBe(1);
     $this->get(route('clients.show', $otherClient))->assertNotFound();
+});
+
+it('refuses a client the user cannot see when creating a lead, visit or quotation', function () {
+    $hidden = Client::factory()->create();
+    $user = scopedUser(['leads.create', 'leads.view', 'site_visits.create', 'quotations.create'], 'assigned');
+    $source = Lookup::query()->ofType(LookupType::LeadSource)->value('id');
+
+    actingAs($user)->post(route('leads.store'), ['client_id' => $hidden->id, 'source_id' => $source])->assertSessionHasErrors('client_id');
+    actingAs($user)->post(route('site-visits.store'), ['client_id' => $hidden->id, 'scheduled_at' => '2026-12-01 10:00', 'engineer_id' => $user->id])->assertSessionHasErrors('client_id');
+    actingAs($user)->post(route('quotations.store'), [
+        'client_id' => $hidden->id, 'title_ar' => 'x', 'issue_date' => '2026-11-14', 'valid_until' => '2026-12-14', 'assigned_to' => $user->id,
+        'items' => [['description_ar' => 'x', 'quantity' => '1', 'unit_price' => '1']], 'payments' => [['label_ar' => 'x', 'percent' => '100']],
+    ])->assertSessionHasErrors('client_id');
+
+    expect($hidden->fresh()->isVisibleTo($user))->toBeFalse();
+});
+
+it('counts only visible quotations in the client page figures', function () {
+    $client = Client::factory()->create();
+    $this->mine->first()->update(['client_id' => $client->id]);
+    Quotation::factory()->create(['client_id' => $client->id, 'assigned_to' => $this->engineer->id, 'status' => 'accepted', 'total' => '1000.00']);
+    Quotation::factory()->create(['client_id' => $client->id, 'status' => 'accepted', 'total' => '99999.00']);
+
+    actingAs($this->engineer)->get(route('clients.show', $client))->assertOk()
+        ->assertSee(money('1000.00'))->assertDontSee(money('100999.00'))->assertDontSee(money('99999.00'));
 });
 
 it('shows every lead to a user with an all-scope role', function () {

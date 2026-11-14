@@ -81,7 +81,7 @@ class SalesServiceProvider extends ServiceProvider
         Client::$linkedRelations[] = 'leads';
         Client::$visibilityRules[] = fn (Builder $query, $user) => $query->orWhereHas('leads', fn (Builder $leads) => $leads->where('assigned_to', $user->id));
 
-        ClientController::$figureProviders['leads'] = fn (Client $client) => (string) $client->leads()->count();
+        ClientController::$figureProviders['leads'] = fn (Client $client) => (string) $client->leads()->visibleTo(auth()->user())->count();
         ClientController::$actionViews[] = 'leads.partials.client-action';
         LeadController::$showViews[] = 'leads.partials.follow-ups';
 
@@ -119,8 +119,8 @@ class SalesServiceProvider extends ServiceProvider
         ClientController::$actionViews[] = 'quotations.partials.client-action';
         QuotationController::$actionViews[] = 'quotations.partials.actions';
         QuotationController::$primaryActionViews[] = 'quotations.partials.share-actions';
-        ClientController::$figureProviders['quotations'] = fn (Client $client) => (string) $client->quotations()->count();
-        ClientController::$figureProviders['accepted_total'] = fn (Client $client) => money($client->quotations()->where('status', QuotationStatus::Accepted)->sum('total'));
+        ClientController::$figureProviders['quotations'] = fn (Client $client) => (string) $client->quotations()->visibleTo(auth()->user())->count();
+        ClientController::$figureProviders['accepted_total'] = fn (Client $client) => money($client->quotations()->visibleTo(auth()->user())->where('status', QuotationStatus::Accepted)->sum('total'));
 
         LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => Quotation::withTrashed()->where('service_id', $lookup->id)->exists());
         LookupUsage::register(LookupType::Unit, fn (Lookup $lookup) => QuotationItem::query()->where('unit_id', $lookup->id)->exists());

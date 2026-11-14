@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\DiscountType;
 use App\Enums\LookupType;
+use App\Rules\VisibleClient;
 use App\Services\QuotationCalculator;
 use App\Settings\FinanceSettings;
 use Illuminate\Foundation\Http\FormRequest;
@@ -37,7 +38,7 @@ class SaveQuotationRequest extends FormRequest
 
         return [
             'lead_id' => ['nullable', 'integer', Rule::exists('leads', 'id')->whereNull('deleted_at')],
-            'client_id' => [Rule::requiredIf(! $this->filled('lead_id')), 'nullable', 'integer', Rule::exists('clients', 'id')->whereNull('deleted_at')],
+            'client_id' => [Rule::requiredIf(! $this->filled('lead_id')), 'nullable', 'integer', new VisibleClient],
             'service_id' => ['nullable', $lookup(LookupType::Service)],
             'title_ar' => ['required', 'string', 'max:190'],
             'title_en' => ['nullable', 'string', 'max:190'],

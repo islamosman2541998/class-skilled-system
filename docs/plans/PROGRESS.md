@@ -50,7 +50,7 @@ All scenarios are under the 300 ms target. The remaining cost is the `count(*)` 
 
 Stage 1 plan (Sales: clients, requests, site visits, price items, quotations with PDF and WhatsApp, website link) — starts after the user approves the reference screens (spec §4.6).
 
-## Stage 1 — Sales (in progress: Tasks 1–10 done, Task 11 gate partly done)
+## Stage 1 — Sales (complete)
 
 Plan: `docs/plans/2026-11-14-stage-1-sales.md`. Ledger of decisions: `.superpowers/sdd/2026-11-14-stage-1-sales/progress.md` (local, git-ignored).
 
@@ -58,6 +58,10 @@ Delivered: clients (contacts, duplicate phone detection across formats, quick ad
 
 Gate run on MySQL: `migrate:fresh --seed` and `DemoSeeder` succeed; Pint and PHPStan clean; 360 tests pass; build succeeds; no log errors.
 
-Left for Task 11: visual pass at 390 / 1440 px in English for the new screens, final self-review of Stage 1, then Stage 2 plan.
+Visual pass: every Stage 1 screen checked at 375 px in Arabic and English (no horizontal scroll, no raw translation keys); quotation form checked at 1440 px in English; PDFs inspected in Arabic and bilingual.
+
+Final self-review (no separate reviewer) fixed: assigned-only users could link a hidden client by its id and so reveal it; client page figures counted records the user cannot see; searchable selects hid their placeholder. Deferred: the "see amounts and costs" permission of §6 is not implemented yet; the Tajawal OFL licence text is not yet shipped with the font.
+
+Next: Stage 2 plan (projects).
 
 Known gaps: PDFs use Tajawal also when Cairo is chosen (user decision); the OFL licence text of Tajawal is not yet added next to the font files; the website project change is documented in `docs/integration/website-link.md`, not applied.

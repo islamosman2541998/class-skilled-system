@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\LookupType;
+use App\Rules\VisibleClient;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,7 +23,7 @@ class SaveLeadRequest extends FormRequest
         $withoutClient = ! $this->filled('client_id');
 
         return [
-            'client_id' => ['nullable', 'integer', Rule::exists('clients', 'id')->whereNull('deleted_at')],
+            'client_id' => ['nullable', 'integer', new VisibleClient],
             'contact_name' => [Rule::requiredIf($withoutClient), 'nullable', 'string', 'max:190'],
             'contact_phone' => [Rule::requiredIf($withoutClient), 'nullable', 'string', 'max:40', 'regex:/^[0-9+\-\s()]{7,40}$/'],
             'contact_email' => ['nullable', 'email', 'max:190'],

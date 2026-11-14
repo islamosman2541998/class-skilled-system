@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Enums\SiteVisitStatus;
+use App\Rules\VisibleClient;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,7 +21,7 @@ class SaveSiteVisitRequest extends FormRequest
     {
         return [
             'lead_id' => ['nullable', 'integer', Rule::exists('leads', 'id')->whereNull('deleted_at')],
-            'client_id' => [Rule::requiredIf(! $this->filled('lead_id')), 'nullable', 'integer', Rule::exists('clients', 'id')->whereNull('deleted_at')],
+            'client_id' => [Rule::requiredIf(! $this->filled('lead_id')), 'nullable', 'integer', new VisibleClient],
             'scheduled_at' => ['required', 'date'],
             'engineer_id' => ['required', 'integer', Rule::exists('users', 'id')->where('is_active', true)->whereNull('deleted_at')],
             'address' => ['nullable', 'string', 'max:1000'],
