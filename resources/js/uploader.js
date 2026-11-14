@@ -118,7 +118,8 @@ function mount(input) {
                     'Upload-Length': file.size,
                     'Upload-Name': encodeURIComponent(file.name),
                 }),
-                onload: (response) => String(response).trim(),
+                // Whole uploads pass the response text; chunked uploads pass the XHR itself.
+                onload: (response) => String(typeof response === 'string' ? response : (response?.responseText ?? '')).trim(),
             },
             patch: {
                 url: `${config.base}/`,
