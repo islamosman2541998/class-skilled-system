@@ -133,7 +133,7 @@
                     <div><dt>{{ __('quotations.subtotal') }}</dt><dd data-total="subtotal"></dd></div>
                     <div><dt>{{ __('quotations.discount') }}</dt><dd data-total="discount"></dd></div>
                     <div><dt>{{ __('quotations.taxable') }}</dt><dd data-total="taxable"></dd></div>
-                    <div><dt>{{ __('quotations.vat', ['rate' => rtrim(rtrim($vatRate, '0'), '.')]) }}</dt><dd data-total="vat"></dd></div>
+                    <div><dt>{{ __('quotations.vat') }} <bdi dir="ltr">({{ rtrim(rtrim($vatRate, '0'), '.') }}%)</bdi></dt><dd data-total="vat"></dd></div>
                     <div class="q-grand"><dt>{{ __('quotations.total') }}</dt><dd data-total="total"></dd></div>
                 </dl>
             </div>

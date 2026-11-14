@@ -74,7 +74,7 @@
                                 <tr><th colspan="4" class="text-end">{{ __('quotations.discount') }}@if ($quotation->discount_type === \App\Enums\DiscountType::Percent) <bdi dir="ltr">({{ rtrim(rtrim($quotation->discount_value, '0'), '.') }}%)</bdi>@endif</th><td class="num"><bdi dir="ltr">{{ money($quotation->discount_amount) }}</bdi></td></tr>
                                 <tr><th colspan="4" class="text-end">{{ __('quotations.taxable') }}</th><td class="num"><bdi dir="ltr">{{ money($quotation->taxable_amount) }}</bdi></td></tr>
                             @endif
-                            <tr><th colspan="4" class="text-end">{{ __('quotations.vat', ['rate' => rtrim(rtrim($quotation->vat_rate, '0'), '.')]) }}</th><td class="num"><bdi dir="ltr">{{ money($quotation->vat_amount) }}</bdi></td></tr>
+                            <tr><th colspan="4" class="text-end">{{ __('quotations.vat') }} <bdi dir="ltr">({{ rtrim(rtrim($quotation->vat_rate, '0'), '.') }}%)</bdi></th><td class="num"><bdi dir="ltr">{{ money($quotation->vat_amount) }}</bdi></td></tr>
                             <tr class="q-grand"><th colspan="4" class="text-end">{{ __('quotations.total') }}</th><td class="num"><bdi dir="ltr">{{ money($quotation->total) }}</bdi></td></tr>
                         </tfoot>
                     </table>

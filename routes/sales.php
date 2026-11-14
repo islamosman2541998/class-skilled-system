@@ -6,6 +6,7 @@ use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MyVisitsController;
 use App\Http\Controllers\PriceItemController;
+use App\Http\Controllers\QuotationActionController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\SiteVisitController;
 use Illuminate\Support\Facades\Route;
@@ -46,3 +47,8 @@ Route::put('/price-items/{price_item}', [PriceItemController::class, 'update'])-
 
 Route::resource('quotations', QuotationController::class)->except(['destroy']);
 Route::post('/quotations/{quotation}/attachments', [QuotationController::class, 'attach'])->name('quotations.attachments.store');
+Route::patch('/quotations/{quotation}/send', [QuotationActionController::class, 'send'])->name('quotations.send');
+Route::patch('/quotations/{quotation}/accept', [QuotationActionController::class, 'accept'])->name('quotations.accept');
+Route::patch('/quotations/{quotation}/reject', [QuotationActionController::class, 'reject'])->name('quotations.reject');
+Route::post('/quotations/{quotation}/revise', [QuotationActionController::class, 'revise'])->name('quotations.revise');
+Route::post('/quotations/{quotation}/copy', [QuotationActionController::class, 'copy'])->name('quotations.copy');

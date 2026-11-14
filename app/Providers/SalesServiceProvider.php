@@ -8,6 +8,7 @@ use App\Enums\QuotationStatus;
 use App\Enums\SiteVisitStatus;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\QuotationController;
 use App\Models\Client;
 use App\Models\Lead;
 use App\Models\Lookup;
@@ -22,6 +23,7 @@ use App\Search\SearchRegistry;
 use App\Search\SiteVisitSearchProvider;
 use App\Services\DueTasks;
 use App\Services\Notifier;
+use App\Settings\NotificationSettings;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
@@ -108,6 +110,7 @@ class SalesServiceProvider extends ServiceProvider
         LeadController::$headerActionViews[] = 'quotations.partials.lead-action';
         LeadController::$showViews[] = 'quotations.partials.lead-quotations';
         ClientController::$actionViews[] = 'quotations.partials.client-action';
+        QuotationController::$actionViews[] = 'quotations.partials.actions';
         ClientController::$figureProviders['quotations'] = fn (Client $client) => (string) $client->quotations()->count();
         ClientController::$figureProviders['accepted_total'] = fn (Client $client) => money($client->quotations()->where('status', QuotationStatus::Accepted)->sum('total'));
 
@@ -128,6 +131,35 @@ class SalesServiceProvider extends ServiceProvider
                 ->each(fn (SiteVisit $visit) => $notifier->toUser(
                     $visit->engineer, NotificationType::VisitToday, $visit, ['number' => $visit->number],
                     route('site-visits.show', $visit), 'visit-'.today()->format('Y-m-d'),
+                ));
+        });
+
+        // A sent quotation without an answer after the configured days (spec §5.5).
+        DueTasks::register('quotation-no-response', 60, function () {
+            $days = (int) (app(NotificationSettings::class)->rule(NotificationType::QuotationNoResponse)['days'] ?? 3);
+            $notifier = app(Notifier::class);
+
+            Quotation::query()->with('assignee')
+                ->where('status', QuotationStatus::Sent)->whereNull('superseded_at')
+                ->where('sent_at', '<=', now()->subDays($days))
+                ->each(fn (Quotation $q) => $notifier->toUser(
+                    $q->assignee, NotificationType::QuotationNoResponse, $q, ['number' => $q->number],
+                    route('quotations.show', $q), 'no-response',
+                ));
+        });
+
+        // A draft or sent quotation whose validity ends within the configured days.
+        DueTasks::register('quotation-expiring', 60, function () {
+            $days = (int) (app(NotificationSettings::class)->rule(NotificationType::QuotationExpiring)['days'] ?? 3);
+            $notifier = app(Notifier::class);
+
+            Quotation::query()->with('assignee')
+                ->whereIn('status', [QuotationStatus::Draft, QuotationStatus::Sent])->whereNull('superseded_at')
+                ->whereBetween('valid_until', [today(), today()->addDays($days)])
+                ->each(fn (Quotation $q) => $notifier->toUser(
+                    $q->assignee, NotificationType::QuotationExpiring, $q,
+                    ['number' => $q->number, 'date' => fmt_date($q->valid_until)],
+                    route('quotations.show', $q), 'expiring-'.$q->valid_until->format('Y-m-d'),
                 ));
         });
     }

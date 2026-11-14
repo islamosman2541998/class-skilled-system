@@ -100,15 +100,17 @@ class QuotationController extends Controller
         );
     }
 
-    public function update(SaveQuotationRequest $request, Quotation $quotation, SaveQuotation $save): RedirectResponse
+    public function update(Request $request, Quotation $quotation, SaveQuotation $save): RedirectResponse
     {
+        Gate::authorize('quotations.update');
         $this->ensureVisible($request, $quotation);
 
+        // The lock is checked before validation, so a locked quotation never reaches the form rules.
         if ($quotation->isLocked()) {
             return redirect()->route('quotations.show', $quotation)->with('error', __('quotations.locked'));
         }
 
-        $save->handle($request->validated(), $request->user(), $quotation);
+        $save->handle(app(SaveQuotationRequest::class)->validated(), $request->user(), $quotation);
 
         return redirect()->route('quotations.show', $quotation)->with('success', __('app.saved'));
     }
@@ -129,6 +131,20 @@ class QuotationController extends Controller
      * @var list<string>
      */
     public static array $actionViews = [];
+
+    /**
+     * Prominent buttons placed before the workflow buttons (PDF, WhatsApp, convert to project).
+     *
+     * @var list<string>
+     */
+    public static array $primaryActionViews = [];
+
+    /**
+     * Items added to the "actions" menu of a quotation, each a <li> receiving $quotation.
+     *
+     * @var list<string>
+     */
+    public static array $menuActionViews = [];
 
     /**
      * @param  list<array<string, mixed>>  $items
