@@ -31,6 +31,7 @@ export default defineConfig({
                 'resources/js/uploader.js',
                 'resources/js/attachments.js',
                 'resources/js/translations.js',
+                'resources/js/clients.js',
             ],
             refresh: true,
         }),

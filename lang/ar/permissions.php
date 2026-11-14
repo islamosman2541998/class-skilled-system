@@ -2,6 +2,11 @@
 
 return [
     'modules' => [
+        'clients' => 'العملاء',
+        'leads' => 'الطلبات',
+        'site_visits' => 'المعاينات',
+        'price_items' => 'بنود الأسعار',
+        'quotations' => 'عروض الأسعار',
         'users' => 'المستخدمون',
         'roles' => 'الأدوار',
         'lookups' => 'القوائم',
@@ -10,6 +15,7 @@ return [
         'translations' => 'الترجمة',
     ],
     'actions' => [
+        'approve' => 'اعتماد',
         'view' => 'عرض',
         'create' => 'إضافة',
         'update' => 'تعديل',

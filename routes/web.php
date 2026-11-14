@@ -56,6 +56,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
 
     Route::get('/activity', ActivityController::class)->name('activity.index');
+    require __DIR__.'/sales.php';
+
     Route::get('/design', [DesignController::class, 'index'])->name('design.index');
     Route::get('/design/record', [DesignController::class, 'record'])->name('design.record');
     Route::get('/search', SearchController::class)->middleware('throttle:60,1')->name('search');

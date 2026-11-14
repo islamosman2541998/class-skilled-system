@@ -2,6 +2,11 @@
 
 return [
     'modules' => [
+        'clients' => 'Clients',
+        'leads' => 'Requests',
+        'site_visits' => 'Site visits',
+        'price_items' => 'Price items',
+        'quotations' => 'Quotations',
         'users' => 'Users',
         'roles' => 'Roles',
         'lookups' => 'Lists',
@@ -10,6 +15,7 @@ return [
         'translations' => 'Translation',
     ],
     'actions' => [
+        'approve' => 'Approve',
         'view' => 'View',
         'create' => 'Add',
         'update' => 'Edit',

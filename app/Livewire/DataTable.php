@@ -85,6 +85,17 @@ abstract class DataTable extends Component
         return [];
     }
 
+    /**
+     * Extra [columns, term] pairs OR-ed with the main search, for example a phone typed in another
+     * format compared with a normalized phone column.
+     *
+     * @return list<array{0: list<string>, 1: string}>
+     */
+    protected function searchVariants(string $term): array
+    {
+        return [];
+    }
+
     /** The column the "from – to" range applies to; null hides the range. */
     protected function dateColumn(): ?string
     {
@@ -364,7 +375,22 @@ abstract class DataTable extends Component
 
     private function applySearch(Builder $query): void
     {
-        Like::any($query, $this->searchColumns(), $this->search);
+        $term = trim($this->search);
+        $variants = $term === '' ? [] : $this->searchVariants($term);
+
+        if ($variants === []) {
+            Like::any($query, $this->searchColumns(), $term);
+
+            return;
+        }
+
+        $query->where(function (Builder $outer) use ($term, $variants) {
+            $outer->orWhere(fn (Builder $q) => Like::any($q, $this->searchColumns(), $term));
+
+            foreach ($variants as [$columns, $variant]) {
+                $outer->orWhere(fn (Builder $q) => Like::any($q, $columns, $variant));
+            }
+        });
     }
 
     private function applyDateRange(Builder $query): void

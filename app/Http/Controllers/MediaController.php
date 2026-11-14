@@ -92,6 +92,8 @@ class MediaController extends Controller
         $owner = $media->model;
 
         abort_unless($owner instanceof Model && method_exists($owner, 'attachmentPermission'), 404);
+        // Records limited to their assignee (spec §6 "assigned only") hide their files too.
+        abort_if(method_exists($owner, 'isVisibleTo') && ! $owner->isVisibleTo(auth()->user()), 404);
 
         Gate::authorize($owner->attachmentPermission().'.'.$ability);
     }
