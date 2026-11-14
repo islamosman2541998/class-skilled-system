@@ -51,4 +51,12 @@ return [
     'close_lost' => 'Close as lost',
     'reopen' => 'Reopen',
     'closed' => 'Request closed',
+    'website' => [
+        'unauthorized' => 'Invalid link key',
+        'preferred_contact' => 'Preferred contact',
+        'fetch' => 'Fetch website requests',
+        'fetched' => ':count new requests fetched',
+        'fetch_failed' => 'The website could not be reached',
+        'not_configured' => 'The website link is not configured',
+    ],
 ];

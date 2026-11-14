@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\MediaController;
@@ -83,6 +84,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
         Route::get('/translations', [TranslationController::class, 'index'])->name('translations.index');
         Route::put('/translations', [TranslationController::class, 'update'])->name('translations.update');
         Route::delete('/translations', [TranslationController::class, 'reset'])->name('translations.reset');
+        Route::get('/integration', [IntegrationController::class, 'edit'])->name('settings.integration');
+        Route::put('/integration', [IntegrationController::class, 'update'])->name('settings.integration.update');
+        Route::post('/integration/key', [IntegrationController::class, 'generateKey'])->name('settings.integration.key');
         Route::get('/templates', [TemplateSettingsController::class, 'edit'])->name('settings.templates');
         Route::put('/templates', [TemplateSettingsController::class, 'update'])->name('settings.templates.update');
         Route::get('/numbering', [NumberingController::class, 'edit'])->name('settings.numbering');

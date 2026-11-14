@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientContactController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\IntegrationController;
 use App\Http\Controllers\LeadActionController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\MyVisitsController;
@@ -25,6 +26,7 @@ Route::post('/clients/{client}/contacts', [ClientContactController::class, 'stor
 Route::put('/clients/{client}/contacts/{contact}', [ClientContactController::class, 'update'])->name('clients.contacts.update');
 Route::delete('/clients/{client}/contacts/{contact}', [ClientContactController::class, 'destroy'])->name('clients.contacts.destroy');
 
+Route::post('/leads/fetch-website', [IntegrationController::class, 'fetch'])->middleware('throttle:6,1')->name('leads.fetch-website');
 Route::resource('leads', LeadController::class)->except(['destroy']);
 Route::post('/leads/{lead}/attachments', [LeadController::class, 'attach'])->name('leads.attachments.store');
 Route::post('/leads/{lead}/follow-ups', [LeadActionController::class, 'followUp'])->name('leads.follow-ups.store');

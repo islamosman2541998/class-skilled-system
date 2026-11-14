@@ -28,7 +28,10 @@ use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
 use App\Support\TrashRegistry;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -61,6 +64,9 @@ class SalesServiceProvider extends ServiceProvider
             $this->registerQuotations();
             self::registerDueTasks();
         }
+
+        // The website API: 30 requests a minute per address (spec §10, §12).
+        RateLimiter::for('website', fn (Request $request) => Limit::perMinute(30)->by((string) $request->ip()));
 
         // The search registry is a container singleton, so it is filled on every boot.
         $search = $this->app->make(SearchRegistry::class);
@@ -108,6 +114,7 @@ class SalesServiceProvider extends ServiceProvider
         Client::$visibilityRules[] = fn (Builder $query, $user) => $query->orWhereHas('quotations', fn (Builder $quotations) => $quotations->where('assigned_to', $user->id));
         Lead::$linkedRelations[] = 'quotations';
         LeadController::$headerActionViews[] = 'quotations.partials.lead-action';
+        LeadController::$indexActionViews[] = 'leads.partials.fetch-website';
         LeadController::$showViews[] = 'quotations.partials.lead-quotations';
         ClientController::$actionViews[] = 'quotations.partials.client-action';
         QuotationController::$actionViews[] = 'quotations.partials.actions';

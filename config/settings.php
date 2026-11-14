@@ -3,6 +3,7 @@
 use App\Settings\AppearanceSettings;
 use App\Settings\CompanySettings;
 use App\Settings\FinanceSettings;
+use App\Settings\IntegrationSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\SystemSettings;
 use App\Settings\TemplateSettings;
@@ -28,6 +29,7 @@ return [
         SystemSettings::class,
         NotificationSettings::class,
         TemplateSettings::class,
+        IntegrationSettings::class,
     ],
 
     /*

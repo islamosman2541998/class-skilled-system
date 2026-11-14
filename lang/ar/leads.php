@@ -51,4 +51,12 @@ return [
     'close_lost' => 'إغلاق كمرفوض',
     'reopen' => 'إعادة فتح',
     'closed' => 'تم إغلاق الطلب',
+    'website' => [
+        'unauthorized' => 'مفتاح الربط غير صحيح',
+        'preferred_contact' => 'طريقة التواصل المفضلة',
+        'fetch' => 'جلب طلبات الموقع',
+        'fetched' => 'تم جلب :count طلب جديد',
+        'fetch_failed' => 'تعذر الاتصال بالموقع',
+        'not_configured' => 'الربط بالموقع غير مكتمل',
+    ],
 ];
