@@ -9,6 +9,8 @@ use App\Http\Requests\SaveClientRequest;
 use App\Http\Requests\StoreAttachmentsRequest;
 use App\Models\Client;
 use App\Models\Lookup;
+use App\Support\Like;
+use App\Support\Phone;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -104,6 +106,28 @@ class ClientController extends Controller
         $this->save($request, $client);
 
         return redirect()->route('clients.show', $client)->with('success', __('app.saved'));
+    }
+
+    /** Options for remote client selects in other forms: [{value, text}]. */
+    public function options(Request $request): JsonResponse
+    {
+        abort_unless($request->user()->can('clients.view') || $request->user()->can('leads.create') || $request->user()->can('quotations.create'), 403);
+
+        $term = (string) $request->query('q', '');
+        $query = Client::query()->visibleTo($request->user());
+
+        if ($term !== '') {
+            $query->where(function ($inner) use ($term) {
+                $inner->orWhere(fn ($q) => Like::any($q, ['name_ar', 'name_en', 'phone'], $term));
+
+                foreach (Phone::searchVariants($term) as $digits) {
+                    $inner->orWhere(fn ($q) => Like::any($q, ['phone_normalized'], $digits));
+                }
+            });
+        }
+
+        return response()->json($query->orderBy('name_ar')->limit(20)->get()
+            ->map(fn (Client $client) => ['value' => $client->id, 'text' => $client->name.' · '.$client->phone])->values());
     }
 
     /** Clients with the same phone, however it was written (spec §8.1). */

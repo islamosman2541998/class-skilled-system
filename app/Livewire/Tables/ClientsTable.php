@@ -27,7 +27,7 @@ class ClientsTable extends DataTable
 
     protected function query(): Builder
     {
-        return Client::query()->with('emirate')->visibleTo(auth()->user());
+        return Client::query()->with('emirate');
     }
 
     protected function columns(): array

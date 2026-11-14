@@ -256,11 +256,26 @@ abstract class DataTable extends Component
     }
 
     /**
+     * The base query limited to the records the user may reach. Assigned-scope users only reach
+     * their own records (spec §6), so rows, totals, export, every delete and the trash share it.
+     */
+    protected function scopedQuery(): Builder
+    {
+        $query = $this->query();
+
+        if (method_exists($query->getModel(), 'scopeVisibleTo') && auth()->user() !== null) {
+            $query->visibleTo(auth()->user()); // @phpstan-ignore method.notFound
+        }
+
+        return $query;
+    }
+
+    /**
      * Search, filters, date range and trash applied; no ordering and no paging.
      */
     protected function filteredQuery(): Builder
     {
-        $query = $this->query();
+        $query = $this->scopedQuery();
 
         if ($this->trashed && $this->canSeeTrash()) {
             $query->onlyTrashed(); // @phpstan-ignore method.notFound

@@ -29,13 +29,16 @@ export function initDatepickers(root = document) {
             }
 
             const range = input.hasAttribute('data-date-range');
+            const time = input.hasAttribute('data-enable-time');
 
             flatpickr(input, {
                 locale: rtl ? { ...arabic, rangeSeparator: ' - ' } : { rangeSeparator: ' - ' },
                 mode: range ? 'range' : 'single',
-                dateFormat: 'Y-m-d',
+                enableTime: time,
+                time_24hr: true,
+                dateFormat: time ? 'Y-m-d H:i' : 'Y-m-d',
                 altInput: true,
-                altFormat: 'd/m/Y',
+                altFormat: time ? 'd/m/Y H:i' : 'd/m/Y',
                 allowInput: !range,
                 disableMobile: true,
                 onClose(selected, value, instance) {

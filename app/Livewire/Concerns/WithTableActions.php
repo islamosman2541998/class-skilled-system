@@ -36,7 +36,7 @@ trait WithTableActions
     {
         $this->authorizeTable('delete');
 
-        $this->reportDeletion($this->deleteQuery($this->query()->whereKey($id)));
+        $this->reportDeletion($this->deleteQuery($this->scopedQuery()->whereKey($id)));
     }
 
     public function deleteSelected(): void
@@ -316,7 +316,7 @@ trait WithTableActions
     {
         abort_unless($this->usesSoftDeletes(), 403);
 
-        return $this->query()->onlyTrashed(); // @phpstan-ignore method.notFound
+        return $this->scopedQuery()->onlyTrashed(); // @phpstan-ignore method.notFound
     }
 
     private function deleteQuery(Builder $query): DeleteResult

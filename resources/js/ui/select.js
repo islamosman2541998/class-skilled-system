@@ -24,7 +24,7 @@ export function initSelects(root = document) {
                 return;
             }
 
-            new TomSelect(select, {
+            const options = {
                 allowEmptyOption: true,
                 maxOptions: 500,
                 plugins: select.multiple ? ['remove_button'] : [],
@@ -32,7 +32,28 @@ export function initSelects(root = document) {
                 render: {
                     no_results: () => `<div class="no-results">${(window.I18N && window.I18N.no_results) || ''}</div>`,
                 },
-            });
+            };
+
+            // <select data-select data-remote="/url">: options come from the server as [{value, text, ...}].
+            if (select.dataset.remote) {
+                Object.assign(options, {
+                    valueField: 'value',
+                    labelField: 'text',
+                    searchField: ['text'],
+                    preload: 'focus',
+                    shouldLoad: () => true,
+                    load: (query, callback) => {
+                        const url = new URL(select.dataset.remote, window.location.origin);
+                        url.searchParams.set('q', query);
+                        fetch(url, { headers: { Accept: 'application/json' } })
+                            .then((response) => response.json())
+                            .then(callback)
+                            .catch(() => callback());
+                    },
+                });
+            }
+
+            new TomSelect(select, options);
         });
     });
 }
