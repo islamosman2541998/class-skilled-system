@@ -30,6 +30,7 @@ export default defineConfig({
                 'resources/js/app.js',
                 'resources/js/uploader.js',
                 'resources/js/attachments.js',
+                'resources/js/translations.js',
             ],
             refresh: true,
         }),

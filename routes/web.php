@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsActive;
@@ -69,6 +70,9 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
 
         Route::get('/notifications', [NotificationSettingsController::class, 'edit'])->name('settings.notifications');
         Route::put('/notifications', [NotificationSettingsController::class, 'update'])->name('settings.notifications.update');
+        Route::get('/translations', [TranslationController::class, 'index'])->name('translations.index');
+        Route::put('/translations', [TranslationController::class, 'update'])->name('translations.update');
+        Route::delete('/translations', [TranslationController::class, 'reset'])->name('translations.reset');
         Route::get('/numbering', [NumberingController::class, 'edit'])->name('settings.numbering');
         Route::put('/numbering', [NumberingController::class, 'update'])->name('settings.numbering.update');
 
