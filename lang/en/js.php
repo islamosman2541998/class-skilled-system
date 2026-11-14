@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'saved' => 'Saved',
     'confirm_title' => 'Confirm',
     'confirm_yes' => 'Confirm',
     'confirm_cancel' => 'Cancel',

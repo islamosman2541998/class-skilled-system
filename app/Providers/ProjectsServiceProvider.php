@@ -2,14 +2,21 @@
 
 namespace App\Providers;
 
+use App\Actions\Projects\SaveProject;
 use App\Enums\LookupType;
+use App\Enums\NotificationType;
+use App\Enums\StageStatus;
 use App\Http\Controllers\ClientController;
 use App\Models\Client;
 use App\Models\Lookup;
 use App\Models\Project;
+use App\Models\ProjectStage;
 use App\Models\StageTemplate;
+use App\Models\User;
 use App\Search\ProjectSearchProvider;
 use App\Search\SearchRegistry;
+use App\Services\DueTasks;
+use App\Services\Notifier;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
@@ -54,5 +61,42 @@ class ProjectsServiceProvider extends ServiceProvider
         PermissionRegistry::register('maintenance', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
 
         LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => StageTemplate::withTrashed()->where('service_id', $lookup->id)->exists());
+
+        // A new project starts with the stage template of its service (spec §8.7).
+        SaveProject::$afterCreate[] = function (Project $project, User $by) {
+            foreach (StageTemplate::forService($project->service_id) as $index => $template) {
+                $project->stages()->create([
+                    'name_ar' => $template->name_ar,
+                    'name_en' => $template->name_en,
+                    'weight' => $template->weight,
+                    'sort_order' => $index + 1,
+                    'status' => StageStatus::NotStarted,
+                ]);
+            }
+        };
+
+        self::registerDueTasks();
+    }
+
+    /** Periodic checks of the project modules (no cron, spec §3.2). */
+    public static function registerDueTasks(): void
+    {
+        // A stage past its planned end and not done: roles from the rule plus the project manager.
+        DueTasks::register('stage-late', 1440, function () {
+            $notifier = app(Notifier::class);
+
+            ProjectStage::query()->with('project.manager')
+                ->where('status', '!=', StageStatus::Done->value)
+                ->whereNotNull('planned_end')->whereDate('planned_end', '<', today())
+                ->whereHas('project')
+                ->each(function (ProjectStage $stage) use ($notifier) {
+                    $project = $stage->project;
+                    $params = ['number' => $project->number];
+                    $url = route('projects.show', [$project, 'tab' => 'stages']);
+
+                    $notifier->toRoles(NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id);
+                    $notifier->toUser($project->manager, NotificationType::StageLate, $project, $params, $url, 'stage-'.$stage->id.'-manager');
+                });
+        });
     }
 }

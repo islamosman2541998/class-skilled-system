@@ -131,6 +131,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->belongsToMany(User::class, 'project_members')->withTimestamps();
     }
 
+    /** @return HasMany<ProjectStage, $this> */
+    public function stages(): HasMany
+    {
+        return $this->hasMany(ProjectStage::class)->orderBy('sort_order')->orderBy('id');
+    }
+
     /** @return HasMany<ProjectItem, $this> */
     public function items(): HasMany
     {

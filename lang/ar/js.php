@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'saved' => 'تم الحفظ',
     'confirm_title' => 'تأكيد',
     'confirm_yes' => 'تأكيد',
     'confirm_cancel' => 'إلغاء',

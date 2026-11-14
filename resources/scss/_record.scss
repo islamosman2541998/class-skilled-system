@@ -410,3 +410,108 @@
         background: var(--c-sky);
     }
 }
+
+// Project stages and timeline (spec §8.7)
+.stage-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.stage-row {
+    display: flex;
+    align-items: flex-start;
+    gap: .5rem;
+    padding: .7rem 0;
+    border-bottom: 1px solid var(--c-line);
+
+    &:last-child {
+        border-bottom: 0;
+    }
+}
+
+.stage-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.stage-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .25rem .6rem;
+}
+
+.tl-legend {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    margin-bottom: .75rem;
+    font-size: .85rem;
+}
+
+.tl-key {
+    display: inline-block;
+    inline-size: 14px;
+    block-size: 8px;
+    margin-inline-end: .35rem;
+    border-radius: 2px;
+    vertical-align: middle;
+}
+
+.tl-rows {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+        display: grid;
+        grid-template-columns: minmax(90px, 200px) 1fr;
+        gap: .75rem;
+        align-items: center;
+        padding: .3rem 0;
+    }
+}
+
+.tl-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: .85rem;
+}
+
+.tl-track {
+    position: relative;
+    block-size: 18px;
+    border-radius: 4px;
+    background: var(--c-paper);
+}
+
+.tl-bar {
+    position: absolute;
+    block-size: 7px;
+    border-radius: 3px;
+}
+
+.tl-planned {
+    inset-block-start: 1px;
+    background: #B9C3D1;
+}
+
+.tl-actual {
+    inset-block-end: 1px;
+    background: var(--c-sky);
+
+    &.is-late {
+        background: var(--c-danger);
+    }
+}
+
+.tl-key.tl-planned {
+    background: #B9C3D1;
+}
+
+.tl-key.tl-actual {
+    background: var(--c-sky);
+}
