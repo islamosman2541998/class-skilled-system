@@ -10,6 +10,7 @@ import { initSidebar } from './ui/sidebar';
 import { initAjaxForms } from './ui/ajax-form';
 import { initSortables } from './ui/sortable';
 import { initNotifications } from './ui/notifications';
+import { initSearch } from './ui/search';
 
 window.$ = window.jQuery = $;
 window.bootstrap = { Dropdown, Collapse, Modal };
@@ -28,6 +29,7 @@ $(() => {
     initAjaxForms();
     initSortables();
     initNotifications();
+    initSearch();
     window.initUi();
 });
 

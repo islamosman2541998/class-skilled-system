@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Livewire\Concerns\WithTableActions;
+use App\Support\Like;
 use App\Tables\Column;
 use App\Tables\Filters\Filter;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -363,29 +364,7 @@ abstract class DataTable extends Component
 
     private function applySearch(Builder $query): void
     {
-        $term = trim($this->search);
-        $columns = $this->searchColumns();
-
-        if ($term === '' || $columns === []) {
-            return;
-        }
-
-        // "!" is the escape character so that % and _ typed by the user match literally.
-        $like = '%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term).'%';
-
-        $query->where(function (Builder $outer) use ($columns, $like) {
-            foreach ($columns as $column) {
-                if (str_contains($column, '.')) {
-                    [$relation, $related] = explode('.', $column, 2);
-
-                    $outer->orWhereHas($relation, function (Builder $inner) use ($related, $like) {
-                        $inner->whereRaw($inner->getGrammar()->wrap($inner->qualifyColumn($related))." LIKE ? ESCAPE '!'", [$like]);
-                    });
-                } else {
-                    $outer->orWhereRaw($outer->getGrammar()->wrap($outer->qualifyColumn($column))." LIKE ? ESCAPE '!'", [$like]);
-                }
-            }
-        });
+        Like::any($query, $this->searchColumns(), $this->search);
     }
 
     private function applyDateRange(Builder $query): void

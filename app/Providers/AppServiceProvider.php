@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use App\Models\Lookup;
 use App\Models\User;
+use App\Search\SearchRegistry;
+use App\Search\UserSearchProvider;
 use App\Services\DueTasks;
 use App\Support\Menu;
 use App\Support\TrashRegistry;
@@ -15,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->singleton(SearchRegistry::class);
     }
 
     public function boot(): void
@@ -31,6 +33,8 @@ class AppServiceProvider extends ServiceProvider
         TrashRegistry::register(Lookup::class);
 
         DueTasks::registerDefaults();
+
+        $this->app->make(SearchRegistry::class)->register(new UserSearchProvider);
     }
 
     private function registerNavigation(): void

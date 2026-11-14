@@ -31,4 +31,9 @@ return [
     'back' => 'رجوع',
     'optional' => 'اختياري',
     'comma' => '، ',
+    'search' => 'بحث',
+    'search_placeholder' => 'بحث بالاسم أو الرقم أو الهاتف',
+    'search_shortcut' => 'Ctrl K',
+    'search_hint' => 'اكتب حرفين على الأقل',
+    'close' => 'إغلاق',
 ];

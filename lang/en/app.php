@@ -31,4 +31,9 @@ return [
     'back' => 'Back',
     'optional' => 'Optional',
     'comma' => ', ',
+    'search' => 'Search',
+    'search_placeholder' => 'Search by name, number or phone',
+    'search_shortcut' => 'Ctrl K',
+    'search_hint' => 'Type at least two characters',
+    'close' => 'Close',
 ];

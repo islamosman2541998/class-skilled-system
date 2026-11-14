@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\NumberingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
@@ -53,6 +54,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::resource('roles', RoleController::class)->except(['show', 'destroy']);
 
     Route::get('/activity', ActivityController::class)->name('activity.index');
+    Route::get('/search', SearchController::class)->middleware('throttle:60,1')->name('search');
 
     Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');

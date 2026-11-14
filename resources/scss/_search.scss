@@ -1,0 +1,111 @@
+// Global search (spec §5.6)
+.search-trigger {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    width: 100%;
+    padding: .4rem .65rem;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    background: var(--c-paper);
+    color: var(--c-muted);
+    font-size: .875rem;
+    text-align: start;
+
+    &:hover,
+    &:focus-visible {
+        border-color: #CDD5E0;
+        color: var(--c-ink);
+    }
+}
+
+.search-trigger-text {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.search-trigger-key {
+    padding: .05rem .35rem;
+    border: 1px solid var(--c-line);
+    border-radius: 4px;
+    background: #fff;
+    color: var(--c-muted);
+    font-family: inherit;
+    font-size: .72rem;
+}
+
+@media (max-width: 575.98px) {
+    .search-trigger-text,
+    .search-trigger-key {
+        display: none;
+    }
+
+    .search-trigger {
+        width: auto;
+        border-color: transparent;
+        background: none;
+    }
+}
+
+.search-dialog {
+    margin-top: 10vh;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .75rem 1rem;
+    border-bottom: 1px solid var(--c-line);
+    color: var(--c-muted);
+}
+
+.search-input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: none;
+    color: var(--c-ink);
+    font-size: 1rem;
+}
+
+.search-results {
+    max-height: 60vh;
+    padding: .35rem 0;
+    overflow-y: auto;
+}
+
+.search-group {
+    padding: .5rem 1rem .25rem;
+    color: var(--c-muted);
+    font-size: .78rem;
+    font-weight: 600;
+}
+
+.search-result {
+    display: flex;
+    flex-direction: column;
+    padding: .45rem 1rem;
+    color: var(--c-ink);
+    text-decoration: none;
+
+    &:hover,
+    &.is-active {
+        background: var(--c-paper);
+        color: var(--c-navy);
+    }
+}
+
+.search-result-subtitle {
+    color: var(--c-muted);
+    font-size: .8rem;
+}
+
+.search-empty {
+    margin: 0;
+    padding: 1rem;
+    color: var(--c-muted);
+}
