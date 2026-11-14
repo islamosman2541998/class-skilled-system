@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ConvertQuotationController;
+use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectHandoverController;
 use App\Http\Controllers\ProjectInstallmentController;
@@ -40,3 +41,6 @@ Route::post('/projects/{project}/variations/{variation}/attachments', [Variation
 Route::put('/projects/{project}/handover', [ProjectHandoverController::class, 'update'])->name('projects.handover.update');
 Route::get('/projects/{project}/handover/pdf', [ProjectHandoverController::class, 'pdf'])->name('projects.handover.pdf');
 Route::post('/projects/{project}/handover/attachments', [ProjectHandoverController::class, 'attach'])->name('projects.handover.attachments.store');
+
+Route::resource('maintenance', MaintenanceController::class)->except(['destroy']);
+Route::post('/maintenance/{maintenance}/attachments', [MaintenanceController::class, 'attach'])->name('maintenance.attachments.store');

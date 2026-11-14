@@ -13,12 +13,14 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\QuotationController;
 use App\Models\Client;
 use App\Models\Lookup;
+use App\Models\MaintenanceRequest;
 use App\Models\Project;
 use App\Models\ProjectHandover;
 use App\Models\ProjectInstallment;
 use App\Models\ProjectStage;
 use App\Models\StageTemplate;
 use App\Models\User;
+use App\Search\MaintenanceSearchProvider;
 use App\Search\ProjectSearchProvider;
 use App\Search\SearchRegistry;
 use App\Services\DueTasks;
@@ -45,6 +47,7 @@ class ProjectsServiceProvider extends ServiceProvider
     {
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new ProjectSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new MaintenanceSearchProvider);
 
         if (self::$registered) {
             return;
@@ -53,8 +56,11 @@ class ProjectsServiceProvider extends ServiceProvider
         self::$registered = true;
 
         Menu::register('projects', ['label' => 'projects.projects', 'icon' => 'building-skyscraper', 'route' => 'projects.index', 'permission' => 'projects.view']);
+        Menu::register('projects', ['label' => 'maintenance.maintenance', 'icon' => 'tool', 'route' => 'maintenance.index', 'permission' => 'maintenance.view']);
         TrashRegistry::register(Project::class);
+        TrashRegistry::register(MaintenanceRequest::class);
 
+        Project::$linkedRelations[] = 'maintenanceRequests';
         Client::$linkedRelations[] = 'projects';
         Client::$visibilityRules[] = fn (Builder $query, $user) => $query->orWhereHas('projects', fn (Builder $projects) => $projects->where(
             fn (Builder $inner) => $inner->where('manager_id', $user->id)->orWhereHas('members', fn (Builder $members) => $members->where('users.id', $user->id))

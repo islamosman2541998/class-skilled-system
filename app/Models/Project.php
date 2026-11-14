@@ -150,6 +150,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Variation::class)->latest('id');
     }
 
+    /** @return HasMany<MaintenanceRequest, $this> */
+    public function maintenanceRequests(): HasMany
+    {
+        return $this->hasMany(MaintenanceRequest::class);
+    }
+
     /** @return HasOne<ProjectHandover, $this> */
     public function handover(): HasOne
     {
