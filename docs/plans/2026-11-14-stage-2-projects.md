@@ -23,10 +23,10 @@
 
 ## Review Focus
 
-1. An "assigned only" engineer reaches a project only as its manager or a team member — in lists, pages, media, search, export, stage and installment actions, and the maintenance list. [Tasks 2, 4, 5, 8]
-2. Converting the same accepted quotation twice (double click, two tabs) creates one project only. [Task 3]
-3. Project progress follows the stage weights even when weights do not add up to 100 (they are normalised), and a project with no stages shows 0, not an error. [Task 4]
-4. An approved variation changes the contract value exactly once; rejecting or re-approving does not apply it again; the installment sum warning uses the value after variations. [Tasks 5, 6]
+1. An "assigned only" engineer reaches a project only as its manager or a team member — in lists, pages, media, search, export, stage and installment actions, and the maintenance list. [Tasks 2, 3, 4, 8]
+2. Converting the same accepted quotation twice (double click, two tabs) creates one project only. [Task 5]
+3. Project progress follows the stage weights even when weights do not add up to 100 (they are normalised), and a project with no stages shows 0, not an error. [Task 3]
+4. An approved variation changes the contract value exactly once; rejecting or re-approving does not apply it again; the installment sum warning uses the value after variations. [Tasks 4, 6]
 5. Warranty end is computed from the handover date and months, month-end safe (31 January + 1 month = 28/29 February), and "inside warranty" for a maintenance request follows its own date. [Tasks 7, 8]
 
 ---
@@ -83,33 +83,11 @@
 
 ---
 
-### Task 3: Convert an accepted quotation to a project
-
-**Files:**
-- Create: `app/Actions/Projects/CreateProjectFromQuotation.php`, `resources/views/quotations/partials/convert-action.blade.php`
-- Modify: `app/Http/Controllers/ProjectController.php` (create with `?quotation=`), `app/Providers/ProjectsServiceProvider.php` (register the button through `QuotationController::$primaryActionViews`), `resources/views/quotations/show.blade.php` (project link when converted)
-- Test: `tests/Feature/Projects/ConvertQuotationTest.php`
-
-**Interfaces:**
-- `CreateProjectFromQuotation::handle(Quotation $q, array $data, User $by): Project` — only for an accepted quotation without a project; in one transaction with `lockForUpdate()` on the quotation row: project with the quotation's client, service, emirate, location, titles, `original_value = contract_value = quotation total`, `vat_rate = quotation vat_rate`; items copied to `project_items`; quotation payments copied as installments (Task 5 table, created here when that task has run — the action calls `InstallmentSchedule::fromPercents()` when the class exists, otherwise skips); stages copied from `StageTemplate::forService()` when Task 4 exists. `$data` holds the fields the user confirms on the form: dates, manager, team, billing method.
-- The project form opened from a quotation shows the copied values read-only and asks only for the confirm fields.
-- Button "convert to project" on an accepted quotation (`projects.create` + quotation visible); once converted the quotation page links to the project instead.
-
-- [ ] **Step 1: Failing tests** — `converts an accepted quotation with value, items and installments`, `refuses a draft, sent or rejected quotation`, `creates one project when converted twice` (second call returns the existing project, still one row), `needs projects.create and quotation visibility`, `links the project from the quotation page`.
-- [ ] **Step 2: Run** `php artisan test --filter=ConvertQuotationTest` — expected FAIL.
-- [ ] **Step 3: Implement** the action (unique `quotation_id` index as the final guard; a unique violation returns the existing project), controller paths, button.
-- [ ] **Step 4: Run** the filter and the whole suite — expected PASS.
-- [ ] **Step 5: Commit** `stage-2: convert quotation to project`.
-
-> Order note: Tasks 4 and 5 add stages and installments; when they land, they extend `CreateProjectFromQuotation` and its test with the copy of stages and installments (no class_exists checks remain at the end of the stage).
-
----
-
-### Task 4: Project stages, progress and timeline
+### Task 3: Project stages, progress and timeline
 
 **Files:**
 - Create: `app/Enums/StageStatus.php`, `app/Models/ProjectStage.php` + migration, `app/Services/ProjectProgress.php`, `app/Http/Controllers/ProjectStageController.php`, `app/Http/Requests/SaveProjectStageRequest.php`, `resources/views/projects/tabs/stages.blade.php`, `resources/views/projects/partials/timeline.blade.php`
-- Modify: `app/Actions/Projects/CreateProjectFromQuotation.php`, `app/Http/Controllers/ProjectController.php` (copy template on direct create), `app/Providers/ProjectsServiceProvider.php` (due task), tests of Task 3
+- Modify: `app/Http/Controllers/ProjectController.php` (copy the template on creation), `app/Providers/ProjectsServiceProvider.php` (due task)
 - Test: `tests/Feature/Projects/ProjectStagesTest.php`, `tests/Unit/ProjectProgressTest.php`
 
 **Interfaces:**
@@ -123,17 +101,17 @@
 
 - [ ] **Step 1: Failing tests** — Unit: `weights normalised`, `no stages gives 0.00`, `zero weights give 0.00`. Feature: `copies the service stage template on creation`, `refreshes project progress after a stage update`, `done means 100 and the reverse`, `flags late stages and notifies once`, `an engineer outside the project cannot change its stages`.
 - [ ] **Step 2: Run** `php artisan test --filter="ProjectStagesTest|ProjectProgressTest"` — expected FAIL.
-- [ ] **Step 3: Implement** enum, model, migration, service, controller (permission `projects.update` + visibility), request, tab, timeline, due task, template copy in both creation paths.
+- [ ] **Step 3: Implement** enum, model, migration, service, controller (permission `projects.update` + visibility), request, tab, timeline, due task, template copy on creation.
 - [ ] **Step 4: Run** the filter and the whole suite — expected PASS.
 - [ ] **Step 5: Commit** `stage-2: project stages and progress`.
 
 ---
 
-### Task 5: Payment schedule (installments)
+### Task 4: Payment schedule (installments)
 
 **Files:**
 - Create: `app/Enums/{InstallmentStatus,InstallmentDueType}.php`, `app/Models/ProjectInstallment.php` + migration, `app/Services/InstallmentSchedule.php`, `app/Http/Controllers/ProjectInstallmentController.php`, `app/Http/Requests/SaveInstallmentRequest.php`, `resources/views/projects/tabs/payments.blade.php`
-- Modify: `app/Actions/Projects/CreateProjectFromQuotation.php`, `app/Providers/ProjectsServiceProvider.php`, `app/Services/ProjectProgress.php` (a stage reaching Done makes its installments due)
+- Modify: `app/Providers/ProjectsServiceProvider.php`, `app/Services/ProjectProgress.php` (a stage reaching Done makes its installments due)
 - Test: `tests/Feature/Projects/InstallmentsTest.php`
 
 **Interfaces:**
@@ -144,11 +122,31 @@
 - An installment is Due when its date is today or past, or its stage is Done; the daily due task `installments-due` moves NotDue → Due and sends `InstallmentDue` (days before, rule days) to the configured roles, dedupe `'due-'.$installment->id`.
 - Payments tab: rows with label, percent or amount (either may be entered; the other is derived), due rule, status badge; a warning panel when `difference ≠ 0` showing the gap (spec §8.8). The "create invoice" button is a Stage 3 slot.
 
-- [ ] **Step 1: Failing tests** — `copies quotation payments on conversion with amounts that sum to the contract value`, `derives amount from percent and the reverse`, `warns when the schedule does not match the contract value`, `becomes due on its date and when its stage is done`, `notifies installment due once per installment`, `refuses changes to invoiced installments` (status invoiced set directly in the test).
+- [ ] **Step 1: Failing tests** — `builds a schedule from percents with amounts that sum to the contract value`, `derives amount from percent and the reverse`, `warns when the schedule does not match the contract value`, `becomes due on its date and when its stage is done`, `notifies installment due once per installment`, `refuses changes to invoiced installments` (status invoiced set directly in the test).
 - [ ] **Step 2: Run** `php artisan test --filter=InstallmentsTest` — expected FAIL.
-- [ ] **Step 3: Implement** enums, model, migration, schedule service, controller, request, tab, due task, conversion copy.
+- [ ] **Step 3: Implement** enums, model, migration, schedule service, controller, request, tab, due task.
 - [ ] **Step 4: Run** the filter and the whole suite — expected PASS.
 - [ ] **Step 5: Commit** `stage-2: payment schedule`.
+
+---
+
+### Task 5: Convert an accepted quotation to a project
+
+**Files:**
+- Create: `app/Actions/Projects/CreateProjectFromQuotation.php`, `resources/views/quotations/partials/convert-action.blade.php`
+- Modify: `app/Http/Controllers/ProjectController.php` (create with `?quotation=`), `app/Providers/ProjectsServiceProvider.php` (register the button through `QuotationController::$primaryActionViews`), `resources/views/quotations/show.blade.php` (project link when converted)
+- Test: `tests/Feature/Projects/ConvertQuotationTest.php`
+
+**Interfaces:**
+- `CreateProjectFromQuotation::handle(Quotation $q, array $data, User $by): Project` — only for an accepted quotation without a project; in one transaction with `lockForUpdate()` on the quotation row: project with the quotation's client, service, emirate, location, titles, `original_value = contract_value = quotation total`, `vat_rate = quotation vat_rate`; items copied to `project_items`; quotation payments copied as installments through `InstallmentSchedule::fromPercents()` (Task 4); stages copied from `StageTemplate::forService()` like a direct creation (Task 3). `$data` holds the fields the user confirms on the form: dates, manager, team, billing method.
+- The project form opened from a quotation shows the copied values read-only and asks only for the confirm fields.
+- Button "convert to project" on an accepted quotation (`projects.create` + quotation visible); once converted the quotation page links to the project instead.
+
+- [ ] **Step 1: Failing tests** — `converts an accepted quotation with value, items, installments and the service stages`, `refuses a draft, sent or rejected quotation`, `creates one project when converted twice` (second call returns the existing project, still one row), `needs projects.create and quotation visibility`, `links the project from the quotation page`.
+- [ ] **Step 2: Run** `php artisan test --filter=ConvertQuotationTest` — expected FAIL.
+- [ ] **Step 3: Implement** the action (unique `quotation_id` index as the final guard; a unique violation returns the existing project), controller paths, button.
+- [ ] **Step 4: Run** the filter and the whole suite — expected PASS.
+- [ ] **Step 5: Commit** `stage-2: convert quotation to project`.
 
 ---
 
