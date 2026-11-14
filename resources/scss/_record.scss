@@ -376,3 +376,19 @@
         padding-bottom: 5rem;
     }
 }
+
+// Payment templates editor
+.payment-template {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid var(--c-line);
+    border-radius: 10px;
+}
+
+.payment-template-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem;
+    margin-top: .5rem;
+}

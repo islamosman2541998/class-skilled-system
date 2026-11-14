@@ -5,6 +5,7 @@ use App\Settings\CompanySettings;
 use App\Settings\FinanceSettings;
 use App\Settings\NotificationSettings;
 use App\Settings\SystemSettings;
+use App\Settings\TemplateSettings;
 use App\Settings\UploadSettings;
 use Spatie\LaravelData\Data;
 use Spatie\LaravelSettings\SettingsCasts\DataCast;
@@ -26,6 +27,7 @@ return [
         UploadSettings::class,
         SystemSettings::class,
         NotificationSettings::class,
+        TemplateSettings::class,
     ],
 
     /*

@@ -14,6 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\TemplateSettingsController;
 use App\Http\Controllers\TranslationController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\UserController;
@@ -78,6 +79,8 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
         Route::get('/translations', [TranslationController::class, 'index'])->name('translations.index');
         Route::put('/translations', [TranslationController::class, 'update'])->name('translations.update');
         Route::delete('/translations', [TranslationController::class, 'reset'])->name('translations.reset');
+        Route::get('/templates', [TemplateSettingsController::class, 'edit'])->name('settings.templates');
+        Route::put('/templates', [TemplateSettingsController::class, 'update'])->name('settings.templates.update');
         Route::get('/numbering', [NumberingController::class, 'edit'])->name('settings.numbering');
         Route::put('/numbering', [NumberingController::class, 'update'])->name('settings.numbering.update');
 

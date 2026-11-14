@@ -5,6 +5,7 @@
 @php
     $icons = ['company' => 'building', 'appearance' => 'palette', 'finance' => 'coins', 'uploads' => 'cloud-upload', 'system' => 'adjustments'];
     $extra = [
+        ['route' => 'settings.templates', 'label' => 'settings.groups.templates', 'icon' => 'file-text', 'permission' => 'settings.manage'],
         ['route' => 'settings.numbering', 'label' => 'settings.groups.numbering', 'icon' => 'hash', 'permission' => 'settings.manage'],
         ['route' => 'settings.notifications', 'label' => 'settings.groups.notifications', 'icon' => 'bell', 'permission' => 'settings.manage'],
         ['route' => 'translations.index', 'label' => 'settings.groups.translations', 'icon' => 'language', 'permission' => 'translations.manage'],
