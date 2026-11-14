@@ -27,6 +27,7 @@ return [
         'roles_changed' => 'Roles changed',
     ],
     'modules' => [
+        'expenses' => 'Expenses',
         'receipts' => 'Receipts',
         'invoices' => 'Invoices',
         'users' => 'Users',

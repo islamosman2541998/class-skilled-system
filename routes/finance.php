@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoicePdfController;
 use App\Http\Controllers\ReceiptController;
@@ -23,3 +24,9 @@ Route::patch('/receipts/{receipt}/cancel', [ReceiptController::class, 'cancel'])
 Route::post('/receipts/{receipt}/attachments', [ReceiptController::class, 'attach'])->name('receipts.attachments.store');
 Route::get('/receipts/{receipt}/pdf', [ReceiptPdfController::class, 'show'])->name('receipts.pdf');
 Route::post('/receipts/{receipt}/share', [ReceiptPdfController::class, 'share'])->name('receipts.share');
+
+// The quick entry routes come before the resource so "quick" is not read as an expense id.
+Route::get('/expenses/quick', [ExpenseController::class, 'quick'])->name('expenses.quick');
+Route::post('/expenses/quick', [ExpenseController::class, 'storeQuick'])->name('expenses.quick.store');
+Route::resource('expenses', ExpenseController::class)->except(['destroy']);
+Route::post('/expenses/{expense}/attachments', [ExpenseController::class, 'attach'])->name('expenses.attachments.store');

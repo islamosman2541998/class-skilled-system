@@ -12,12 +12,14 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Client;
+use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Lookup;
 use App\Models\Project;
 use App\Models\ProjectInstallment;
 use App\Models\Receipt;
 use App\Models\ReceiptAllocation;
+use App\Search\ExpenseSearchProvider;
 use App\Search\InvoiceSearchProvider;
 use App\Search\ReceiptSearchProvider;
 use App\Search\SearchRegistry;
@@ -44,6 +46,7 @@ class FinanceServiceProvider extends ServiceProvider
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new InvoiceSearchProvider);
         $this->app->make(SearchRegistry::class)->register(new ReceiptSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new ExpenseSearchProvider);
 
         if (self::$registered) {
             return;
@@ -53,17 +56,28 @@ class FinanceServiceProvider extends ServiceProvider
 
         PermissionRegistry::register('invoices', [...PermissionRegistry::ACTIONS, 'cancel']);
         PermissionRegistry::register('receipts', ['view', 'create', 'update', 'export', 'print', 'cancel']);
+        PermissionRegistry::register('expenses');
         PermissionRegistry::register('finance', ['costs', 'profitability']);
 
         Menu::register('finance', ['label' => 'finance.invoices.invoices', 'icon' => 'file-invoice', 'route' => 'invoices.index', 'permission' => 'invoices.view']);
         Menu::register('finance', ['label' => 'finance.receipts.receipts', 'icon' => 'cash', 'route' => 'receipts.index', 'permission' => 'receipts.view']);
+        Menu::register('finance', ['label' => 'finance.expenses.expenses', 'icon' => 'receipt', 'route' => 'expenses.index', 'permission' => 'expenses.view']);
+        Menu::register('finance', ['label' => 'finance.expenses.quick', 'icon' => 'camera', 'route' => 'expenses.quick', 'permission' => 'expenses.create']);
         TrashRegistry::register(Invoice::class);
+        TrashRegistry::register(Expense::class);
 
         Project::$linkedRelations[] = 'invoices';
         ProjectController::$tabPermissions['invoices'] = ['invoices.view'];
         Client::$linkedRelations[] = 'invoices';
         Client::$linkedRelations[] = 'receipts';
         Project::$linkedRelations[] = 'receipts';
+        Project::$linkedRelations[] = 'expenses';
+        ProjectController::$tabPermissions['expenses'] = ['expenses.view', 'finance.costs'];
+        LookupUsage::register(LookupType::ExpenseCategory, fn (Lookup $lookup) => Expense::withTrashed()->where('category_id', $lookup->id)->exists());
+        LookupUsage::register(LookupType::PaymentMethod, fn (Lookup $lookup) => Expense::withTrashed()->where('payment_method_id', $lookup->id)->exists());
+
+        // Cost = expenses of the project before VAT (spec §8.6); Stage 5 adds purchases and labour.
+        ProjectLedger::$costSources['expenses'] = fn (Project $project) => (string) Expense::query()->where('project_id', $project->id)->sum('amount');
         InvoiceController::$showViews[] = 'invoices.partials.receipts';
         LookupUsage::register(LookupType::PaymentMethod, fn (Lookup $lookup) => Receipt::query()->where('payment_method_id', $lookup->id)->exists());
 

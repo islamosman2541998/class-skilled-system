@@ -43,9 +43,12 @@
                 </span>
             </div>
             <div class="figure"><span class="figure-label">{{ __('projects.contract_value') }}</span><span class="figure-value"><bdi dir="ltr">{{ money($project->contract_value) }}</bdi></span></div>
-            @foreach (['invoiced' => $project->invoiced_total, 'collected' => $project->collected_total, 'outstanding' => $project->outstanding(), 'cost' => $project->cost_total] as $label => $amount)
+            @foreach (['invoiced' => $project->invoiced_total, 'collected' => $project->collected_total, 'outstanding' => $project->outstanding()] as $label => $amount)
                 <div class="figure"><span class="figure-label">{{ __('projects.'.$label) }}</span><span class="figure-value"><bdi dir="ltr">{{ money($amount) }}</bdi></span></div>
             @endforeach
+            @can('finance.costs')
+                <div class="figure"><span class="figure-label">{{ __('projects.cost') }}</span><span class="figure-value"><bdi dir="ltr">{{ money($project->cost_total) }}</bdi></span></div>
+            @endcan
         </x-slot:figures>
     </x-record-header>
 

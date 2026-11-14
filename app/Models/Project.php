@@ -158,6 +158,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Receipt::class);
     }
 
+    /** @return HasMany<Expense, $this> */
+    public function expenses(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
+
     /** @return HasMany<Variation, $this> */
     public function variations(): HasMany
     {

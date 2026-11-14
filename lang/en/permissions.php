@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'expenses' => 'Expenses',
         'receipts' => 'Receipts',
         'invoices' => 'Invoices',
         'finance' => 'Finance',
