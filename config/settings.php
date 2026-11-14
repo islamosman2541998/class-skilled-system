@@ -3,6 +3,7 @@
 use App\Settings\AppearanceSettings;
 use App\Settings\CompanySettings;
 use App\Settings\FinanceSettings;
+use App\Settings\NotificationSettings;
 use App\Settings\SystemSettings;
 use App\Settings\UploadSettings;
 use Spatie\LaravelData\Data;
@@ -24,6 +25,7 @@ return [
         FinanceSettings::class,
         UploadSettings::class,
         SystemSettings::class,
+        NotificationSettings::class,
     ],
 
     /*

@@ -1043,3 +1043,116 @@ tr.is-selected > td,
         border: 0;
     }
 }
+
+// Notifications (spec §5.5)
+.btn-link-plain {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    text-align: start;
+
+    &:hover,
+    &:focus-visible {
+        color: var(--c-navy);
+        text-decoration: underline;
+    }
+}
+
+.notifications-bell {
+    position: relative;
+
+    .btn-icon {
+        position: relative;
+    }
+}
+
+.bell-count {
+    position: absolute;
+    inset-block-start: 2px;
+    inset-inline-end: 2px;
+    min-width: 17px;
+    height: 17px;
+    padding: 0 4px;
+    border-radius: 9px;
+    background: var(--c-danger);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 17px;
+    text-align: center;
+}
+
+.notifications-menu {
+    width: min(360px, calc(100vw - 2rem));
+    padding: 0;
+    overflow: hidden;
+}
+
+.notifications-menu-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: .65rem .9rem;
+    border-bottom: 1px solid var(--c-line);
+    font-weight: 600;
+}
+
+.notifications-menu-body {
+    max-height: 360px;
+    overflow-y: auto;
+}
+
+.notification-item {
+    display: flex;
+    flex-direction: column;
+    gap: .15rem;
+    width: 100%;
+    padding: .6rem .9rem;
+    border: 0;
+    border-bottom: 1px solid var(--c-line);
+    background: #fff;
+    text-align: start;
+
+    &:hover {
+        background: var(--c-paper);
+    }
+
+    &.is-unread .notification-title {
+        font-weight: 600;
+    }
+}
+
+.notification-time {
+    color: var(--c-muted);
+    font-size: .8rem;
+}
+
+.notification-empty {
+    margin: 0;
+    padding: 1rem .9rem;
+    color: var(--c-muted);
+}
+
+.notifications-menu-footer {
+    display: block;
+    padding: .55rem .9rem;
+    color: var(--c-navy);
+    text-align: center;
+    text-decoration: none;
+
+    &:hover {
+        background: var(--c-paper);
+    }
+}
+
+.rules-table {
+    th,
+    td {
+        vertical-align: middle;
+    }
+
+    .days-input {
+        width: 90px;
+    }
+}

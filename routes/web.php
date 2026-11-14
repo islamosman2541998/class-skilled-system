@@ -6,6 +6,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\LookupController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\NumberingController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -52,12 +54,19 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
 
     Route::get('/activity', ActivityController::class)->name('activity.index');
 
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/latest', [NotificationController::class, 'latest'])->name('notifications.latest');
+    Route::post('/notifications/read-all', [NotificationController::class, 'readAll'])->name('notifications.read-all');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'read'])->whereUuid('id')->name('notifications.read');
+
     Route::prefix('settings')->group(function () {
         Route::get('/lists/{type}', [LookupController::class, 'index'])->name('lookups.index');
         Route::post('/lists/{type}', [LookupController::class, 'store'])->name('lookups.store');
         Route::post('/lists/{type}/reorder', [LookupController::class, 'reorder'])->name('lookups.reorder');
         Route::put('/lists/{type}/{lookup}', [LookupController::class, 'update'])->name('lookups.update');
 
+        Route::get('/notifications', [NotificationSettingsController::class, 'edit'])->name('settings.notifications');
+        Route::put('/notifications', [NotificationSettingsController::class, 'update'])->name('settings.notifications.update');
         Route::get('/numbering', [NumberingController::class, 'edit'])->name('settings.numbering');
         Route::put('/numbering', [NumberingController::class, 'update'])->name('settings.numbering.update');
 

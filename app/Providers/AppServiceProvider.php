@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Lookup;
 use App\Models\User;
+use App\Services\DueTasks;
 use App\Support\Menu;
 use App\Support\TrashRegistry;
 use Illuminate\Database\Eloquent\Model;
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
         TrashRegistry::register(User::class);
         TrashRegistry::register(Lookup::class);
+
+        DueTasks::registerDefaults();
     }
 
     private function registerNavigation(): void
