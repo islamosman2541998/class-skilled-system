@@ -30,6 +30,7 @@ class ClientController extends Controller
         'quotations' => 'quotations.index',
         'projects' => 'projects.index',
         'invoices' => 'invoices.index',
+        'receipts' => 'receipts.index',
         'attachments' => null,
         'activity' => null,
     ];

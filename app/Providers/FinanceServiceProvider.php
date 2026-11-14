@@ -6,19 +6,26 @@ use App\Actions\Finance\CancelInvoice;
 use App\Actions\Finance\IssueInvoice;
 use App\Enums\InstallmentDueType;
 use App\Enums\InstallmentStatus;
+use App\Enums\LookupType;
 use App\Enums\NotificationType;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Client;
 use App\Models\Invoice;
+use App\Models\Lookup;
 use App\Models\Project;
 use App\Models\ProjectInstallment;
+use App\Models\Receipt;
+use App\Models\ReceiptAllocation;
 use App\Search\InvoiceSearchProvider;
+use App\Search\ReceiptSearchProvider;
 use App\Search\SearchRegistry;
 use App\Services\DueTasks;
+use App\Services\Finance\ProjectLedger;
 use App\Services\InstallmentSchedule;
 use App\Services\Notifier;
+use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
 use App\Support\TrashRegistry;
@@ -36,6 +43,7 @@ class FinanceServiceProvider extends ServiceProvider
     {
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new InvoiceSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new ReceiptSearchProvider);
 
         if (self::$registered) {
             return;
@@ -44,14 +52,30 @@ class FinanceServiceProvider extends ServiceProvider
         self::$registered = true;
 
         PermissionRegistry::register('invoices', [...PermissionRegistry::ACTIONS, 'cancel']);
+        PermissionRegistry::register('receipts', ['view', 'create', 'update', 'export', 'print', 'cancel']);
         PermissionRegistry::register('finance', ['costs', 'profitability']);
 
         Menu::register('finance', ['label' => 'finance.invoices.invoices', 'icon' => 'file-invoice', 'route' => 'invoices.index', 'permission' => 'invoices.view']);
+        Menu::register('finance', ['label' => 'finance.receipts.receipts', 'icon' => 'cash', 'route' => 'receipts.index', 'permission' => 'receipts.view']);
         TrashRegistry::register(Invoice::class);
 
         Project::$linkedRelations[] = 'invoices';
         ProjectController::$tabPermissions['invoices'] = ['invoices.view'];
         Client::$linkedRelations[] = 'invoices';
+        Client::$linkedRelations[] = 'receipts';
+        Project::$linkedRelations[] = 'receipts';
+        InvoiceController::$showViews[] = 'invoices.partials.receipts';
+        LookupUsage::register(LookupType::PaymentMethod, fn (Lookup $lookup) => Receipt::query()->where('payment_method_id', $lookup->id)->exists());
+
+        // Collected = active receipts of the project, plus what project-less receipts pay on its invoices.
+        ProjectLedger::$collectedSources['receipts'] = fn (Project $project) => bcadd(
+            (string) Receipt::query()->active()->where('project_id', $project->id)->sum('amount'),
+            (string) ReceiptAllocation::query()
+                ->whereHas('receipt', fn ($receipts) => $receipts->active()->whereNull('project_id'))
+                ->whereHas('invoice', fn ($invoices) => $invoices->where('project_id', $project->id))
+                ->sum('amount'),
+            2,
+        );
         ClientController::$figureProviders['invoiced'] = fn (Client $client) => auth()->user()?->can('invoices.view')
             ? money((string) $client->invoices()->active()->visibleTo(auth()->user())->sum('total'))
             : '';

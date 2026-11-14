@@ -113,6 +113,12 @@ class Invoice extends Model implements GuardsDeletion
         return $this->hasMany(InvoiceItem::class)->orderBy('sort_order');
     }
 
+    /** @return HasMany<ReceiptAllocation, $this> */
+    public function allocations(): HasMany
+    {
+        return $this->hasMany(ReceiptAllocation::class);
+    }
+
     public function isDraft(): bool
     {
         return $this->status === InvoiceStatus::Draft;

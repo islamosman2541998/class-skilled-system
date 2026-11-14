@@ -27,6 +27,7 @@ return [
         'roles_changed' => 'تعديل أدوار',
     ],
     'modules' => [
+        'receipts' => 'سندات القبض',
         'invoices' => 'الفواتير',
         'users' => 'المستخدمون',
         'roles' => 'الأدوار',

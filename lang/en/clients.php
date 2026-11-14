@@ -43,6 +43,7 @@ return [
         'leads' => 'Requests',
     ],
     'tabs' => [
+        'receipts' => 'Receipts',
         'invoices' => 'Invoices',
         'projects' => 'Projects',
         'overview' => 'Overview',

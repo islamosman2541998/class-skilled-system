@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'receipts' => 'سندات القبض',
         'invoices' => 'الفواتير',
         'finance' => 'المالية العامة',
         'projects' => 'المشاريع',

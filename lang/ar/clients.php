@@ -43,6 +43,7 @@ return [
         'leads' => 'الطلبات',
     ],
     'tabs' => [
+        'receipts' => 'سندات القبض',
         'invoices' => 'الفواتير',
         'projects' => 'المشاريع',
         'overview' => 'نظرة عامة',
