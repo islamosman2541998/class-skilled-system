@@ -1,0 +1,25 @@
+<?php
+
+return [
+    'quotation' => 'Quotation',
+    'trn' => 'TRN',
+    'client' => 'Client',
+    'number' => 'Number',
+    'date' => 'Date',
+    'valid_until' => 'Valid until',
+    'location' => 'Location',
+    'description' => 'Description',
+    'unit' => 'Unit',
+    'quantity' => 'Qty',
+    'price' => 'Price',
+    'total' => 'Total',
+    'subtotal' => 'Subtotal',
+    'discount' => 'Discount',
+    'after_discount' => 'Total after discount',
+    'vat' => 'VAT',
+    'grand_total' => 'Total including VAT',
+    'payments' => 'Payment schedule',
+    'terms' => 'Terms and conditions',
+    'signature' => 'Signature',
+    'stamp' => 'Stamp',
+];

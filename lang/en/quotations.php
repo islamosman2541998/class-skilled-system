@@ -89,4 +89,9 @@ return [
     'copy' => 'Copy to new quotation',
     'copied' => 'Quotation :number created',
     'more' => 'Actions',
+    'print' => 'Print PDF',
+    'print_ar' => 'Arabic PDF',
+    'print_en' => 'English PDF',
+    'print_both' => 'Bilingual PDF',
+    'send_whatsapp' => 'Send by WhatsApp',
 ];

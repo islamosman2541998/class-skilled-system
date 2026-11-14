@@ -111,6 +111,7 @@ class SalesServiceProvider extends ServiceProvider
         LeadController::$showViews[] = 'quotations.partials.lead-quotations';
         ClientController::$actionViews[] = 'quotations.partials.client-action';
         QuotationController::$actionViews[] = 'quotations.partials.actions';
+        QuotationController::$primaryActionViews[] = 'quotations.partials.share-actions';
         ClientController::$figureProviders['quotations'] = fn (Client $client) => (string) $client->quotations()->count();
         ClientController::$figureProviders['accepted_total'] = fn (Client $client) => money($client->quotations()->where('status', QuotationStatus::Accepted)->sum('total'));
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\MyVisitsController;
 use App\Http\Controllers\PriceItemController;
 use App\Http\Controllers\QuotationActionController;
 use App\Http\Controllers\QuotationController;
+use App\Http\Controllers\QuotationPdfController;
 use App\Http\Controllers\SiteVisitController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,3 +53,5 @@ Route::patch('/quotations/{quotation}/accept', [QuotationActionController::class
 Route::patch('/quotations/{quotation}/reject', [QuotationActionController::class, 'reject'])->name('quotations.reject');
 Route::post('/quotations/{quotation}/revise', [QuotationActionController::class, 'revise'])->name('quotations.revise');
 Route::post('/quotations/{quotation}/copy', [QuotationActionController::class, 'copy'])->name('quotations.copy');
+Route::get('/quotations/{quotation}/pdf', [QuotationPdfController::class, 'show'])->name('quotations.pdf');
+Route::post('/quotations/{quotation}/share', [QuotationPdfController::class, 'share'])->name('quotations.share');

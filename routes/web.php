@@ -11,6 +11,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\NotificationSettingsController;
 use App\Http\Controllers\NumberingController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicDocumentController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SettingsController;
@@ -26,6 +27,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');
     Route::post('/login', [LoginController::class, 'store'])->middleware('throttle:5,1')->name('login.store');
 });
+
+// Documents opened by clients from a signed, expiring link (spec §5.10).
+Route::get('/d/q/{quotation}', [PublicDocumentController::class, 'quotation'])->middleware(['signed', 'throttle:30,1'])->name('public.quotation');
 
 Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');

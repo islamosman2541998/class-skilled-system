@@ -89,4 +89,9 @@ return [
     'copy' => 'نسخ إلى عرض جديد',
     'copied' => 'تم إنشاء العرض :number',
     'more' => 'إجراءات',
+    'print' => 'طباعة PDF',
+    'print_ar' => 'PDF عربي',
+    'print_en' => 'PDF إنجليزي',
+    'print_both' => 'PDF باللغتين',
+    'send_whatsapp' => 'إرسال واتساب',
 ];
