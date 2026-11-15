@@ -42,6 +42,7 @@ return [
     'outstanding' => 'المستحق',
     'cost' => 'التكلفة',
     'profit' => 'الربح',
+    'margin' => 'هامش الربح',
     'not_yet' => '—',
     'created_by' => 'أنشأه',
     'has_records' => 'المشروع مرتبط بسجلات أخرى',

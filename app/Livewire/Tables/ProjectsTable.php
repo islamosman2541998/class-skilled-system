@@ -40,6 +40,45 @@ class ProjectsTable extends DataTable
 
     protected function columns(): array
     {
+        return [...$this->baseColumns(), ...$this->moneyColumns()];
+    }
+
+    /**
+     * Invoiced and collected for whoever sees projects; cost behind finance.costs, profit and margin
+     * behind finance.profitability (spec §6). Export uses the same list, so it follows too.
+     *
+     * @return list<Column>
+     */
+    private function moneyColumns(): array
+    {
+        $user = auth()->user();
+        $money = fn (string $key, string $label, string $attribute) => Column::make($key, $label)->sortable()->summable()->alignEnd()->hiddenByDefault()
+            ->format(fn (Project $row) => money($row->getAttribute($attribute)))->exportAs(fn (Project $row) => $row->getAttribute($attribute));
+
+        $columns = [
+            $money('invoiced_total', 'projects.invoiced', 'invoiced_total'),
+            $money('collected_total', 'projects.collected', 'collected_total'),
+        ];
+
+        if ($user?->can('finance.costs')) {
+            $columns[] = $money('cost_total', 'projects.cost', 'cost_total');
+        }
+
+        if ($user?->can('finance.profitability')) {
+            $columns[] = Column::make('profit', 'projects.profit')->alignEnd()->hiddenByDefault()
+                ->format(fn (Project $row) => money($row->profit()))->exportAs(fn (Project $row) => $row->profit());
+            $columns[] = Column::make('margin', 'projects.margin')->alignEnd()->hiddenByDefault()
+                ->format(fn (Project $row) => $row->margin() !== null ? $row->margin().'%' : '')->exportAs(fn (Project $row) => $row->margin());
+        }
+
+        return $columns;
+    }
+
+    /**
+     * @return list<Column>
+     */
+    private function baseColumns(): array
+    {
         return [
             Column::make('number', 'projects.number')->sortable()->view('projects.partials.number')->exportAs(fn (Project $row) => $row->number)->onCard(),
             Column::make('title_ar', 'projects.title')->sortable()->format(fn (Project $row) => $row->title)->onCard(),

@@ -42,6 +42,7 @@ return [
     'outstanding' => 'Outstanding',
     'cost' => 'Cost',
     'profit' => 'Profit',
+    'margin' => 'Margin',
     'not_yet' => '—',
     'created_by' => 'Created by',
     'has_records' => 'The project is linked to other records',

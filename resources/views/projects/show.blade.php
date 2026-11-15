@@ -49,6 +49,16 @@
             @can('finance.costs')
                 <div class="figure"><span class="figure-label">{{ __('projects.cost') }}</span><span class="figure-value"><bdi dir="ltr">{{ money($project->cost_total) }}</bdi></span></div>
             @endcan
+            @can('finance.profitability')
+                <div class="figure">
+                    <span class="figure-label">{{ __('projects.profit') }}</span>
+                    <span @class(['figure-value', 'text-danger' => bccomp($project->profit(), '0', 2) < 0])><bdi dir="ltr">{{ money($project->profit()) }}</bdi></span>
+                </div>
+                <div class="figure">
+                    <span class="figure-label">{{ __('projects.margin') }}</span>
+                    <span class="figure-value"><bdi dir="ltr">{{ $project->margin() !== null ? rtrim(rtrim($project->margin(), '0'), '.').'%' : '' }}</bdi></span>
+                </div>
+            @endcan
         </x-slot:figures>
     </x-record-header>
 

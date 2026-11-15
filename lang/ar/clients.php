@@ -35,6 +35,7 @@ return [
     'has_records' => 'العميل مرتبط بسجلات أخرى',
     'quick_add' => 'إضافة عميل',
     'figures' => [
+        'outstanding' => 'المستحق',
         'invoiced' => 'المفوتر',
         'projects' => 'المشاريع',
         'contacts' => 'جهات الاتصال',

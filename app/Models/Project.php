@@ -225,6 +225,27 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return bcsub((string) $this->invoiced_total, (string) $this->collected_total, 2);
     }
 
+    /** Realised profit: invoiced before VAT minus cost before VAT (spec §8.6). */
+    public function profit(): string
+    {
+        return bcsub((string) $this->invoiced_net, (string) $this->cost_total, 2);
+    }
+
+    /** Profit as a percentage of the invoiced amount before VAT; null while nothing is invoiced. */
+    public function margin(): ?string
+    {
+        if (bccomp((string) $this->invoiced_net, '0', 2) === 0) {
+            return null;
+        }
+
+        $percent = bcdiv(bcmul($this->profit(), '100', 8), (string) $this->invoiced_net, 8);
+
+        // Half away from zero, so a loss rounds like a profit.
+        return bccomp($percent, '0', 8) < 0
+            ? '-'.bcadd(ltrim($percent, '-'), '0.005', 2)
+            : bcadd($percent, '0.005', 2);
+    }
+
     public function deletionBlockedReason(User $by): ?string
     {
         foreach (self::$linkedRelations as $relation) {

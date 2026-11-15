@@ -35,6 +35,7 @@ return [
     'has_records' => 'The client is linked to other records',
     'quick_add' => 'Add client',
     'figures' => [
+        'outstanding' => 'Outstanding',
         'invoiced' => 'Invoiced',
         'projects' => 'Projects',
         'contacts' => 'Contacts',

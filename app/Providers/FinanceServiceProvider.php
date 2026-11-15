@@ -93,6 +93,14 @@ class FinanceServiceProvider extends ServiceProvider
         ClientController::$figureProviders['invoiced'] = fn (Client $client) => auth()->user()?->can('invoices.view')
             ? money((string) $client->invoices()->active()->visibleTo(auth()->user())->sum('total'))
             : '';
+        // What the client still owes on issued invoices.
+        ClientController::$figureProviders['outstanding'] = fn (Client $client) => auth()->user()?->can('invoices.view')
+            ? money(bcsub(
+                (string) $client->invoices()->active()->visibleTo(auth()->user())->sum('total'),
+                (string) $client->invoices()->active()->visibleTo(auth()->user())->sum('paid_amount'),
+                2,
+            ))
+            : '';
         InvoiceController::$actionViews[] = 'invoices.partials.share-actions';
 
         // The installment follows its invoice (spec §8.8): issued → invoiced; cancelled → due again by its own rule.
