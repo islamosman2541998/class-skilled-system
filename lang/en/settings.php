@@ -55,7 +55,7 @@ return [
         'appearance' => 'Colours, primary font, default language',
         'finance' => 'Currency, decimals, VAT rate, validity and due periods',
         'uploads' => 'Allowed types and size limits for images, videos and files',
-        'system' => 'Session length, trash retention, public link lifetime',
+        'system' => 'Session length, trash retention, public link lifetime, days off',
     ],
     'company' => [
         'identity' => 'Identity',
@@ -130,6 +130,8 @@ return [
         'trash_retention_days_hint' => 'Leave empty to never purge automatically.',
         'public_link_hours' => 'Public link lifetime (hours)',
         'public_link_hours_hint' => 'Links to documents sent to clients.',
+        'weekly_days_off' => 'Weekly days off',
+        'weekly_days_off_hint' => 'Not counted as days without a daily report.',
     ],
     'documents' => [
         'lead' => 'Request',

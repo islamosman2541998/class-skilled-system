@@ -26,5 +26,17 @@ return [
         'media' => 'Photos and video',
         'exists' => 'This project already has a report for this day: :url',
         'foreign_stage' => 'A stage does not belong to this project',
+        'missing_days' => 'Days without a report',
+        'missing_hint' => 'Working days in the last 30 days up to yesterday. Choose a day to write its report.',
+        'none_missing' => 'No days without a report',
+    ],
+    'weekdays' => [
+        1 => 'Monday',
+        2 => 'Tuesday',
+        3 => 'Wednesday',
+        4 => 'Thursday',
+        5 => 'Friday',
+        6 => 'Saturday',
+        7 => 'Sunday',
     ],
 ];

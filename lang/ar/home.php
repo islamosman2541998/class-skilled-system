@@ -35,6 +35,7 @@ return [
         'due_installments' => 'دفعات مستحقة',
         'period_expenses' => 'مصروفات الفترة',
         'period_profit' => 'ربح الفترة',
+        'reports_not_sent' => 'تقارير يومية لم ترسل',
     ],
     'revenue_vs_cost' => 'الإيراد مقابل التكلفة شهريا',
     'revenue' => 'الإيراد قبل الضريبة',

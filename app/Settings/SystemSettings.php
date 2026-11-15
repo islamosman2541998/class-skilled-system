@@ -12,6 +12,9 @@ class SystemSettings extends Settings
 
     public int $public_link_hours;
 
+    /** @var list<int> ISO weekdays (1 = Monday ... 7 = Sunday) not counted as days without a daily report. */
+    public array $weekly_days_off;
+
     public static function group(): string
     {
         return 'system';

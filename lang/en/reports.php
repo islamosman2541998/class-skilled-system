@@ -17,6 +17,7 @@ return [
         'vat' => 'VAT summary',
         'sales' => 'Sales performance',
         'late' => 'Late projects and stages',
+        'missing-reports' => 'Daily reports not sent',
         'statement' => 'Client statement',
     ],
     'hints' => [
@@ -28,6 +29,7 @@ return [
         'vat' => 'Output VAT from issued invoices and input VAT from expenses per month.',
         'sales' => 'Requests by source and service, quotations by status and owner, and the conversion rate.',
         'late' => 'Running projects past their end date and stages past their date and not done.',
+        'missing-reports' => 'Working days without a daily report for running projects, up to yesterday. The default period is the last 7 days, the longest 62 days.',
         'statement' => 'Invoices and receipts of a client with the opening balance and the balance after each entry. Choose the client in the filters.',
     ],
     'cost_of' => 'Cost of :category',

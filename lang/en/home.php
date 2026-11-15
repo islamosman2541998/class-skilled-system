@@ -35,6 +35,7 @@ return [
         'due_installments' => 'Due installments',
         'period_expenses' => 'Period expenses',
         'period_profit' => 'Period profit',
+        'reports_not_sent' => 'Daily reports not sent',
     ],
     'revenue_vs_cost' => 'Revenue and cost by month',
     'revenue' => 'Revenue before VAT',

@@ -5,10 +5,14 @@ namespace App\Providers;
 use App\Http\Controllers\ProjectController;
 use App\Models\DailyReport;
 use App\Models\Project;
+use App\Models\User;
 use App\Search\DailyReportSearchProvider;
 use App\Search\SearchRegistry;
+use App\Services\Dashboard\DashboardRegistry;
+use App\Services\Site\ReportCalendar;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
+use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
 use Illuminate\Support\ServiceProvider;
 
@@ -38,5 +42,19 @@ class SiteServiceProvider extends ServiceProvider
 
         Project::$linkedRelations[] = 'dailyReports';
         ProjectController::$tabPermissions['daily_reports'] = ['daily_reports.view'];
+
+        ReportRegistry::register('missing-reports', 'tables.reports.missing-reports-report', 'projects', ['daily_reports.view']);
+        $this->registerDashboard();
+    }
+
+    /** Site figures on the dashboard (spec §9.1): working days of the last week without a daily report. */
+    private function registerDashboard(): void
+    {
+        DashboardRegistry::register('reports_not_sent', 'daily_reports.view',
+            fn (User $user) => ReportCalendar::missingQuery($user, today()->subDays(7), today()->subDay())->count(),
+            fn (User $user) => ReportRegistry::allows($user, 'missing-reports')
+                ? route('reports.show', ['missing-reports', 'from' => today()->subDays(7)->toDateString(), 'to' => today()->subDay()->toDateString()])
+                : null,
+            'projects');
     }
 }
