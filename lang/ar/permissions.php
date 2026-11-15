@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'reports' => 'التقارير',
         'expenses' => 'المصروفات',
         'receipts' => 'سندات القبض',
         'invoices' => 'الفواتير',

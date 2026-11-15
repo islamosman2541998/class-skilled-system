@@ -408,11 +408,17 @@ abstract class DataTable extends Component
         });
     }
 
+    /** False for tables that apply the period themselves, for example inside an aggregate. */
+    protected function appliesDateRangeToQuery(): bool
+    {
+        return true;
+    }
+
     private function applyDateRange(Builder $query): void
     {
         $column = $this->dateColumn();
 
-        if ($column === null) {
+        if ($column === null || ! $this->appliesDateRangeToQuery()) {
             return;
         }
 
@@ -432,7 +438,7 @@ abstract class DataTable extends Component
     /**
      * @return array{0: ?Carbon, 1: ?Carbon}
      */
-    private function dateBounds(): array
+    protected function dateBounds(): array
     {
         return [$this->parseDate($this->dateFrom), $this->parseDate($this->dateTo)];
     }

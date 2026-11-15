@@ -5,6 +5,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoicePdfController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\ReceiptPdfController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,6 @@ Route::get('/expenses/quick', [ExpenseController::class, 'quick'])->name('expens
 Route::post('/expenses/quick', [ExpenseController::class, 'storeQuick'])->name('expenses.quick.store');
 Route::resource('expenses', ExpenseController::class)->except(['destroy']);
 Route::post('/expenses/{expense}/attachments', [ExpenseController::class, 'attach'])->name('expenses.attachments.store');
+
+Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+Route::get('/reports/{report}', [ReportController::class, 'show'])->name('reports.show');

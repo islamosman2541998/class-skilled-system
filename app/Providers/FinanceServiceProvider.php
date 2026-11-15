@@ -30,6 +30,7 @@ use App\Services\Notifier;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
+use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
 use Illuminate\Support\ServiceProvider;
 
@@ -58,13 +59,21 @@ class FinanceServiceProvider extends ServiceProvider
         PermissionRegistry::register('receipts', ['view', 'create', 'update', 'export', 'print', 'cancel']);
         PermissionRegistry::register('expenses');
         PermissionRegistry::register('finance', ['costs', 'profitability']);
+        PermissionRegistry::register('reports', ['view', 'export']);
 
         Menu::register('finance', ['label' => 'finance.invoices.invoices', 'icon' => 'file-invoice', 'route' => 'invoices.index', 'permission' => 'invoices.view']);
         Menu::register('finance', ['label' => 'finance.receipts.receipts', 'icon' => 'cash', 'route' => 'receipts.index', 'permission' => 'receipts.view']);
         Menu::register('finance', ['label' => 'finance.expenses.expenses', 'icon' => 'receipt', 'route' => 'expenses.index', 'permission' => 'expenses.view']);
         Menu::register('finance', ['label' => 'finance.expenses.quick', 'icon' => 'camera', 'route' => 'expenses.quick', 'permission' => 'expenses.create']);
+        Menu::register('finance', ['label' => 'reports.reports', 'icon' => 'chart-bar', 'route' => 'reports.index', 'permission' => 'reports.view']);
         TrashRegistry::register(Invoice::class);
         TrashRegistry::register(Expense::class);
+
+        ReportRegistry::register('profitability', 'tables.reports.profitability-report', 'finance', ['finance.profitability']);
+        ReportRegistry::register('aging', 'tables.reports.receivables-aging-report', 'finance', ['invoices.view']);
+        ReportRegistry::register('collections', 'tables.reports.collections-report', 'finance', ['receipts.view']);
+        ReportRegistry::register('expenses', 'tables.reports.expenses-report', 'finance', ['expenses.view', 'finance.costs']);
+        ReportRegistry::register('vat', 'tables.reports.vat-summary-report', 'finance', ['invoices.view', 'expenses.view']);
 
         Project::$linkedRelations[] = 'invoices';
         ProjectController::$tabPermissions['invoices'] = ['invoices.view'];

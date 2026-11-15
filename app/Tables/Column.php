@@ -22,6 +22,9 @@ final class Column
 
     public bool $hiddenByDefault = false;
 
+    /** @var array<string, string> */
+    private array $labelParams = [];
+
     private ?Closure $formatter = null;
 
     private ?Closure $exporter = null;
@@ -98,9 +101,21 @@ final class Column
         return $this;
     }
 
+    /**
+     * Placeholders for the label, for a column made per lookup (one column per expense category).
+     *
+     * @param  array<string, string>  $params
+     */
+    public function labelWith(array $params): self
+    {
+        $this->labelParams = $params;
+
+        return $this;
+    }
+
     public function label(): string
     {
-        return __($this->labelKey);
+        return __($this->labelKey, $this->labelParams);
     }
 
     public function render(Model $row): Htmlable|string
