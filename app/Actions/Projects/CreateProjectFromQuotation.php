@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\Quotation;
 use App\Models\User;
 use App\Services\InstallmentSchedule;
+use App\Services\QuotationCalculator;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Support\Facades\DB;
 use LogicException;
@@ -53,6 +54,7 @@ class CreateProjectFromQuotation
                 ], $by, null, [
                     'quotation_id' => $locked->id,
                     'vat_rate' => $locked->vat_rate,
+                    'contract_discount_percent' => self::discountPercent($locked),
                 ]);
 
                 foreach ($locked->items as $index => $item) {
@@ -62,11 +64,14 @@ class CreateProjectFromQuotation
                     ]);
                 }
 
-                InstallmentSchedule::fromPercents($project, $locked->payments->map(fn ($payment) => [
-                    'label_ar' => $payment->label_ar,
-                    'label_en' => $payment->label_en,
-                    'percent' => (string) $payment->percent,
-                ])->all());
+                // A project billed by claims has no payment schedule (spec §5.9).
+                if (! $project->isClaimsBilled()) {
+                    InstallmentSchedule::fromPercents($project, $locked->payments->map(fn ($payment) => [
+                        'label_ar' => $payment->label_ar,
+                        'label_en' => $payment->label_en,
+                        'percent' => (string) $payment->percent,
+                    ])->all());
+                }
 
                 return $project;
             });
@@ -74,5 +79,15 @@ class CreateProjectFromQuotation
             // Another request converted the same quotation at the same moment.
             return Project::withTrashed()->where('quotation_id', $quotation->id)->firstOrFail();
         }
+    }
+
+    /** The quotation discount as a share of its subtotal, 4 decimals half up; applied to each claim's work. */
+    private static function discountPercent(Quotation $quotation): string
+    {
+        if (bccomp((string) $quotation->subtotal, '0', 2) <= 0 || bccomp((string) $quotation->discount_amount, '0', 2) <= 0) {
+            return '0.0000';
+        }
+
+        return QuotationCalculator::round(bcdiv(bcmul((string) $quotation->discount_amount, '100', 10), (string) $quotation->subtotal, 10), 4);
     }
 }

@@ -17,6 +17,7 @@ class FinanceSettingsRequest extends SettingsRequest
             'vat_rate' => ['required', 'numeric', 'between:0,100'],
             'quotation_validity_days' => ['required', 'integer', 'between:1,365'],
             'invoice_due_days' => ['required', 'integer', 'between:1,365'],
+            'retention_percent' => ['required', 'numeric', 'between:0,100'],
         ];
     }
 
@@ -31,6 +32,7 @@ class FinanceSettingsRequest extends SettingsRequest
             'vat_rate' => number_format((float) $values['vat_rate'], 2, '.', ''),
             'quotation_validity_days' => (int) $values['quotation_validity_days'],
             'invoice_due_days' => (int) $values['invoice_due_days'],
+            'retention_percent' => number_format((float) $values['retention_percent'], 2, '.', ''),
         ];
     }
 }

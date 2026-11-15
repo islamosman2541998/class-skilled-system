@@ -109,6 +109,8 @@ return [
         'vat_rate_hint' => 'The rate is stored in each document when it is created.',
         'quotation_validity_days' => 'Quotation validity in days',
         'invoice_due_days' => 'Invoice due in days',
+        'retention_percent' => 'Default retention %',
+        'retention_percent_hint' => 'Copied into each new project and editable there.',
     ],
     'uploads' => [
         'images' => 'Images',

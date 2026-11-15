@@ -36,12 +36,15 @@ class SiteServiceProvider extends ServiceProvider
         self::$registered = true;
 
         PermissionRegistry::register('daily_reports');
+        PermissionRegistry::register('claims', ['view', 'create', 'update', 'delete', 'export', 'print', 'approve']);
 
         Menu::register('projects', ['label' => 'site.reports.reports', 'icon' => 'clipboard-text', 'route' => 'daily-reports.index', 'permission' => 'daily_reports.view']);
         TrashRegistry::register(DailyReport::class);
 
         Project::$linkedRelations[] = 'dailyReports';
         ProjectController::$tabPermissions['daily_reports'] = ['daily_reports.view'];
+        ProjectController::$tabPermissions['claims'] = ['claims.view'];
+        ProjectController::$tabConditions['claims'] = fn (Project $project) => $project->isClaimsBilled();
 
         ReportRegistry::register('missing-reports', 'tables.reports.missing-reports-report', 'projects', ['daily_reports.view']);
         $this->registerDashboard();

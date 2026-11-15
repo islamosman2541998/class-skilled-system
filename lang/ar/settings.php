@@ -109,6 +109,8 @@ return [
         'vat_rate_hint' => 'تُحفظ النسبة داخل كل مستند عند إنشائه.',
         'quotation_validity_days' => 'صلاحية عرض السعر بالأيام',
         'invoice_due_days' => 'استحقاق الفاتورة بالأيام',
+        'retention_percent' => 'نسبة المحتجز الافتراضية %',
+        'retention_percent_hint' => 'تنسخ إلى كل مشروع جديد، ويمكن تعديلها في المشروع.',
     ],
     'uploads' => [
         'images' => 'الصور',

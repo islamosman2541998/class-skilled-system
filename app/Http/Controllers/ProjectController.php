@@ -13,6 +13,7 @@ use App\Models\Lookup;
 use App\Models\Project;
 use App\Models\Quotation;
 use App\Models\User;
+use Closure;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -33,6 +34,13 @@ class ProjectController extends Controller
      * @var array<string, list<string>>
      */
     public static array $tabPermissions = [];
+
+    /**
+     * Conditions a tab needs on the project itself (payments or claims by billing method).
+     *
+     * @var array<string, Closure(Project): bool>
+     */
+    public static array $tabConditions = [];
 
     /**
      * Header buttons added by later tasks and stages, each receiving $project.
@@ -80,6 +88,7 @@ class ProjectController extends Controller
         $tabs = collect(self::TABS)
             ->filter(fn (string $tab) => in_array($tab, ['overview', 'attachments', 'activity'], true) || ViewFactory::exists('projects.tabs.'.$tab))
             ->filter(fn (string $tab) => collect(self::$tabPermissions[$tab] ?? [])->every(fn (string $permission) => $request->user()->can($permission)))
+            ->filter(fn (string $tab) => ! isset(self::$tabConditions[$tab]) || (self::$tabConditions[$tab])($project))
             ->mapWithKeys(fn (string $tab) => [$tab => __('projects.tabs.'.$tab)])
             ->all();
         $active = array_key_exists((string) $request->query('tab'), $tabs) ? (string) $request->query('tab') : 'overview';
@@ -102,7 +111,7 @@ class ProjectController extends Controller
         $this->ensureVisible($request, $project);
 
         // The client and the original value come from the contract and do not change here.
-        $save->handle($request->safe()->except(['client_id', 'original_value']), $request->user(), $project);
+        $save->handle($request->safe()->except(['client_id', 'original_value', 'billing_method']), $request->user(), $project);
 
         return redirect()->route('projects.show', $project)->with('success', __('app.saved'));
     }

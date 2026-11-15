@@ -71,7 +71,7 @@
                     <input id="original_value" name="original_value" value="{{ $value('original_value') }}" @class(['form-control text-end', 'is-invalid' => $errors->has('original_value')]) dir="ltr" inputmode="decimal" @disabled($editing) required>
                 </x-field>
                 <x-field name="billing_method" :label="__('projects.billing_method')" required>
-                    <select id="billing_method" name="billing_method" class="form-select">
+                    <select id="billing_method" name="billing_method" class="form-select" @disabled($editing)>
                         @foreach (\App\Enums\BillingMethod::cases() as $method)
                             <option value="{{ $method->value }}" @selected($value('billing_method') === $method->value)>{{ $method->label() }}</option>
                         @endforeach

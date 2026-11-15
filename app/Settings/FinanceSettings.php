@@ -20,6 +20,9 @@ class FinanceSettings extends Settings
 
     public int $invoice_due_days;
 
+    /** Default retention percent copied into new projects (spec §5.9). */
+    public string $retention_percent;
+
     public static function group(): string
     {
         return 'finance';

@@ -10,6 +10,7 @@ use App\Enums\NotificationType;
 use App\Enums\ProjectStatus;
 use App\Enums\StageStatus;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\QuotationController;
 use App\Models\Client;
 use App\Models\Lookup;
@@ -80,6 +81,7 @@ class ProjectsServiceProvider extends ServiceProvider
         PermissionRegistry::register('maintenance', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
 
         ReportRegistry::register('late', 'tables.reports.late-work-report', 'projects', ['projects.view']);
+        ProjectController::$tabConditions['payments'] = fn (Project $project) => ! $project->isClaimsBilled();
         $this->registerDashboard();
 
         LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => StageTemplate::withTrashed()->where('service_id', $lookup->id)->exists());

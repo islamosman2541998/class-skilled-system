@@ -29,6 +29,9 @@
             <x-field name="invoice_due_days" :label="__('settings.finance.invoice_due_days')" required>
                 <input id="invoice_due_days" type="number" name="invoice_due_days" value="{{ old('invoice_due_days', $settings->invoice_due_days) }}" @class(['form-control', 'is-invalid' => $errors->has('invoice_due_days')]) required min="1" max="365" dir="ltr">
             </x-field>
+            <x-field name="retention_percent" :label="__('settings.finance.retention_percent')" :hint="__('settings.finance.retention_percent_hint')" required>
+                <input id="retention_percent" type="number" name="retention_percent" value="{{ old('retention_percent', $settings->retention_percent) }}" @class(['form-control', 'is-invalid' => $errors->has('retention_percent')]) required min="0" max="100" step="0.01" dir="ltr">
+            </x-field>
         </div>
     </x-panel>
 @endsection

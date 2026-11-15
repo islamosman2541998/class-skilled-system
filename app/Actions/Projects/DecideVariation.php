@@ -14,7 +14,7 @@ use LogicException;
 
 /**
  * Approving a variation changes the contract value once and adds it to the payment schedule
- * (spec §8.9). Only a proposed variation can be decided; both rows are locked while it happens.
+ * (spec §8.9); a project billed by claims gets no installment, its claims carry the variation items. Only a proposed variation can be decided; both rows are locked while it happens.
  */
 class DecideVariation
 {
@@ -28,17 +28,19 @@ class DecideVariation
             $project->contract_value = bcadd((string) $project->original_value, (string) $project->variations_total, 2);
             $project->save();
 
-            $project->installments()->create([
-                'label_ar' => __('projects.variations.installment_label', ['number' => $locked->number], 'ar'),
-                'label_en' => __('projects.variations.installment_label', ['number' => $locked->number], 'en'),
-                'percent' => null,
-                'amount' => $locked->total,
-                'due_type' => InstallmentDueType::Date,
-                'due_date' => today(),
-                'status' => InstallmentStatus::NotDue,
-                'variation_id' => $locked->id,
-                'sort_order' => (int) $project->installments()->max('sort_order') + 1,
-            ]);
+            if (! $project->isClaimsBilled()) {
+                $project->installments()->create([
+                    'label_ar' => __('projects.variations.installment_label', ['number' => $locked->number], 'ar'),
+                    'label_en' => __('projects.variations.installment_label', ['number' => $locked->number], 'en'),
+                    'percent' => null,
+                    'amount' => $locked->total,
+                    'due_type' => InstallmentDueType::Date,
+                    'due_date' => today(),
+                    'status' => InstallmentStatus::NotDue,
+                    'variation_id' => $locked->id,
+                    'sort_order' => (int) $project->installments()->max('sort_order') + 1,
+                ]);
+            }
 
             $this->decide($locked, VariationStatus::Approved, $by);
         });

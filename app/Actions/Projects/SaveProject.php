@@ -46,6 +46,7 @@ class SaveProject
                 $project->number = $this->numbers->next(DocumentType::Project);
                 $project->status = $data['status'] ?? ProjectStatus::NotStarted;
                 $project->vat_rate = $system['vat_rate'] ?? $this->finance->vat_rate;
+                $project->retention_percent = $this->finance->retention_percent;
                 $project->created_by = $by->id;
             }
 

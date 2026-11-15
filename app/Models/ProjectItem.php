@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * A contract item of a project, copied from the accepted quotation (spec §8.6) and used by
@@ -24,6 +25,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class ProjectItem extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['section_ar', 'section_en', 'description_ar', 'description_en', 'unit_id', 'quantity', 'unit_price', 'line_total', 'sort_order'];
 
     protected function casts(): array

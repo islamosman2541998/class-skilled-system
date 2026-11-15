@@ -38,6 +38,9 @@ use Spatie\MediaLibrary\HasMedia;
  * @property string $contract_value
  * @property string $vat_rate
  * @property BillingMethod $billing_method
+ * @property string $retention_percent
+ * @property string $contract_discount_percent
+ * @property string $advance_amount
  * @property Carbon|null $start_date
  * @property Carbon|null $planned_end_date
  * @property Carbon|null $actual_end_date
@@ -79,6 +82,9 @@ class Project extends Model implements GuardsDeletion, HasMedia
             'variations_total' => 'decimal:2',
             'contract_value' => 'decimal:2',
             'vat_rate' => 'decimal:2',
+            'retention_percent' => 'decimal:2',
+            'contract_discount_percent' => 'decimal:4',
+            'advance_amount' => 'decimal:2',
             'progress' => 'decimal:2',
             'invoiced_total' => 'decimal:2',
             'invoiced_net' => 'decimal:2',
@@ -264,6 +270,18 @@ class Project extends Model implements GuardsDeletion, HasMedia
     }
 
     /** @return list<string> */
+    /** Billed by progress claims (spec §5.9): no payment schedule, a claims tab instead. */
+    public function isClaimsBilled(): bool
+    {
+        return $this->billing_method === BillingMethod::Claims;
+    }
+
+    /** A claim beyond draft exists: the claim setup and the contract items are read-only (Task 4 defines claims). */
+    public function hasLockedClaims(): bool
+    {
+        return false;
+    }
+
     public static function closedStatuses(): array
     {
         return array_values(array_map(fn (ProjectStatus $status) => $status->value, array_filter(ProjectStatus::cases(), fn (ProjectStatus $status) => $status->isClosed())));

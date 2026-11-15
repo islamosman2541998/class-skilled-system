@@ -41,7 +41,7 @@ class SaveProjectRequest extends FormRequest
             'emirate_id' => ['nullable', $lookup(LookupType::Emirate)],
             'location' => ['nullable', 'string', 'max:190'],
             'original_value' => [$editing ? 'nullable' : 'required', 'numeric', 'min:0', 'max:999999999999'],
-            'billing_method' => ['required', Rule::enum(BillingMethod::class)],
+            'billing_method' => [$editing ? 'nullable' : 'required', Rule::enum(BillingMethod::class)],
             'start_date' => ['nullable', 'date'],
             'planned_end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
             'actual_end_date' => ['nullable', 'date'],
