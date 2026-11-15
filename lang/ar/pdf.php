@@ -57,4 +57,13 @@ return [
     'advance' => 'دفعة مقدمة',
     'received_by' => 'المستلم',
     'receiver_signature' => 'توقيع المستلم',
+    'statement_of_account' => 'كشف حساب',
+    'period' => 'الفترة',
+    'all_dates' => 'كل الفترات',
+    'document' => 'المستند',
+    'debit' => 'مدين',
+    'credit' => 'دائن',
+    'balance' => 'الرصيد',
+    'opening_balance' => 'رصيد افتتاحي',
+    'closing_balance' => 'الرصيد الختامي',
 ];

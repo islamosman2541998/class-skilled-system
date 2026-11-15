@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClientStatementController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\InvoicePdfController;
@@ -34,3 +35,4 @@ Route::post('/expenses/{expense}/attachments', [ExpenseController::class, 'attac
 
 Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 Route::get('/reports/{report}', [ReportController::class, 'show'])->name('reports.show');
+Route::get('/clients/{client}/statement/pdf', [ClientStatementController::class, 'pdf'])->name('clients.statement.pdf');

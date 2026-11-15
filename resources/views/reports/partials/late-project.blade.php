@@ -1,0 +1,1 @@
+<a href="{{ route('projects.show', $row->getAttribute('type') === 'stage' ? [$row->getAttribute('project_id'), 'tab' => 'stages'] : $row->getAttribute('project_id')) }}" class="fw-semibold text-nowrap"><bdi dir="ltr">{{ $row->getAttribute('number') }}</bdi></a>

@@ -74,6 +74,7 @@ class FinanceServiceProvider extends ServiceProvider
         ReportRegistry::register('collections', 'tables.reports.collections-report', 'finance', ['receipts.view']);
         ReportRegistry::register('expenses', 'tables.reports.expenses-report', 'finance', ['expenses.view', 'finance.costs']);
         ReportRegistry::register('vat', 'tables.reports.vat-summary-report', 'finance', ['invoices.view', 'expenses.view']);
+        ReportRegistry::register('statement', 'tables.reports.client-statement-report', 'finance', ['invoices.view', 'receipts.view']);
 
         Project::$linkedRelations[] = 'invoices';
         ProjectController::$tabPermissions['invoices'] = ['invoices.view'];
@@ -111,6 +112,7 @@ class FinanceServiceProvider extends ServiceProvider
             ))
             : '';
         InvoiceController::$actionViews[] = 'invoices.partials.share-actions';
+        ClientController::$actionViews[] = 'reports.partials.client-statement-actions';
 
         // The installment follows its invoice (spec §8.8): issued → invoiced; cancelled → due again by its own rule.
         IssueInvoice::$afterIssue[] = function (Invoice $invoice) {

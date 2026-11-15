@@ -57,4 +57,13 @@ return [
     'advance' => 'Advance payment',
     'received_by' => 'Received by',
     'receiver_signature' => 'Receiver signature',
+    'statement_of_account' => 'Statement of account',
+    'period' => 'Period',
+    'all_dates' => 'All dates',
+    'document' => 'Document',
+    'debit' => 'Debit',
+    'credit' => 'Credit',
+    'balance' => 'Balance',
+    'opening_balance' => 'Opening balance',
+    'closing_balance' => 'Closing balance',
 ];

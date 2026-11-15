@@ -31,6 +31,7 @@ use App\Settings\NotificationSettings;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
+use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
@@ -75,6 +76,8 @@ class ProjectsServiceProvider extends ServiceProvider
 
         PermissionRegistry::register('projects', [...PermissionRegistry::ACTIONS, 'approve']);
         PermissionRegistry::register('maintenance', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
+
+        ReportRegistry::register('late', 'tables.reports.late-work-report', 'projects', ['projects.view']);
 
         LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => StageTemplate::withTrashed()->where('service_id', $lookup->id)->exists());
 

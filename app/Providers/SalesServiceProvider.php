@@ -27,6 +27,7 @@ use App\Settings\NotificationSettings;
 use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
+use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Database\Eloquent\Builder;
@@ -179,6 +180,8 @@ class SalesServiceProvider extends ServiceProvider
         PermissionRegistry::register('site_visits');
         PermissionRegistry::register('quotations', [...PermissionRegistry::ACTIONS, 'approve']);
         PermissionRegistry::register('price_items', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
+
+        ReportRegistry::register('sales', 'tables.reports.sales-performance-report', 'sales', ['leads.view', 'quotations.view']);
     }
 
     private function registerMenu(): void
