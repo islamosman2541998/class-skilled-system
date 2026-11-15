@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\GuardsDeletion;
 use App\Enums\BillingMethod;
+use App\Enums\ClaimStatus;
 use App\Enums\ProjectStatus;
 use App\Models\Concerns\HasAttachments;
 use App\Models\Concerns\LogsModelActivity;
@@ -276,10 +277,16 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->billing_method === BillingMethod::Claims;
     }
 
-    /** A claim beyond draft exists: the claim setup and the contract items are read-only (Task 4 defines claims). */
+    /** A claim beyond draft exists: the claim setup and the contract items are read-only. */
     public function hasLockedClaims(): bool
     {
-        return false;
+        return $this->claims()->where('status', '!=', ClaimStatus::Draft->value)->exists();
+    }
+
+    /** @return HasMany<Claim, $this> */
+    public function claims(): HasMany
+    {
+        return $this->hasMany(Claim::class);
     }
 
     public static function closedStatuses(): array

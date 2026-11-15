@@ -9,6 +9,9 @@ return [
     'confirm_mismatch' => 'The value does not match',
     'unsaved_changes' => 'There are unsaved changes.',
     'no_results' => 'No results',
+    'claims' => [
+        'beyond_contract' => 'The cumulative must be between zero and the contract quantity',
+    ],
     'request_failed' => 'The request could not be completed.',
     'uploader' => [
         'idle' => 'Drop files here or <span class="filepond--label-action">browse</span>',

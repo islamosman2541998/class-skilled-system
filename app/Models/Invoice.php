@@ -24,6 +24,7 @@ use Illuminate\Support\Carbon;
  * @property int $project_id
  * @property int $client_id
  * @property int|null $installment_id
+ * @property int|null $claim_id
  * @property int|null $replaces_id
  * @property Carbon $issue_date
  * @property Carbon $due_date
@@ -87,6 +88,12 @@ class Invoice extends Model implements GuardsDeletion
     public function installment(): BelongsTo
     {
         return $this->belongsTo(ProjectInstallment::class);
+    }
+
+    /** @return BelongsTo<Claim, $this> */
+    public function claim(): BelongsTo
+    {
+        return $this->belongsTo(Claim::class);
     }
 
     /** @return BelongsTo<Invoice, $this> */

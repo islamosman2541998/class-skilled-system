@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Http\Controllers\ProjectController;
+use App\Models\Claim;
 use App\Models\DailyReport;
 use App\Models\Project;
 use App\Models\User;
+use App\Search\ClaimSearchProvider;
 use App\Search\DailyReportSearchProvider;
 use App\Search\SearchRegistry;
 use App\Services\Dashboard\DashboardRegistry;
@@ -28,6 +30,7 @@ class SiteServiceProvider extends ServiceProvider
     {
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new DailyReportSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new ClaimSearchProvider);
 
         if (self::$registered) {
             return;
@@ -39,9 +42,12 @@ class SiteServiceProvider extends ServiceProvider
         PermissionRegistry::register('claims', ['view', 'create', 'update', 'delete', 'export', 'print', 'approve']);
 
         Menu::register('projects', ['label' => 'site.reports.reports', 'icon' => 'clipboard-text', 'route' => 'daily-reports.index', 'permission' => 'daily_reports.view']);
+        Menu::register('finance', ['label' => 'site.claims.claims', 'icon' => 'file-certificate', 'route' => 'claims.index', 'permission' => 'claims.view']);
         TrashRegistry::register(DailyReport::class);
+        TrashRegistry::register(Claim::class);
 
         Project::$linkedRelations[] = 'dailyReports';
+        Project::$linkedRelations[] = 'claims';
         ProjectController::$tabPermissions['daily_reports'] = ['daily_reports.view'];
         ProjectController::$tabPermissions['claims'] = ['claims.view'];
         ProjectController::$tabConditions['claims'] = fn (Project $project) => $project->isClaimsBilled();

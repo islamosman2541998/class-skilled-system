@@ -34,6 +34,7 @@ export default defineConfig({
                 'resources/js/clients.js',
                 'resources/js/quotation-form.js',
                 'resources/js/project-stages.js',
+                'resources/js/claim-form.js',
             ],
             refresh: true,
         }),

@@ -1,4 +1,4 @@
-{{-- Claims of a project billed by claims (spec §5.9, §8.14): setup, contract items; Task 4 adds the claims list. --}}
+{{-- Claims of a project billed by claims (spec §5.9, §8.14): the claims, the setup and the contract items. --}}
 @php
     $items = $project->items()->with('unit')->get();
     $units = \App\Models\Lookup::options(\App\Enums\LookupType::Unit);
@@ -6,7 +6,21 @@
     $canEdit = auth()->user()->can('projects.update') && ! $locked;
     $sectionOf = fn ($item) => app()->getLocale() === 'en' && filled($item->section_en) ? $item->section_en : $item->section_ar;
     $previous = null;
+    $retained = (string) $project->claims()->whereIn('status', \App\Enums\ClaimStatus::countedValues())->sum('retention_amount');
 @endphp
+
+<x-panel :title="__('site.claims.claims')" class="panel-flush">
+    <x-slot:tools>
+        <span class="text-muted small">{{ __('site.claims.retention_to_date') }}: <bdi dir="ltr">{{ money($retained) }}</bdi></span>
+        @can('claims.create')
+            <form method="POST" action="{{ route('claims.store', $project) }}">
+                @csrf
+                <button type="submit" class="btn btn-primary btn-sm"><x-icon name="plus" :size="16" /> {{ __('site.claims.new') }}</button>
+            </form>
+        @endcan
+    </x-slot:tools>
+    <livewire:tables.claims-table :project-id="$project->id" />
+</x-panel>
 
 @if ($locked)
     <div class="alert alert-info">{{ __('site.setup.locked') }}</div>

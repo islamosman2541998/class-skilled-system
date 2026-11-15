@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\ProjectItemController;
 use Illuminate\Support\Facades\Route;
@@ -16,3 +17,12 @@ Route::put('/projects/{project}/claim-setup', [ProjectItemController::class, 'se
 Route::post('/projects/{project}/items', [ProjectItemController::class, 'store'])->name('projects.items.store');
 Route::put('/projects/{project}/items/{item}', [ProjectItemController::class, 'update'])->name('projects.items.update');
 Route::delete('/projects/{project}/items/{item}', [ProjectItemController::class, 'destroy'])->name('projects.items.destroy');
+
+Route::get('/claims', [ClaimController::class, 'index'])->name('claims.index');
+Route::post('/projects/{project}/claims', [ClaimController::class, 'store'])->name('claims.store');
+Route::get('/claims/{claim}', [ClaimController::class, 'show'])->name('claims.show');
+Route::get('/claims/{claim}/edit', [ClaimController::class, 'edit'])->name('claims.edit');
+Route::put('/claims/{claim}', [ClaimController::class, 'update'])->name('claims.update');
+Route::delete('/claims/{claim}', [ClaimController::class, 'destroy'])->name('claims.destroy');
+Route::patch('/claims/{claim}/submit', [ClaimController::class, 'submit'])->name('claims.submit');
+Route::patch('/claims/{claim}/return', [ClaimController::class, 'return'])->name('claims.return');

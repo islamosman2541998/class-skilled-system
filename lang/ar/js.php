@@ -10,6 +10,9 @@ return [
     'unsaved_changes' => 'توجد تعديلات غير محفوظة.',
     'no_results' => 'لا توجد نتائج',
     'request_failed' => 'تعذر تنفيذ الطلب.',
+    'claims' => [
+        'beyond_contract' => 'التراكمي يجب أن يكون بين صفر وكمية العقد',
+    ],
     'uploader' => [
         'idle' => 'اسحب الملفات هنا أو <span class="filepond--label-action">اختر من الجهاز</span>',
         'invalid' => 'الحقل يحتوي ملفات غير صالحة',

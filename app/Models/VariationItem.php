@@ -35,4 +35,10 @@ class VariationItem extends Model
     {
         return $this->belongsTo(Lookup::class, 'unit_id');
     }
+
+    /** @return BelongsTo<Variation, $this> */
+    public function variation(): BelongsTo
+    {
+        return $this->belongsTo(Variation::class);
+    }
 }

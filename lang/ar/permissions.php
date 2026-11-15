@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'claims' => 'المستخلصات',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',
