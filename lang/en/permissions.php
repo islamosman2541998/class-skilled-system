@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',
         'receipts' => 'Receipts',

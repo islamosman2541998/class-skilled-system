@@ -9,6 +9,7 @@ use App\Http\Requests\StoreAttachmentsRequest;
 use App\Models\Project;
 use App\Models\ProjectStage;
 use App\Services\ProjectProgress;
+use App\Services\StageProgress;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -89,26 +90,12 @@ class ProjectStageController extends Controller
     {
         $stage->fill(collect($data)->except(['status', 'progress'])->all());
 
-        $progress = isset($data['progress']) ? (string) $data['progress'] : (string) ($stage->progress ?? '0');
-        $status = isset($data['status']) ? StageStatus::from($data['status']) : null;
-
-        if ($status === StageStatus::Done || bccomp($progress, '100', 2) >= 0) {
-            $status = StageStatus::Done;
-            $progress = '100';
-        } elseif ($status === null || ($status === StageStatus::NotStarted && bccomp($progress, '0', 2) > 0)) {
-            $status = bccomp($progress, '0', 2) > 0 ? StageStatus::InProgress : StageStatus::NotStarted;
-        }
-
-        $stage->status = $status;
-        $stage->progress = $progress;
-
-        if ($status !== StageStatus::NotStarted && $stage->actual_start === null) {
-            $stage->actual_start = today();
-        }
-
-        if ($status === StageStatus::Done && $stage->actual_end === null) {
-            $stage->actual_end = today();
-        }
+        StageProgress::apply(
+            $stage,
+            isset($data['progress']) ? (string) $data['progress'] : null,
+            isset($data['status']) ? StageStatus::from($data['status']) : null,
+            today(),
+        );
     }
 
     private function back(Project $project): RedirectResponse

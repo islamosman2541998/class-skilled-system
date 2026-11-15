@@ -1,0 +1,30 @@
+<?php
+
+return [
+    'reports' => [
+        'reports' => 'Daily reports',
+        'report' => 'Daily report',
+        'new' => 'New report',
+        'edit' => 'Edit report',
+        'saved' => 'Report saved',
+        'project' => 'Project',
+        'date' => 'Report date',
+        'engineer' => 'Engineer',
+        'work_done' => 'Work done',
+        'stages' => 'Stages worked on',
+        'stage' => 'Stage',
+        'stages_count' => 'Stages',
+        'stages_hint' => 'Enter the new progress only for the stages you worked on and leave the rest empty.',
+        'current_progress' => 'now :progress%',
+        'progress_set' => 'Progress',
+        'choose_project' => 'Choose the project to see its stages.',
+        'no_stages' => 'This project has no stages',
+        'labour_count' => 'Labour count',
+        'obstacles' => 'Obstacles',
+        'has_obstacles' => 'Has obstacles',
+        'notes' => 'Notes',
+        'media' => 'Photos and video',
+        'exists' => 'This project already has a report for this day: :url',
+        'foreign_stage' => 'A stage does not belong to this project',
+    ],
+];

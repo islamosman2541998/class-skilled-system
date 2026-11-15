@@ -2,6 +2,7 @@
 
 return [
     'modules' => [
+        'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',
         'receipts' => 'سندات القبض',
