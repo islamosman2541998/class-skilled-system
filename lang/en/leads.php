@@ -26,6 +26,7 @@ return [
     'status' => 'Status',
     'assigned_to' => 'Assigned to',
     'follow_up_at' => 'Follow-up date',
+    'follow_up_today' => 'Follow-up today',
     'overdue' => 'Overdue follow-up',
     'rejection_reason' => 'Rejection reason',
     'rejection_note' => 'Rejection note',

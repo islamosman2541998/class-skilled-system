@@ -62,14 +62,22 @@ class LeadsTable extends DataTable
             SelectFilter::make('assigned_to', 'leads.assigned_to')->options(fn () => User::query()->where('is_active', true)->orderBy('name')->pluck('name', 'id')),
             SelectFilter::make('emirate_id', 'leads.emirate')->options(fn () => Lookup::options(LookupType::Emirate)->pluck('name', 'id')),
             BooleanFilter::make('overdue', 'leads.overdue')->query(function (Builder $query, mixed $value) {
-                if ((string) $value !== '1') {
-                    return;
+                if ((string) $value === '1') {
+                    Lead::constrainOverdueFollowUp($query);
                 }
-
-                $closed = Lookup::query()->ofType(LookupType::LeadStatus)->whereIn('code', Lead::CLOSED_CODES)->pluck('id');
-                $query->whereNotNull('follow_up_at')->where('follow_up_at', '<', now())->whereNotIn('status_id', $closed);
+            }),
+            BooleanFilter::make('follow_up_today', 'leads.follow_up_today')->query(function (Builder $query, mixed $value) {
+                if ((string) $value === '1') {
+                    Lead::constrainFollowUpToday($query);
+                }
             }),
         ];
+    }
+
+    /** The request date (spec §8.2). */
+    protected function dateColumn(): ?string
+    {
+        return 'created_at';
     }
 
     protected function searchColumns(): array

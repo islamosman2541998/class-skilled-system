@@ -8,6 +8,7 @@ use App\Enums\InstallmentDueType;
 use App\Enums\InstallmentStatus;
 use App\Enums\LookupType;
 use App\Enums\NotificationType;
+use App\Enums\ReceiptStatus;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProjectController;
@@ -19,10 +20,13 @@ use App\Models\Project;
 use App\Models\ProjectInstallment;
 use App\Models\Receipt;
 use App\Models\ReceiptAllocation;
+use App\Models\User;
 use App\Search\ExpenseSearchProvider;
 use App\Search\InvoiceSearchProvider;
 use App\Search\ReceiptSearchProvider;
 use App\Search\SearchRegistry;
+use App\Services\Dashboard\DashboardRegistry;
+use App\Services\Dashboard\Period;
 use App\Services\DueTasks;
 use App\Services\Finance\ProjectLedger;
 use App\Services\InstallmentSchedule;
@@ -32,6 +36,7 @@ use App\Support\Menu;
 use App\Support\PermissionRegistry;
 use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -75,6 +80,8 @@ class FinanceServiceProvider extends ServiceProvider
         ReportRegistry::register('expenses', 'tables.reports.expenses-report', 'finance', ['expenses.view', 'finance.costs']);
         ReportRegistry::register('vat', 'tables.reports.vat-summary-report', 'finance', ['invoices.view', 'expenses.view']);
         ReportRegistry::register('statement', 'tables.reports.client-statement-report', 'finance', ['invoices.view', 'receipts.view']);
+        ReportRegistry::register('installments', 'tables.reports.installments-report', 'finance', ['invoices.view']);
+        $this->registerDashboard();
 
         Project::$linkedRelations[] = 'invoices';
         ProjectController::$tabPermissions['invoices'] = ['invoices.view'];
@@ -158,5 +165,51 @@ class FinanceServiceProvider extends ServiceProvider
                     route('projects.show', [$installment->project, 'tab' => 'payments']), 'overdue-'.$installment->id,
                 ));
         });
+    }
+
+    /** Money figures on the dashboard (spec §9.1). */
+    private function registerDashboard(): void
+    {
+        $inPeriod = fn (Builder $query, string $column, Period $period) => $query
+            ->whereDate($query->qualifyColumn($column), '>=', $period->from->toDateString())
+            ->whereDate($query->qualifyColumn($column), '<=', $period->to->toDateString());
+        $open = fn (Builder $query) => bcsub((string) (clone $query)->sum('total'), (string) (clone $query)->sum('paid_amount'), 2);
+
+        DashboardRegistry::register('collected', 'receipts.view',
+            fn (User $user, Period $period) => (string) $inPeriod(Receipt::query()->visibleTo($user)->active(), 'receipt_date', $period)->sum('amount'),
+            fn (User $user, Period $period) => route('receipts.index', ['f' => ['status' => ReceiptStatus::Active->value], ...$period->query()]),
+            'finance', 'money');
+        DashboardRegistry::register('outstanding', 'invoices.view',
+            fn (User $user) => $open(Invoice::query()->visibleTo($user)->active()),
+            fn (User $user) => ReportRegistry::allows($user, 'aging') ? route('reports.show', 'aging') : route('invoices.index'),
+            'finance', 'money');
+        DashboardRegistry::register('overdue_collection', 'invoices.view',
+            fn (User $user) => $open(Invoice::query()->visibleTo($user)->overdue()),
+            fn () => route('invoices.index', ['f' => ['overdue' => '1']]),
+            'finance', 'money');
+        DashboardRegistry::register('overdue_invoices', 'invoices.view',
+            fn (User $user) => Invoice::query()->visibleTo($user)->overdue()->count(),
+            fn () => route('invoices.index', ['f' => ['overdue' => '1']]),
+            'finance');
+        DashboardRegistry::register('due_installments', 'invoices.view',
+            fn (User $user) => ProjectInstallment::query()
+                ->whereIn('project_id', Project::query()->visibleTo($user)->select('projects.id'))
+                ->where('status', InstallmentStatus::Due->value)
+                ->count(),
+            fn (User $user) => ReportRegistry::allows($user, 'installments') ? route('reports.show', ['installments', 'f' => ['status' => InstallmentStatus::Due->value]]) : null,
+            'finance');
+        DashboardRegistry::register('period_expenses', ['expenses.view', 'finance.costs'],
+            fn (User $user, Period $period) => (string) $inPeriod(Expense::query()->visibleTo($user), 'expense_date', $period)->sum('total'),
+            fn (User $user, Period $period) => route('expenses.index', $period->query()),
+            'finance', 'money');
+        // Invoiced before VAT minus expenses before VAT in the period, as in the VAT summary.
+        DashboardRegistry::register('period_profit', 'finance.profitability',
+            fn (User $user, Period $period) => bcsub(
+                (string) $inPeriod(Invoice::query()->visibleTo($user)->active(), 'issue_date', $period)->sum('subtotal'),
+                (string) $inPeriod(Expense::query()->visibleTo($user), 'expense_date', $period)->sum('amount'),
+                2,
+            ),
+            fn (User $user, Period $period) => ReportRegistry::allows($user, 'vat') ? route('reports.show', ['vat', ...$period->query()]) : null,
+            'finance', 'money');
     }
 }

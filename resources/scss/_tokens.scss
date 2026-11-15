@@ -95,6 +95,9 @@ $link-hover-decoration: underline;
     --c-paper: #F5F7FA;
     --c-navy-rgb: 43, 65, 104;
     --c-sky-rgb: 79, 195, 238;
+    // Chart series, fixed order (validated for colour-blind separation and contrast on white).
+    --c-series-1: #2a78d6;
+    --c-series-2: #eb6834;
     --font-body: 'Cairo', system-ui, sans-serif;
     --font-heading: 'Cairo', system-ui, sans-serif;
 

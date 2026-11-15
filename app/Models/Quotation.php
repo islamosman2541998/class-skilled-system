@@ -3,10 +3,12 @@
 namespace App\Models;
 
 use App\Enums\DiscountType;
+use App\Enums\NotificationType;
 use App\Enums\QuotationStatus;
 use App\Models\Concerns\HasAttachments;
 use App\Models\Concerns\HasRecordScope;
 use App\Models\Concerns\LogsModelActivity;
+use App\Settings\NotificationSettings;
 use Database\Factories\QuotationFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -204,5 +206,21 @@ class Quotation extends Model implements HasMedia
     public function baseNumber(): string
     {
         return (string) preg_replace('/-R\d+$/', '', $this->number);
+    }
+
+    /**
+     * Open quotations whose validity ends within the "quotation expiring" notice days (the
+     * "expiring" filter and figure).
+     *
+     * @param  Builder<Quotation>  $query
+     * @return Builder<Quotation>
+     */
+    public static function constrainExpiring(Builder $query): Builder
+    {
+        $days = app(NotificationSettings::class)->rule(NotificationType::QuotationExpiring)['days'] ?? 3;
+
+        return $query->whereIn($query->qualifyColumn('status'), [QuotationStatus::Draft->value, QuotationStatus::Sent->value])
+            ->whereNull($query->qualifyColumn('superseded_at'))
+            ->whereBetween($query->qualifyColumn('valid_until'), [today(), today()->addDays($days)]);
     }
 }

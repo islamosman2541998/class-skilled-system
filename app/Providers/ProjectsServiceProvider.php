@@ -23,6 +23,8 @@ use App\Models\User;
 use App\Search\MaintenanceSearchProvider;
 use App\Search\ProjectSearchProvider;
 use App\Search\SearchRegistry;
+use App\Services\Dashboard\DashboardRegistry;
+use App\Services\Dashboard\Period;
 use App\Services\DueTasks;
 use App\Services\InstallmentSchedule;
 use App\Services\Notifier;
@@ -78,6 +80,7 @@ class ProjectsServiceProvider extends ServiceProvider
         PermissionRegistry::register('maintenance', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
 
         ReportRegistry::register('late', 'tables.reports.late-work-report', 'projects', ['projects.view']);
+        $this->registerDashboard();
 
         LookupUsage::register(LookupType::Service, fn (Lookup $lookup) => StageTemplate::withTrashed()->where('service_id', $lookup->id)->exists());
 
@@ -169,5 +172,33 @@ class ProjectsServiceProvider extends ServiceProvider
                     route('projects.show', [$installment->project, 'tab' => 'payments']), 'due-'.$installment->id,
                 ));
         });
+    }
+
+    /** Project figures on the dashboard (spec §9.1). */
+    private function registerDashboard(): void
+    {
+        DashboardRegistry::register('running_projects', 'projects.view',
+            fn (User $user) => Project::query()->visibleTo($user)->where('status', ProjectStatus::InProgress->value)->count(),
+            fn () => route('projects.index', ['f' => ['status' => ProjectStatus::InProgress->value]]),
+            'projects');
+        DashboardRegistry::register('late_projects', 'projects.view',
+            fn (User $user) => Project::constrainLate(Project::query()->visibleTo($user))->count(),
+            fn () => route('projects.index', ['f' => ['late' => '1']]),
+            'projects');
+        DashboardRegistry::register('late_stages', 'projects.view',
+            fn (User $user) => ProjectStage::query()
+                ->whereIn('project_id', Project::query()->visibleTo($user)->whereNotIn('status', Project::closedStatuses())->select('projects.id'))
+                ->where('status', '!=', StageStatus::Done->value)
+                ->whereDate('planned_end', '<', today())
+                ->count(),
+            fn (User $user) => ReportRegistry::allows($user, 'late') ? route('reports.show', ['late', 'f' => ['type' => 'stage']]) : null,
+            'projects');
+        DashboardRegistry::register('contracts_total', ['projects.view', 'finance.costs'],
+            fn (User $user, Period $period) => (string) Project::query()->visibleTo($user)
+                ->whereDate('start_date', '>=', $period->from->toDateString())
+                ->whereDate('start_date', '<=', $period->to->toDateString())
+                ->sum('contract_value'),
+            fn (User $user, Period $period) => route('projects.index', $period->query()),
+            'projects', 'money');
     }
 }

@@ -3,13 +3,11 @@
 namespace App\Livewire\Tables;
 
 use App\Enums\LookupType;
-use App\Enums\NotificationType;
 use App\Enums\QuotationStatus;
 use App\Livewire\DataTable;
 use App\Models\Lookup;
 use App\Models\Quotation;
 use App\Models\User;
-use App\Settings\NotificationSettings;
 use App\Tables\Column;
 use App\Tables\Filters\BooleanFilter;
 use App\Tables\Filters\NumberRangeFilter;
@@ -65,14 +63,9 @@ class QuotationsTable extends DataTable
             SelectFilter::make('assigned_to', 'quotations.assigned_to')->options(fn () => User::query()->where('is_active', true)->orderBy('name')->pluck('name', 'id')),
             NumberRangeFilter::make('total', 'quotations.total'),
             BooleanFilter::make('expiring', 'quotations.expiring')->query(function (Builder $query, mixed $value) {
-                if ((string) $value !== '1') {
-                    return;
+                if ((string) $value === '1') {
+                    Quotation::constrainExpiring($query);
                 }
-
-                $days = app(NotificationSettings::class)->rule(NotificationType::QuotationExpiring)['days'] ?? 3;
-                $query->whereIn('status', [QuotationStatus::Draft->value, QuotationStatus::Sent->value])
-                    ->whereNull('superseded_at')
-                    ->whereBetween('valid_until', [today(), today()->addDays($days)]);
             }),
         ];
     }

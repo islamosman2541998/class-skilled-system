@@ -1185,3 +1185,171 @@ tr.is-selected > td,
         border-color: var(--c-navy);
     }
 }
+
+// Dashboard (spec §9.1)
+.dash-period {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block-end: 1rem;
+
+    .form-control {
+        width: auto;
+    }
+}
+
+.dash-figures {
+    display: grid;
+    gap: 0.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+}
+
+.dash-figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid var(--c-line);
+    border-radius: 8px;
+    color: inherit;
+    text-decoration: none;
+}
+
+a.dash-figure:hover,
+a.dash-figure:focus-visible {
+    border-color: var(--c-navy);
+}
+
+.dash-figure-label {
+    color: var(--c-muted);
+    font-size: 0.875rem;
+}
+
+.dash-figure-value {
+    color: var(--c-ink);
+    font-size: 1.0625rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+
+    @media (min-width: 768px) {
+        font-size: 1.25rem;
+    }
+}
+
+// Bar chart component
+.bar-chart {
+    margin: 0;
+}
+
+.chart-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 0 0 0.5rem;
+    padding: 0;
+    list-style: none;
+    color: var(--c-ink);
+    font-size: 0.875rem;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.375rem;
+    }
+}
+
+.chart-swatch {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+}
+
+.chart-body {
+    --chart-axis: 4.5rem;
+    max-width: 52rem;
+}
+
+.chart-plot {
+    position: relative;
+    height: 200px;
+    margin-block-start: 0.5rem;
+    padding-inline-start: var(--chart-axis);
+}
+
+.chart-gridline {
+    position: absolute;
+    inset-inline: var(--chart-axis) 0;
+    border-top: 1px solid var(--c-line);
+
+    &.is-baseline {
+        border-top-color: var(--c-muted);
+    }
+}
+
+.chart-tick {
+    position: absolute;
+    inset-inline-start: calc(-1 * var(--chart-axis));
+    width: calc(var(--chart-axis) - 0.375rem);
+    transform: translateY(-50%);
+    color: var(--c-muted);
+    font-size: 0.75rem;
+    text-align: end;
+}
+
+.chart-groups {
+    position: relative;
+    display: flex;
+    height: 100%;
+}
+
+.chart-group {
+    display: flex;
+    flex: 1 1 0;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 2px;
+}
+
+// Hit target as tall as the plot, wider than the bar.
+.chart-hit {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: clamp(10px, 4vw, 28px);
+    height: 100%;
+}
+
+.chart-bar {
+    display: block;
+    width: 100%;
+    border-radius: 4px 4px 0 0;
+}
+
+.chart-hit:hover .chart-bar {
+    opacity: 0.85;
+}
+
+.chart-labels {
+    display: flex;
+    padding-inline-start: var(--chart-axis);
+    margin-block-start: 0.25rem;
+    color: var(--c-muted);
+    font-size: 0.75rem;
+
+    span {
+        flex: 1 1 0;
+        text-align: center;
+    }
+}
+
+.chart-table {
+    margin-block-start: 0.5rem;
+
+    summary {
+        color: var(--c-muted);
+        font-size: 0.875rem;
+        cursor: pointer;
+    }
+}

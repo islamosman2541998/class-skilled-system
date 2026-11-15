@@ -10,6 +10,7 @@ use App\Models\Concerns\LogsModelActivity;
 use App\Services\ActivityLogger;
 use App\Support\Phone;
 use Database\Factories\LeadFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -221,5 +222,38 @@ class Lead extends Model implements GuardsDeletion, HasMedia
         }
 
         return null;
+    }
+
+    /**
+     * Open leads whose follow-up time has passed (the "overdue follow-up" filter and figure).
+     *
+     * @param  Builder<Lead>  $query
+     * @return Builder<Lead>
+     */
+    public static function constrainOverdueFollowUp(Builder $query): Builder
+    {
+        return self::constrainOpen($query)->whereNotNull($query->qualifyColumn('follow_up_at'))->where($query->qualifyColumn('follow_up_at'), '<', now());
+    }
+
+    /**
+     * Open leads with a follow-up still due later today.
+     *
+     * @param  Builder<Lead>  $query
+     * @return Builder<Lead>
+     */
+    public static function constrainFollowUpToday(Builder $query): Builder
+    {
+        return self::constrainOpen($query)->whereBetween($query->qualifyColumn('follow_up_at'), [now(), today()->endOfDay()]);
+    }
+
+    /**
+     * @param  Builder<Lead>  $query
+     * @return Builder<Lead>
+     */
+    private static function constrainOpen(Builder $query): Builder
+    {
+        $closed = Lookup::query()->ofType(LookupType::LeadStatus)->whereIn('code', self::CLOSED_CODES)->pluck('id');
+
+        return $query->whereNotIn($query->qualifyColumn('status_id'), $closed);
     }
 }

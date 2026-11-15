@@ -256,4 +256,23 @@ class Project extends Model implements GuardsDeletion, HasMedia
 
         return null;
     }
+
+    /** @return list<string> */
+    public static function closedStatuses(): array
+    {
+        return array_values(array_map(fn (ProjectStatus $status) => $status->value, array_filter(ProjectStatus::cases(), fn (ProjectStatus $status) => $status->isClosed())));
+    }
+
+    /**
+     * Open projects past their planned end (the "late" filter and figure).
+     *
+     * @param  Builder<Project>  $query
+     * @return Builder<Project>
+     */
+    public static function constrainLate(Builder $query): Builder
+    {
+        return $query->whereNotNull($query->qualifyColumn('planned_end_date'))
+            ->whereDate($query->qualifyColumn('planned_end_date'), '<', today())
+            ->whereNotIn($query->qualifyColumn('status'), self::closedStatuses());
+    }
 }

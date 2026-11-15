@@ -102,12 +102,9 @@ class ProjectsTable extends DataTable
             SelectFilter::make('manager_id', 'projects.manager')->options(fn () => User::query()->where('is_active', true)->orderBy('name')->pluck('name', 'id')),
             SelectFilter::make('emirate_id', 'projects.emirate')->options(fn () => Lookup::options(LookupType::Emirate)->pluck('name', 'id')),
             BooleanFilter::make('late', 'projects.late')->query(function (Builder $query, mixed $value) {
-                if ((string) $value !== '1') {
-                    return;
+                if ((string) $value === '1') {
+                    Project::constrainLate($query);
                 }
-
-                $closed = array_map(fn (ProjectStatus $status) => $status->value, array_filter(ProjectStatus::cases(), fn (ProjectStatus $status) => $status->isClosed()));
-                $query->whereNotNull('planned_end_date')->whereDate('planned_end_date', '<', today())->whereNotIn('status', $closed);
             }),
             NumberRangeFilter::make('contract_value', 'projects.contract_value'),
         ];

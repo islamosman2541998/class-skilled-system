@@ -26,6 +26,7 @@ return [
     'status' => 'الحالة',
     'assigned_to' => 'المسؤول',
     'follow_up_at' => 'تاريخ المتابعة',
+    'follow_up_today' => 'متابعة اليوم',
     'overdue' => 'متابعة متأخرة',
     'rejection_reason' => 'سبب الرفض',
     'rejection_note' => 'ملاحظة الرفض',

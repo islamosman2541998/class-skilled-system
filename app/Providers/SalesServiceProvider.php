@@ -16,11 +16,14 @@ use App\Models\PriceItem;
 use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\SiteVisit;
+use App\Models\User;
 use App\Search\ClientSearchProvider;
 use App\Search\LeadSearchProvider;
 use App\Search\QuotationSearchProvider;
 use App\Search\SearchRegistry;
 use App\Search\SiteVisitSearchProvider;
+use App\Services\Dashboard\DashboardRegistry;
+use App\Services\Dashboard\Period;
 use App\Services\DueTasks;
 use App\Services\Notifier;
 use App\Settings\NotificationSettings;
@@ -182,6 +185,7 @@ class SalesServiceProvider extends ServiceProvider
         PermissionRegistry::register('price_items', ['view', 'create', 'update', 'delete', 'restore', 'force-delete', 'export']);
 
         ReportRegistry::register('sales', 'tables.reports.sales-performance-report', 'sales', ['leads.view', 'quotations.view']);
+        $this->registerDashboard();
     }
 
     private function registerMenu(): void
@@ -192,5 +196,51 @@ class SalesServiceProvider extends ServiceProvider
         Menu::register('sales', ['label' => 'quotations.quotations', 'icon' => 'file-invoice', 'route' => 'quotations.index', 'permission' => 'quotations.view']);
         Menu::register('sales', ['label' => 'price_items.price_items', 'icon' => 'list-numbers', 'route' => 'price-items.index', 'permission' => 'price_items.view']);
         Menu::register('sales', ['label' => 'clients.clients', 'icon' => 'users-group', 'route' => 'clients.index', 'permission' => 'clients.view']);
+    }
+
+    /** Sales and visit figures on the dashboard (spec §9.1). */
+    private function registerDashboard(): void
+    {
+        DashboardRegistry::register('new_leads', 'leads.view',
+            fn (User $user, Period $period) => Lead::query()->visibleTo($user)
+                ->where('created_at', '>=', $period->from->toDateString().' 00:00:00')
+                ->where('created_at', '<', $period->to->copy()->addDay()->toDateString().' 00:00:00')
+                ->count(),
+            fn (User $user, Period $period) => route('leads.index', $period->query()),
+            'sales');
+        DashboardRegistry::register('follow_ups_today', 'leads.view',
+            fn (User $user) => Lead::constrainFollowUpToday(Lead::query()->visibleTo($user))->count(),
+            fn () => route('leads.index', ['f' => ['follow_up_today' => '1']]),
+            'sales');
+        DashboardRegistry::register('follow_ups_overdue', 'leads.view',
+            fn (User $user) => Lead::constrainOverdueFollowUp(Lead::query()->visibleTo($user))->count(),
+            fn () => route('leads.index', ['f' => ['overdue' => '1']]),
+            'sales');
+        DashboardRegistry::register('quotations_waiting', 'quotations.view',
+            fn (User $user) => Quotation::query()->visibleTo($user)->where('status', QuotationStatus::Sent->value)->count(),
+            fn () => route('quotations.index', ['f' => ['status' => QuotationStatus::Sent->value]]),
+            'sales');
+        DashboardRegistry::register('quotations_expiring', 'quotations.view',
+            fn (User $user) => Quotation::constrainExpiring(Quotation::query()->visibleTo($user))->count(),
+            fn () => route('quotations.index', ['f' => ['expiring' => '1']]),
+            'sales');
+        // Accepted ÷ (sent + accepted + rejected) of the period, as in the sales report.
+        DashboardRegistry::register('conversion_rate', 'quotations.view',
+            function (User $user, Period $period) {
+                $counts = Quotation::query()->visibleTo($user)->whereNull('superseded_at')
+                    ->whereDate('issue_date', '>=', $period->from->toDateString())
+                    ->whereDate('issue_date', '<=', $period->to->toDateString())
+                    ->whereIn('status', [QuotationStatus::Sent->value, QuotationStatus::Accepted->value, QuotationStatus::Rejected->value])
+                    ->toBase()->selectRaw('status, COUNT(*) as total')->groupBy('status')->pluck('total', 'status');
+                $decided = (int) $counts->sum();
+
+                return $decided === 0 ? null : bcdiv(bcmul((string) ($counts[QuotationStatus::Accepted->value] ?? 0), '100', 4), (string) $decided, 2);
+            },
+            fn (User $user, Period $period) => ReportRegistry::allows($user, 'sales') ? route('reports.show', ['sales', ...$period->query()]) : null,
+            'sales', 'percent');
+        DashboardRegistry::register('visits_today', 'site_visits.view',
+            fn (User $user) => SiteVisit::query()->visibleTo($user)->whereDate('scheduled_at', today())->where('status', '!=', SiteVisitStatus::Cancelled->value)->count(),
+            fn () => route('site-visits.index', ['from' => today()->toDateString(), 'to' => today()->toDateString()]),
+            'projects');
     }
 }
