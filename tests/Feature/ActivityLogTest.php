@@ -72,7 +72,7 @@ it('logs login and logout', function () {
 
 it('logs a settings update with the changed keys only', function () {
     actingAs(userWith(['settings.manage']))->put(route('settings.update', 'system'), [
-        'trash_retention_days' => 30, 'session_idle_minutes' => 120, 'public_link_hours' => 72,
+        'trash_retention_days' => 30, 'session_idle_minutes' => 120, 'public_link_hours' => 72, 'weekly_days_off' => ['5'],
     ]);
 
     $activity = lastActivity('settings_updated', 'settings');
