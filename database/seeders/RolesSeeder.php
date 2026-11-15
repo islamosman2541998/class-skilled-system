@@ -24,6 +24,10 @@ class RolesSeeder extends Seeder
             'quotations.view', 'quotations.create', 'quotations.update', 'quotations.delete', 'quotations.restore', 'quotations.export', 'quotations.print', 'quotations.approve',
             'projects.view', 'projects.create', 'projects.update', 'projects.delete', 'projects.restore', 'projects.export', 'projects.print', 'projects.approve',
             'maintenance.view', 'maintenance.create', 'maintenance.update', 'maintenance.delete', 'maintenance.restore', 'maintenance.export',
+            'invoices.view', 'invoices.create', 'invoices.update', 'invoices.delete', 'invoices.restore', 'invoices.force-delete', 'invoices.export', 'invoices.print', 'invoices.cancel',
+            'receipts.view', 'receipts.create', 'receipts.update', 'receipts.export', 'receipts.print', 'receipts.cancel',
+            'expenses.view', 'expenses.create', 'expenses.update', 'expenses.delete', 'expenses.restore', 'expenses.force-delete', 'expenses.export', 'expenses.print',
+            'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
         ]],
         'sales' => ['مبيعات', 'Sales', 'all', false, [
             'lookups.view',
@@ -32,14 +36,20 @@ class RolesSeeder extends Seeder
             'site_visits.view', 'site_visits.create', 'site_visits.update',
             'price_items.view',
             'quotations.view', 'quotations.create', 'quotations.update', 'quotations.export', 'quotations.print',
+            'reports.view',
         ]],
         'engineer' => ['مهندس مشروع', 'Project engineer', 'assigned', false, [
             'clients.view', 'leads.view', 'site_visits.view', 'site_visits.update', 'quotations.view',
             'projects.view', 'projects.update', 'maintenance.view', 'maintenance.create', 'maintenance.update',
+            'expenses.view', 'expenses.create',
         ]],
         'accountant' => ['محاسب', 'Accountant', 'all', false, [
             'lookups.view', 'clients.view', 'price_items.view', 'quotations.view', 'quotations.export', 'quotations.print',
             'projects.view', 'projects.print',
+            'invoices.view', 'invoices.create', 'invoices.update', 'invoices.delete', 'invoices.restore', 'invoices.export', 'invoices.print', 'invoices.cancel',
+            'receipts.view', 'receipts.create', 'receipts.update', 'receipts.export', 'receipts.print', 'receipts.cancel',
+            'expenses.view', 'expenses.create', 'expenses.update', 'expenses.delete', 'expenses.restore', 'expenses.export', 'expenses.print',
+            'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
         ]],
     ];
 

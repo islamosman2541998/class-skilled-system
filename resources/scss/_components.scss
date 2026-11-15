@@ -1203,6 +1203,10 @@ tr.is-selected > td,
     display: grid;
     gap: 0.5rem;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 9rem), 1fr));
+
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+    }
 }
 
 .dash-figure {
@@ -1231,7 +1235,6 @@ a.dash-figure:focus-visible {
     color: var(--c-ink);
     font-size: 1.0625rem;
     font-weight: 600;
-    overflow-wrap: anywhere;
 
     @media (min-width: 768px) {
         font-size: 1.25rem;

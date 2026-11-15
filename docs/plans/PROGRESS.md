@@ -80,4 +80,22 @@ Final self-review (no separate reviewer) fixed: the stages tab imported Sortable
 
 Known gaps: starting role permissions apply to new installs only (existing roles keep their set, as in Stage 1); "see amounts and costs" permission still deferred; the Tajawal OFL licence text is still to add.
 
-Next: Stage 3 plan (finance).
+Next: Stage 3 plan (finance) — done, see below.
+
+## Stage 3 — Finance (complete)
+
+Plan: `docs/plans/2026-11-14-stage-3-finance.md`.
+
+Delivered: tax invoices (draft, issue with a number reserved once, cancel with or without a replacement), invoice from a due installment with the VAT split rounding to the installment amount, invoice PDF in Arabic / English / both and WhatsApp signed links, overdue notices, receipts with allocations over open invoices (rows locked, never more than the invoice or the receipt), advances, receipt cancel that restores invoice, installment and project figures, receipt PDF, expenses with VAT included / excluded / none and a quick phone entry with a receipt photo, project ledger (invoiced, collected, cost, profit, margin) behind the "see amounts and costs" (`finance.costs`) and "see profitability" (`finance.profitability`) permissions, reports as standard tables with filters, totals and Excel export (profitability with cost per category, receivables aging, collections, expenses by category and project, VAT summary, sales performance with conversion rate, late projects and stages, client statement with opening and running balance and its PDF, installments), role dashboards whose figures follow permissions and link to the list that produced them, with a period filter and a six-month revenue against cost chart, finance demo data, default role permissions.
+
+Gate run on MySQL: `migrate:fresh --seed` and `DemoSeeder` succeed (14 invoices in every status, 5 overdue, 8 receipts with partial, full and advance allocations and one cancelled, a cancelled invoice with its replacement, 40 expenses); Pint and PHPStan clean; 524 tests pass; build succeeds; the only new log line is the expected warning of the website sync failure test.
+
+Visual pass: every finance list, invoice page and form, receipt form with allocations, quick expense, every report and the dashboard checked at 375 px in Arabic and at 1440 px in English (no horizontal scroll, no console errors); invoice, receipt and statement PDFs inspected (bilingual).
+
+Final self-review against the Review Focus (no separate reviewer): allocation locking, single issue, installment rounding, cancel rules and report period edges are each covered by tests. Fixed during the stage: report count columns no longer summed in the totals row; the client statement running balance is cast to decimal (MySQL returned a float); dashboard money values wrapped inside the currency code; receipt allocation and report project numbers wrapped on phones; the dashboard chart was rewritten as HTML so its text keeps its size on any screen.
+
+Added beyond the plan: an installments report (the list behind the "due installments" figure), a request date range and a "follow-up today" filter on the leads list (the spec lists the request date filter), shared `Project::constrainLate`, `Quotation::constrainExpiring`, `Lead::constrainOverdueFollowUp` / `constrainFollowUpToday` so each figure and its list filter count the same rows.
+
+Known gaps: starting role permissions apply to new installs only (existing roles keep their set); dashboards per role were checked by tests, visually only as the system administrator (demo users have random passwords); the client statement PDF prints all dates from the client page, a period PDF needs the `from` / `to` query; supplier statements (§9.2) wait for suppliers; "reports not sent" on the engineer dashboard arrives with daily reports in Stage 4; the Tajawal OFL licence text is still to add.
+
+Next: Stage 4 plan.
