@@ -4,6 +4,7 @@ return [
     'modules' => [
         'claims' => 'Claims',
         'suppliers' => 'Suppliers and subcontractors',
+        'purchases' => 'Purchase invoices',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',

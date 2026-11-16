@@ -283,6 +283,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->claims()->where('status', '!=', ClaimStatus::Draft->value)->exists();
     }
 
+    /** @return HasMany<Purchase, $this> */
+    public function purchases(): HasMany
+    {
+        return $this->hasMany(Purchase::class);
+    }
+
     /** @return HasMany<Claim, $this> */
     public function claims(): HasMany
     {

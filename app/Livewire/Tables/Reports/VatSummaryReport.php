@@ -4,6 +4,7 @@ namespace App\Livewire\Tables\Reports;
 
 use App\Models\Expense;
 use App\Models\Invoice;
+use App\Models\Purchase;
 use App\Models\ReportRow;
 use App\Tables\Column;
 use Illuminate\Database\Query\Builder as QueryBuilder;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 
 /**
  * VAT summary per month (spec §9.2): output VAT of issued invoices by invoice date, input VAT of
- * expenses by expense date, and the net. Drafts and cancelled invoices never count.
+ * expenses and purchase invoices by their dates, and the net. Drafts and cancelled invoices never count.
  */
 class VatSummaryReport extends ReportTable
 {
@@ -34,7 +35,12 @@ class VatSummaryReport extends ReportTable
             ->groupByRaw($expenseMonth)
             ->selectRaw("{$expenseMonth} as month, 0 as sales_net, 0 as output_vat, SUM(expenses.amount) as purchases_net, SUM(expenses.vat_amount) as input_vat"), 'expenses.expense_date');
 
-        return DB::query()->fromSub($output->unionAll($input), 'v')
+        $purchaseMonth = self::monthOf('purchases.purchase_date');
+        $purchases = $this->withinPeriod(Purchase::query()->visibleTo($user)->toBase()
+            ->groupByRaw($purchaseMonth)
+            ->selectRaw("{$purchaseMonth} as month, 0 as sales_net, 0 as output_vat, SUM(purchases.subtotal) as purchases_net, SUM(purchases.vat_amount) as input_vat"), 'purchases.purchase_date');
+
+        return DB::query()->fromSub($output->unionAll($input)->unionAll($purchases), 'v')
             ->groupBy('month')
             ->selectRaw('month as id, month, SUM(sales_net) as sales_net, SUM(output_vat) as output_vat, SUM(purchases_net) as purchases_net, SUM(input_vat) as input_vat')
             ->selectRaw('SUM(output_vat) - SUM(input_vat) as net_vat');

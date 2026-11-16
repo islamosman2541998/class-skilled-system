@@ -4,6 +4,7 @@ return [
     'modules' => [
         'claims' => 'المستخلصات',
         'suppliers' => 'الموردون ومقاولو الباطن',
+        'purchases' => 'فواتير الشراء',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

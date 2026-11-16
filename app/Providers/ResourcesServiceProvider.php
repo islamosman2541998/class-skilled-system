@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\SupplierController;
+use App\Models\Project;
+use App\Models\Purchase;
 use App\Models\Supplier;
+use App\Search\PurchaseSearchProvider;
 use App\Search\SearchRegistry;
 use App\Search\SupplierSearchProvider;
+use App\Services\Finance\ProjectLedger;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
 use App\Support\TrashRegistry;
@@ -23,6 +29,7 @@ class ResourcesServiceProvider extends ServiceProvider
     {
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new SupplierSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new PurchaseSearchProvider);
 
         if (self::$registered) {
             return;
@@ -34,5 +41,20 @@ class ResourcesServiceProvider extends ServiceProvider
 
         Menu::register('resources', ['label' => 'resources.suppliers.suppliers', 'icon' => 'truck', 'route' => 'suppliers.index', 'permission' => 'suppliers.view']);
         TrashRegistry::register(Supplier::class);
+
+        PermissionRegistry::register('purchases');
+        Menu::register('resources', ['label' => 'resources.purchases.purchases', 'icon' => 'receipt', 'route' => 'purchases.index', 'permission' => 'purchases.view']);
+        TrashRegistry::register(Purchase::class);
+        Supplier::$linkedRelations[] = 'purchases';
+        Project::$linkedRelations[] = 'purchases';
+        ProjectController::$tabPermissions['purchases'] = ['purchases.view'];
+        SupplierController::$tabs['purchases'] = ['purchases.view'];
+        SupplierController::$figureSources['purchases_total'] = [
+            'permission' => 'purchases.view',
+            'value' => fn (Supplier $supplier) => money((string) $supplier->purchases()->visibleTo(auth()->user())->sum('total')),
+        ];
+
+        // Project cost: purchase invoices before VAT (spec §8.16).
+        ProjectLedger::$costSources['purchases'] = fn (Project $project) => (string) Purchase::query()->where('project_id', $project->id)->sum('subtotal');
     }
 }

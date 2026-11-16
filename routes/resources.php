@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
@@ -10,3 +11,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('suppliers', SupplierController::class)->except(['destroy']);
 Route::post('/suppliers/{supplier}/attachments', [SupplierController::class, 'attach'])->name('suppliers.attachments.store');
+
+Route::resource('purchases', PurchaseController::class);
+Route::post('/purchases/{purchase}/attachments', [PurchaseController::class, 'attach'])->name('purchases.attachments.store');
