@@ -7,11 +7,25 @@
     $sectionOf = fn ($item) => app()->getLocale() === 'en' && filled($item->section_en) ? $item->section_en : $item->section_ar;
     $previous = null;
     $retained = (string) $project->claims()->whereIn('status', \App\Enums\ClaimStatus::countedValues())->sum('retention_amount');
+    $retentionInvoice = \App\Models\Invoice::query()->where('project_id', $project->id)->where('retention_release', true)
+        ->where('status', '!=', \App\Enums\InvoiceStatus::Cancelled->value)->latest('id')->first();
 @endphp
 
 <x-panel :title="__('site.claims.claims')" class="panel-flush">
     <x-slot:tools>
         <span class="text-muted small">{{ __('site.claims.retention_to_date') }}: <bdi dir="ltr">{{ money($retained) }}</bdi></span>
+        @if ($retentionInvoice)
+            @can('invoices.view')
+                <a href="{{ route('invoices.show', $retentionInvoice) }}" class="btn btn-outline btn-sm">{{ __('site.retention.invoice') }}</a>
+            @endcan
+        @elseif ($project->handover()->exists() && bccomp($retained, '0', 2) > 0)
+            @can('invoices.create')
+                <form method="POST" action="{{ route('projects.retention-invoice', $project) }}" data-confirm="{{ __('site.retention.confirm', ['amount' => money($retained)]) }}">
+                    @csrf
+                    <button type="submit" class="btn btn-outline btn-sm">{{ __('site.retention.create') }}</button>
+                </form>
+            @endcan
+        @endif
         @can('claims.create')
             <form method="POST" action="{{ route('claims.store', $project) }}">
                 @csrf

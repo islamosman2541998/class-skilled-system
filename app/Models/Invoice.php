@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
  * @property int $client_id
  * @property int|null $installment_id
  * @property int|null $claim_id
+ * @property bool $retention_release
  * @property int|null $replaces_id
  * @property Carbon $issue_date
  * @property Carbon $due_date
@@ -67,6 +68,7 @@ class Invoice extends Model implements GuardsDeletion
             'vat_amount' => 'decimal:2',
             'total' => 'decimal:2',
             'paid_amount' => 'decimal:2',
+            'retention_release' => 'boolean',
             'issued_at' => 'datetime',
             'cancelled_at' => 'datetime',
         ];

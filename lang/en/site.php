@@ -134,6 +134,16 @@ return [
             'invoiced' => 'Invoiced',
         ],
     ],
+    'retention' => [
+        'create' => 'Retention invoice',
+        'invoice' => 'Retention invoice',
+        'label' => 'Retention release',
+        'confirm' => 'A draft invoice is created for the retention (:amount) before VAT.',
+        'created' => 'Retention invoice created',
+        'line' => 'Retention release for project :number',
+        'no_handover' => 'The retention invoice is issued after handover of a project billed by claims.',
+        'nothing' => 'Approved claims hold no retention.',
+    ],
     'weekdays' => [
         1 => 'Monday',
         2 => 'Tuesday',

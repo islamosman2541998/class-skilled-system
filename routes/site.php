@@ -4,6 +4,7 @@ use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\ClaimPdfController;
 use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\ProjectItemController;
+use App\Http\Controllers\RetentionInvoiceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +31,4 @@ Route::patch('/claims/{claim}/return', [ClaimController::class, 'return'])->name
 Route::patch('/claims/{claim}/approve', [ClaimController::class, 'approve'])->name('claims.approve');
 Route::get('/claims/{claim}/pdf', [ClaimPdfController::class, 'show'])->name('claims.pdf');
 Route::post('/claims/{claim}/share', [ClaimPdfController::class, 'share'])->name('claims.share');
+Route::post('/projects/{project}/retention-invoice', [RetentionInvoiceController::class, 'store'])->name('projects.retention-invoice');
