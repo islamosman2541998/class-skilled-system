@@ -84,4 +84,8 @@ return [
     'advance_recovery' => 'Advance recovery',
     'net_due' => 'Net due before VAT',
     'client_approval' => 'Client approval',
+    'purchase_invoice' => 'Purchase invoice',
+    'payment_voucher' => 'Payment voucher',
+    'paid' => 'Paid',
+    'purchased' => 'Purchases',
 ];

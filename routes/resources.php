@@ -4,6 +4,7 @@ use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SubcontractController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\SupplierStatementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('suppliers', SupplierController::class)->except(['destroy']);
 Route::post('/suppliers/{supplier}/attachments', [SupplierController::class, 'attach'])->name('suppliers.attachments.store');
+Route::get('/suppliers/{supplier}/statement/pdf', [SupplierStatementController::class, 'pdf'])->name('suppliers.statement.pdf');
 
 Route::resource('purchases', PurchaseController::class);
 Route::post('/purchases/{purchase}/attachments', [PurchaseController::class, 'attach'])->name('purchases.attachments.store');

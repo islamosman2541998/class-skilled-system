@@ -150,4 +150,15 @@ return [
             'cancelled' => 'Cancelled',
         ],
     ],
+    'statement' => [
+        'statement' => 'Statement',
+        'paid' => 'Paid',
+        'purchased' => 'Purchases',
+        'balance' => 'Owed',
+        'entries' => [
+            'opening' => 'Opening balance',
+            'purchase' => 'Purchase invoice',
+            'voucher' => 'Payment voucher',
+        ],
+    ],
 ];

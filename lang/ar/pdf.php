@@ -84,4 +84,8 @@ return [
     'advance_recovery' => 'استرداد الدفعة المقدمة',
     'net_due' => 'الصافي المستحق قبل الضريبة',
     'client_approval' => 'اعتماد العميل',
+    'purchase_invoice' => 'فاتورة شراء',
+    'payment_voucher' => 'سند صرف',
+    'paid' => 'المدفوع',
+    'purchased' => 'المشتريات',
 ];

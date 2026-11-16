@@ -19,6 +19,7 @@ return [
         'late' => 'Late projects and stages',
         'missing-reports' => 'Daily reports not sent',
         'statement' => 'Client statement',
+        'supplier-statement' => 'Supplier statement',
     ],
     'hints' => [
         'installments' => 'Project installments by status and due date. The period applies to the due date.',
@@ -31,6 +32,7 @@ return [
         'late' => 'Running projects past their end date and stages past their date and not done.',
         'missing-reports' => 'Working days without a daily report for running projects, up to yesterday. The default period is the last 7 days, the longest 62 days.',
         'statement' => 'Invoices and receipts of a client with the opening balance and the balance after each entry. Choose the client in the filters.',
+        'supplier-statement' => 'Purchase invoices and payment vouchers of a supplier with the opening balance and the amount owed after each entry. Choose the supplier in the filters.',
     ],
     'cost_of' => 'Cost of :category',
     'invoices_count' => 'Invoices',

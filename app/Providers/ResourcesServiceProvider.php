@@ -16,6 +16,7 @@ use App\Search\SupplierSearchProvider;
 use App\Services\Finance\ProjectLedger;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
+use App\Support\ReportRegistry;
 use App\Support\TrashRegistry;
 use Illuminate\Support\ServiceProvider;
 
@@ -90,6 +91,9 @@ class ResourcesServiceProvider extends ServiceProvider
                 ->where(fn ($query) => $query->whereIn('id', $supplier->purchases()->select('project_id'))->orWhereIn('id', $supplier->subcontracts()->select('project_id')))
                 ->count(),
         ];
+
+        ReportRegistry::register('supplier-statement', 'tables.reports.supplier-statement-report', 'finance', ['purchases.view', 'payment_vouchers.view']);
+        SupplierController::$actionViews[] = 'suppliers.partials.statement-actions';
 
         // Project cost: purchase invoices before VAT (spec §8.16).
         ProjectLedger::$costSources['purchases'] = fn (Project $project) => (string) Purchase::query()->where('project_id', $project->id)->sum('subtotal');

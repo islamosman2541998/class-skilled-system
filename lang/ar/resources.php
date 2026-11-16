@@ -150,4 +150,15 @@ return [
             'cancelled' => 'ملغى',
         ],
     ],
+    'statement' => [
+        'statement' => 'كشف الحساب',
+        'paid' => 'المدفوع',
+        'purchased' => 'المشتريات',
+        'balance' => 'المستحق',
+        'entries' => [
+            'opening' => 'رصيد افتتاحي',
+            'purchase' => 'فاتورة شراء',
+            'voucher' => 'سند صرف',
+        ],
+    ],
 ];
