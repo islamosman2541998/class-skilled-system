@@ -13,7 +13,6 @@ use DomainException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use LogicException;
 use Throwable;
 
 /**
@@ -24,6 +23,7 @@ class BackupRunner
 {
     public function __construct(
         private readonly SqlDumper $dumper,
+        private readonly FilesArchiver $archiver,
         private readonly SystemSettings $settings,
         private readonly Notifier $notifier,
     ) {}
@@ -54,7 +54,7 @@ class BackupRunner
                 $disk->makeDirectory('backups');
                 $size = match ($type) {
                     BackupType::Database => $this->dumper->dump($disk->path($backup->path)),
-                    BackupType::Files => throw new LogicException('Files backup is not available yet.'),
+                    BackupType::Files => $this->archiver->archive($disk->path($backup->path)),
                 };
                 $backup->update(['status' => BackupStatus::Success, 'size' => $size, 'finished_at' => now()]);
                 $this->prune($type);

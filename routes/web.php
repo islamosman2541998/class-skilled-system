@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\BackupController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegrationController;
@@ -86,6 +87,11 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
         Route::post('/lists/{type}', [LookupController::class, 'store'])->name('lookups.store');
         Route::post('/lists/{type}/reorder', [LookupController::class, 'reorder'])->name('lookups.reorder');
         Route::put('/lists/{type}/{lookup}', [LookupController::class, 'update'])->name('lookups.update');
+
+        Route::get('/backups', [BackupController::class, 'index'])->name('settings.backups');
+        Route::post('/backups/{type}', [BackupController::class, 'run'])->whereIn('type', ['database', 'files'])->name('settings.backups.run');
+        Route::get('/backups/{backup}/download', [BackupController::class, 'download'])->name('settings.backups.download');
+        Route::delete('/backups/{backup}', [BackupController::class, 'destroy'])->name('settings.backups.destroy');
 
         Route::get('/notifications', [NotificationSettingsController::class, 'edit'])->name('settings.notifications');
         Route::put('/notifications', [NotificationSettingsController::class, 'update'])->name('settings.notifications.update');
