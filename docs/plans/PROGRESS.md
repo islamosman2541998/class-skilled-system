@@ -127,3 +127,19 @@ Final self-review against the Review Focus (no separate reviewer): voucher alloc
 Deferred: a voucher's unallocated amount is not yet shown as a supplier credit on the supplier page (it is in the statement); equipment assignments need an end date (no open-ended hire); attendance has no edit screen per row (the sheet is re-saved).
 
 Pending: `migrate:fresh --seed` and `DemoSeeder` on MySQL (needs the go-ahead, it resets the local data); visual pass at 375 px and 1440 px (needs a signed-in browser session). Stage 4's pending gate items are still open as well.
+
+## Stage 6 — Closing (code complete; MySQL gate and visual pass pending)
+
+Plan: `docs/plans/2026-11-16-stage-6-closing.md`.
+
+Delivered: daily database backup built in PHP (no `mysqldump`, no system command) as a gzip SQL file, run on the first signed-in request of the day after the response, one at a time under a lock, logged, the administrator notified on failure, the newest N kept (Settings → System); files backup (private and public disks, zip) on demand; Settings → Backups with the last backup of each type, run now, download (settings.manage only, path checked) and delete; index review (24 missing indexes added, mostly `deleted_at` and date columns) with a test that fails when a list column loses its index; a query test that fails when a list page's queries grow with its rows; a route audit test (every route needs sign-in; a user without permissions is refused everywhere) and an unescaped-output test; `php artisan app:install` (checks PHP and extensions, migrates, seeds roles, lists, numbers and the administrator once, links storage, caches); the deployment guide `docs/deploy/shared-hosting.md`.
+
+Measured on local MySQL with 50,005 list rows (median of five, count + first page): search 160 ms, filter 137 ms, sort 211 ms — under the 300 ms target of §11.
+
+Checked: Pint and PHPStan clean; every task's full suite passed (641 tests after Task 2); the MySQL dump was restored into a temporary database with matching row counts, ids and Arabic text.
+
+Final self-review against the Review Focus (no separate reviewer): concurrent backups, dump round trip, download protection, route audit and a repeated install are each covered by tests. Fixed in the review: every attachment upload route validated the input before checking permission (a user without permission got a validation error instead of a refusal); on MySQL the dump listed the tables of every database on the server.
+
+Deferred: restore inside the system (the guide documents a manual restore); off-site copies of backups; the Tajawal licence text (noted in the guide).
+
+Pending for go-live: `migrate:fresh --seed` and `DemoSeeder` on MySQL for Stages 4–6 (needs the go-ahead, it resets the local data); visual pass at 375 px and 1440 px for Stages 4–6 (needs a signed-in browser session).
