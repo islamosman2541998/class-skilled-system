@@ -3,18 +3,24 @@
 namespace App\Http\Requests;
 
 use App\Enums\LookupType;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 /**
- * Transfer ids from <x-uploader> plus an optional title and category. Authorization is done by the
- * controller of the owning module, which knows the record's permission prefix.
+ * Transfer ids from <x-uploader> plus an optional title and category. The record in the route
+ * decides the permission ("{prefix}.update" of its attachmentPermission()), checked before the
+ * input is validated; the owning controller checks the record's visibility.
  */
 class StoreAttachmentsRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        return true;
+        $record = collect($this->route()?->parameters() ?? [])
+            ->filter(fn (mixed $value) => $value instanceof Model && method_exists($value, 'attachmentPermission'))
+            ->last();
+
+        return $record === null || $this->user()->can($record->attachmentPermission().'.update');
     }
 
     /**
