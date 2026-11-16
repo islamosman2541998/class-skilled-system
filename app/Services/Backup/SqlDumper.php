@@ -81,7 +81,8 @@ class SqlDumper
      */
     private function tables(string $driver): array
     {
-        return collect(Schema::getTables())
+        // On MySQL only the system's own database: the server may hold others (the website).
+        return collect(Schema::getTables($driver === 'mysql' ? DB::connection()->getDatabaseName() : null))
             ->pluck('name')
             ->reject(fn (string $name) => $driver === 'sqlite' && str_starts_with($name, 'sqlite_'))
             ->values()
