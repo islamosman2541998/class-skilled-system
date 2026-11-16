@@ -9,6 +9,7 @@ return [
         'payment_vouchers' => 'Payment vouchers',
         'workers' => 'Workers',
         'attendance' => 'Attendance',
+        'equipment' => 'Equipment',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',

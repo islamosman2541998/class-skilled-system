@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\EquipmentAssignmentController;
+use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SubcontractController;
@@ -33,3 +35,8 @@ Route::resource('workers', WorkerController::class)->except(['show', 'destroy'])
 Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
 Route::get('/attendance/sheet', [AttendanceController::class, 'sheet'])->name('attendance.sheet');
 Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');
+
+Route::resource('equipment', EquipmentController::class)->except(['destroy'])->parameters(['equipment' => 'equipment']);
+Route::post('/equipment/{equipment}/assignments', [EquipmentAssignmentController::class, 'store'])->name('equipment.assignments.store');
+Route::put('/equipment-assignments/{equipment_assignment}', [EquipmentAssignmentController::class, 'update'])->name('equipment-assignments.update');
+Route::delete('/equipment-assignments/{equipment_assignment}', [EquipmentAssignmentController::class, 'destroy'])->name('equipment-assignments.destroy');

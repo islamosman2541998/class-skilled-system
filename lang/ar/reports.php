@@ -35,6 +35,13 @@ return [
         'supplier-statement' => 'فواتير الشراء وسندات الصرف لمورد مع الرصيد الافتتاحي والمستحق بعد كل حركة. اختر المورد من الفلاتر.',
     ],
     'cost_of' => 'تكلفة :category',
+    'cost_types' => [
+        'materials' => 'المواد',
+        'subcontracts' => 'مقاولو الباطن',
+        'labour' => 'العمالة',
+        'equipment' => 'المعدات',
+        'expenses' => 'المصروفات',
+    ],
     'invoices_count' => 'عدد الفواتير',
     'receipts_count' => 'عدد السندات',
     'expenses_count' => 'عدد المصروفات',

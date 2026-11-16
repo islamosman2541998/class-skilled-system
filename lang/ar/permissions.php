@@ -9,6 +9,7 @@ return [
         'payment_vouchers' => 'سندات الصرف',
         'workers' => 'العمال',
         'attendance' => 'الحضور',
+        'equipment' => 'المعدات',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

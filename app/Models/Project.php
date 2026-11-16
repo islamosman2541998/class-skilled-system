@@ -301,6 +301,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Attendance::class);
     }
 
+    /** @return HasMany<EquipmentAssignment, $this> */
+    public function equipmentAssignments(): HasMany
+    {
+        return $this->hasMany(EquipmentAssignment::class);
+    }
+
     /** @return HasMany<Claim, $this> */
     public function claims(): HasMany
     {

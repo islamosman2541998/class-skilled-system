@@ -14,8 +14,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Project profitability (spec §9.2): contract, invoiced, collected, cost by expense category,
- * profit and margin. The period filters projects by start date. Needs finance.profitability.
+ * Project profitability (spec §9.2): contract, invoiced, collected, cost by type (materials,
+ * subcontracts, labour, equipment, expenses) and by expense category, profit and margin. The period filters projects by start date. Needs finance.profitability.
  */
 class ProfitabilityReport extends ReportTable
 {
@@ -35,6 +35,14 @@ class ProfitabilityReport extends ReportTable
             ])
             ->selectRaw('projects.invoiced_net - projects.cost_total as profit')
             ->selectRaw('CASE WHEN projects.invoiced_net = 0 THEN NULL ELSE ROUND((projects.invoiced_net - projects.cost_total) * 100 / projects.invoiced_net, 2) END as margin');
+
+        // Cost by type (spec §9.2): materials, subcontracts, labour, equipment and expenses.
+        $sum = fn (string $table, string $column) => DB::table($table)->selectRaw("COALESCE(SUM({$column}), 0)")->whereColumn("{$table}.project_id", 'projects.id');
+        $query->selectSub($sum('purchases', 'subtotal')->whereNull('subcontract_id')->whereNull('deleted_at'), 'cost_materials')
+            ->selectSub($sum('purchases', 'subtotal')->whereNotNull('subcontract_id')->whereNull('deleted_at'), 'cost_subcontracts')
+            ->selectSub($sum('attendances', 'cost'), 'cost_labour')
+            ->selectSub($sum('equipment_assignments', 'cost')->whereNull('deleted_at'), 'cost_equipment')
+            ->selectSub($sum('expenses', 'amount')->whereNull('deleted_at'), 'cost_expenses');
 
         foreach ($this->categories() as $category) {
             $query->selectSub(
@@ -59,6 +67,10 @@ class ProfitabilityReport extends ReportTable
             $money('invoiced_total', 'projects.invoiced'),
             $money('collected_total', 'projects.collected'),
         ];
+
+        foreach (['materials', 'subcontracts', 'labour', 'equipment', 'expenses'] as $type) {
+            $columns[] = $money('cost_'.$type, 'reports.cost_types.'.$type);
+        }
 
         foreach ($this->categories() as $category) {
             $key = 'cat_'.$category->id;

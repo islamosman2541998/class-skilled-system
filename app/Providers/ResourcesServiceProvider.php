@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Enums\LookupType;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Models\Attendance;
+use App\Models\Equipment;
+use App\Models\EquipmentAssignment;
 use App\Models\Lookup;
 use App\Models\Project;
 use App\Models\Purchase;
@@ -109,6 +112,16 @@ class ResourcesServiceProvider extends ServiceProvider
         ProjectController::$tabPermissions['resources'] = ['attendance.view'];
         LookupUsage::register(LookupType::WorkerTrade, fn (Lookup $lookup) => Worker::withTrashed()->where('trade_id', $lookup->id)->exists());
         LookupUsage::register(LookupType::SupplierSpecialty, fn (Lookup $lookup) => Supplier::withTrashed()->where('specialty_id', $lookup->id)->exists());
+
+        PermissionRegistry::register('equipment');
+        Menu::register('resources', ['label' => 'resources.equipment.equipment', 'icon' => 'bulldozer', 'route' => 'equipment.index', 'permission' => 'equipment.view']);
+        TrashRegistry::register(Equipment::class);
+        Project::$linkedRelations[] = 'equipmentAssignments';
+        AttendanceController::$projectViews[] = 'equipment.partials.project-panel';
+        LookupUsage::register(LookupType::EquipmentType, fn (Lookup $lookup) => Equipment::withTrashed()->where('type_id', $lookup->id)->exists());
+
+        // Project cost: equipment assignments, days × daily cost (spec §8.17).
+        ProjectLedger::$costSources['equipment'] = fn (Project $project) => (string) EquipmentAssignment::query()->where('project_id', $project->id)->sum('cost');
 
         // Project cost: labour from attendance at the wage of each day (spec §8.17).
         ProjectLedger::$costSources['labour'] = fn (Project $project) => (string) Attendance::query()->where('project_id', $project->id)->sum('cost');

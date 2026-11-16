@@ -35,6 +35,13 @@ return [
         'supplier-statement' => 'Purchase invoices and payment vouchers of a supplier with the opening balance and the amount owed after each entry. Choose the supplier in the filters.',
     ],
     'cost_of' => 'Cost of :category',
+    'cost_types' => [
+        'materials' => 'Materials',
+        'subcontracts' => 'Subcontracts',
+        'labour' => 'Labour',
+        'equipment' => 'Equipment',
+        'expenses' => 'Expenses',
+    ],
     'invoices_count' => 'Invoices',
     'receipts_count' => 'Receipts',
     'expenses_count' => 'Expenses',
