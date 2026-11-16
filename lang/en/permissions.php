@@ -6,6 +6,7 @@ return [
         'suppliers' => 'Suppliers and subcontractors',
         'purchases' => 'Purchase invoices',
         'subcontracts' => 'Subcontracts',
+        'payment_vouchers' => 'Payment vouchers',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',

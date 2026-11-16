@@ -9,6 +9,7 @@ use App\Models\Project;
 use App\Models\Purchase;
 use App\Models\Subcontract;
 use App\Models\Supplier;
+use App\Search\PaymentVoucherSearchProvider;
 use App\Search\PurchaseSearchProvider;
 use App\Search\SearchRegistry;
 use App\Search\SupplierSearchProvider;
@@ -32,6 +33,7 @@ class ResourcesServiceProvider extends ServiceProvider
         // The search registry is a container singleton, so it is filled on every boot.
         $this->app->make(SearchRegistry::class)->register(new SupplierSearchProvider);
         $this->app->make(SearchRegistry::class)->register(new PurchaseSearchProvider);
+        $this->app->make(SearchRegistry::class)->register(new PaymentVoucherSearchProvider);
 
         if (self::$registered) {
             return;
@@ -63,6 +65,31 @@ class ResourcesServiceProvider extends ServiceProvider
         Project::$linkedRelations[] = 'subcontracts';
         SupplierController::$tabs['subcontracts'] = ['subcontracts.view'];
         PurchaseController::$projectViews[] = 'subcontracts.partials.project-panel';
+
+        PermissionRegistry::register('payment_vouchers', ['view', 'create', 'update', 'export', 'print', 'cancel']);
+        Menu::register('finance', ['label' => 'resources.vouchers.vouchers', 'icon' => 'cash-banknote', 'route' => 'payment-vouchers.index', 'permission' => 'payment_vouchers.view']);
+        Supplier::$linkedRelations[] = 'paymentVouchers';
+        SupplierController::$tabs['payment_vouchers'] = ['payment_vouchers.view'];
+        SupplierController::$tabs['projects'] = ['purchases.view'];
+        PurchaseController::$showViews[] = 'purchases.partials.payments';
+        SupplierController::$figureSources['paid'] = [
+            'permission' => 'payment_vouchers.view',
+            'value' => fn (Supplier $supplier) => money((string) $supplier->purchases()->visibleTo(auth()->user())->sum('paid_amount')),
+        ];
+        SupplierController::$figureSources['due'] = [
+            'permission' => 'purchases.view',
+            'value' => fn (Supplier $supplier) => money(bcsub(
+                (string) $supplier->purchases()->visibleTo(auth()->user())->sum('total'),
+                (string) $supplier->purchases()->visibleTo(auth()->user())->sum('paid_amount'),
+                2,
+            )),
+        ];
+        SupplierController::$figureSources['projects'] = [
+            'permission' => 'purchases.view',
+            'value' => fn (Supplier $supplier) => (string) Project::query()->visibleTo(auth()->user())
+                ->where(fn ($query) => $query->whereIn('id', $supplier->purchases()->select('project_id'))->orWhereIn('id', $supplier->subcontracts()->select('project_id')))
+                ->count(),
+        ];
 
         // Project cost: purchase invoices before VAT (spec §8.16).
         ProjectLedger::$costSources['purchases'] = fn (Project $project) => (string) Purchase::query()->where('project_id', $project->id)->sum('subtotal');

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SubcontractController;
 use App\Http\Controllers\SupplierController;
@@ -18,3 +19,8 @@ Route::post('/purchases/{purchase}/attachments', [PurchaseController::class, 'at
 
 Route::resource('subcontracts', SubcontractController::class)->except(['destroy']);
 Route::post('/subcontracts/{subcontract}/payments/{payment}/bill', [SubcontractController::class, 'bill'])->name('subcontracts.bill');
+
+Route::resource('payment-vouchers', PaymentVoucherController::class)->except(['destroy']);
+Route::put('/payment-vouchers/{payment_voucher}/allocations', [PaymentVoucherController::class, 'allocate'])->name('payment-vouchers.allocations.update');
+Route::patch('/payment-vouchers/{payment_voucher}/cancel', [PaymentVoucherController::class, 'cancel'])->name('payment-vouchers.cancel');
+Route::post('/payment-vouchers/{payment_voucher}/attachments', [PaymentVoucherController::class, 'attach'])->name('payment-vouchers.attachments.store');

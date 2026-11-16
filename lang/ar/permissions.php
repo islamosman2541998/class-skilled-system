@@ -6,6 +6,7 @@ return [
         'suppliers' => 'الموردون ومقاولو الباطن',
         'purchases' => 'فواتير الشراء',
         'subcontracts' => 'عقود الباطن',
+        'payment_vouchers' => 'سندات الصرف',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

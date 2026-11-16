@@ -12,7 +12,11 @@ class CancelDocumentRequest extends FormRequest
 {
     public function authorize(): bool
     {
-        $module = $this->route('receipt') !== null ? 'receipts' : 'invoices';
+        $module = match (true) {
+            $this->route('receipt') !== null => 'receipts',
+            $this->route('payment_voucher') !== null => 'payment_vouchers',
+            default => 'invoices',
+        };
 
         return $this->user()->can($module.'.cancel');
     }
