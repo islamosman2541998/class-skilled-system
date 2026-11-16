@@ -187,6 +187,8 @@ return [
         'invoice' => 'Invoice',
         'whatsapp_invoice_ar' => 'Invoice message in Arabic',
         'whatsapp_invoice_en' => 'Invoice message in English',
+        'whatsapp_claim_ar' => 'Claim message in Arabic',
+        'whatsapp_claim_en' => 'Claim message in English',
         'whatsapp_receipt_ar' => 'Receipt message in Arabic',
         'whatsapp_receipt_en' => 'Receipt message in English',
         'quotation' => 'Quotation',

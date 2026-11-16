@@ -26,6 +26,8 @@ class TemplateSettingsRequest extends SettingsRequest
             'invoice_footer_en' => ['nullable', 'string', 'max:2000'],
             'whatsapp_invoice_ar' => $whatsapp,
             'whatsapp_invoice_en' => $whatsapp,
+            'whatsapp_claim_ar' => $whatsapp,
+            'whatsapp_claim_en' => $whatsapp,
             'whatsapp_receipt_ar' => $whatsapp,
             'whatsapp_receipt_en' => $whatsapp,
             'payment_templates' => ['required', 'array', 'min:1', 'max:20'],

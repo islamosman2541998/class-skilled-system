@@ -120,6 +120,11 @@ return [
         'not_submitted' => 'المستخلص ليس مقدما.',
         'beyond_contract' => 'التراكمي للبند :line يجب أن يكون بين صفر وكمية العقد.',
         'negative_net' => 'الصافي سالب. راجع الكميات.',
+        'approve' => 'اعتماد',
+        'approve_confirm' => 'بعد الاعتماد تنشأ فاتورة مسودة بقيمة المستخلص.',
+        'approved' => 'تم اعتماد المستخلص وإنشاء فاتورة مسودة',
+        'draft_invoice' => 'فاتورة مسودة',
+        'invoice_line' => 'مستخلص رقم :number عن الفترة :from - :to',
         'statuses' => [
             'draft' => 'مسودة',
             'submitted' => 'مقدم',

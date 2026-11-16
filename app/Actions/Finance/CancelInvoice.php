@@ -79,6 +79,7 @@ class CancelInvoice
         $copy->forceFill([
             'client_id' => $cancelled->client_id,
             'installment_id' => $cancelled->installment_id,
+            'claim_id' => $cancelled->claim_id,
             'replaces_id' => $cancelled->id,
             'status' => InvoiceStatus::Draft,
             'vat_rate' => $cancelled->vat_rate,

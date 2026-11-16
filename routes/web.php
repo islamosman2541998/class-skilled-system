@@ -34,6 +34,7 @@ Route::middleware('guest')->group(function () {
 Route::get('/d/q/{quotation}', [PublicDocumentController::class, 'quotation'])->middleware(['signed', 'throttle:30,1'])->name('public.quotation');
 Route::get('/d/i/{invoice}', [PublicDocumentController::class, 'invoice'])->middleware(['signed', 'throttle:30,1'])->name('public.invoice');
 Route::get('/d/r/{receipt}', [PublicDocumentController::class, 'receipt'])->middleware(['signed', 'throttle:30,1'])->name('public.receipt');
+Route::get('/d/c/{claim}', [PublicDocumentController::class, 'claim'])->middleware(['signed', 'throttle:30,1'])->name('public.claim');
 
 Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->group(function () {
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');

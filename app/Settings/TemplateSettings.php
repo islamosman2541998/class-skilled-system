@@ -36,6 +36,10 @@ class TemplateSettings extends Settings
 
     public string $whatsapp_invoice_en;
 
+    public string $whatsapp_claim_ar;
+
+    public string $whatsapp_claim_en;
+
     /** Placeholders :client, :number, :total, :link. */
     public string $whatsapp_receipt_ar;
 

@@ -187,6 +187,8 @@ return [
         'invoice' => 'الفاتورة',
         'whatsapp_invoice_ar' => 'رسالة الفاتورة بالعربية',
         'whatsapp_invoice_en' => 'رسالة الفاتورة بالإنجليزية',
+        'whatsapp_claim_ar' => 'رسالة المستخلص بالعربية',
+        'whatsapp_claim_en' => 'رسالة المستخلص بالإنجليزية',
         'whatsapp_receipt_ar' => 'رسالة سند القبض بالعربية',
         'whatsapp_receipt_en' => 'رسالة سند القبض بالإنجليزية',
         'quotation' => 'عرض السعر',

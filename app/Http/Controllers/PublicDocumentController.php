@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Claim;
 use App\Models\Invoice;
 use App\Models\Quotation;
 use App\Models\Receipt;
@@ -27,6 +28,14 @@ class PublicDocumentController extends Controller
         $language = (string) $request->query('lang', 'ar');
 
         return ReceiptPdfController::pdfResponse($receipt, $pdf, in_array($language, PdfRenderer::LANGUAGES, true) ? $language : 'ar');
+    }
+
+    public function claim(Request $request, Claim $claim, PdfRenderer $pdf): Response
+    {
+        abort_if($claim->isDraft(), 404);
+        $language = (string) $request->query('lang', 'ar');
+
+        return ClaimPdfController::pdfResponse($claim, $pdf, in_array($language, PdfRenderer::LANGUAGES, true) ? $language : 'ar');
     }
 
     public function invoice(Request $request, Invoice $invoice, PdfRenderer $pdf): Response

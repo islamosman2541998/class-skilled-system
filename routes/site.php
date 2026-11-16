@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClaimController;
+use App\Http\Controllers\ClaimPdfController;
 use App\Http\Controllers\DailyReportController;
 use App\Http\Controllers\ProjectItemController;
 use Illuminate\Support\Facades\Route;
@@ -26,3 +27,6 @@ Route::put('/claims/{claim}', [ClaimController::class, 'update'])->name('claims.
 Route::delete('/claims/{claim}', [ClaimController::class, 'destroy'])->name('claims.destroy');
 Route::patch('/claims/{claim}/submit', [ClaimController::class, 'submit'])->name('claims.submit');
 Route::patch('/claims/{claim}/return', [ClaimController::class, 'return'])->name('claims.return');
+Route::patch('/claims/{claim}/approve', [ClaimController::class, 'approve'])->name('claims.approve');
+Route::get('/claims/{claim}/pdf', [ClaimPdfController::class, 'show'])->name('claims.pdf');
+Route::post('/claims/{claim}/share', [ClaimPdfController::class, 'share'])->name('claims.share');

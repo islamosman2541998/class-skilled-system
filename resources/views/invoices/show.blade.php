@@ -110,6 +110,9 @@
                     <div><dt>{{ __('finance.client') }}</dt><dd><a href="{{ route('clients.show', $invoice->client) }}">{{ $invoice->client->name }}</a></dd></div>
                     <div><dt>{{ __('finance.project') }}</dt><dd><a href="{{ route('projects.show', [$invoice->project, 'tab' => 'invoices']) }}"><bdi dir="ltr">{{ $invoice->project->number }}</bdi></a> · {{ $invoice->project->title }}</dd></div>
                     <div><dt>{{ __('finance.invoices.issue_date') }}</dt><dd><bdi dir="ltr">{{ fmt_date($invoice->issue_date) }}</bdi></dd></div>
+                    @if ($invoice->claim)
+                        <div><dt>{{ __('site.claims.claim') }}</dt><dd><a href="{{ route('claims.show', $invoice->claim) }}"><bdi dir="ltr">{{ $invoice->claim->number }}</bdi></a></dd></div>
+                    @endif
                     @if ($invoice->installment)
                         <div><dt>{{ __('finance.invoices.installment') }}</dt><dd>{{ $invoice->installment->label() }}</dd></div>
                     @endif

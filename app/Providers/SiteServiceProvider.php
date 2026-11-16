@@ -2,9 +2,14 @@
 
 namespace App\Providers;
 
+use App\Actions\Finance\CancelInvoice;
+use App\Actions\Finance\IssueInvoice;
+use App\Enums\ClaimStatus;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\ProjectController;
 use App\Models\Claim;
 use App\Models\DailyReport;
+use App\Models\Invoice;
 use App\Models\Project;
 use App\Models\User;
 use App\Search\ClaimSearchProvider;
@@ -53,6 +58,21 @@ class SiteServiceProvider extends ServiceProvider
         ProjectController::$tabConditions['claims'] = fn (Project $project) => $project->isClaimsBilled();
 
         ReportRegistry::register('missing-reports', 'tables.reports.missing-reports-report', 'projects', ['daily_reports.view']);
+
+        ClaimController::$actionViews[] = 'claims.partials.approve-action';
+        ClaimController::$actionViews[] = 'claims.partials.share-actions';
+
+        // The invoice of an approved claim moves the claim: issued → invoiced, cancelled → approved.
+        IssueInvoice::$afterIssue[] = function (Invoice $invoice): void {
+            if ($invoice->claim_id !== null) {
+                Claim::query()->whereKey($invoice->claim_id)->where('status', ClaimStatus::Approved->value)->update(['status' => ClaimStatus::Invoiced->value]);
+            }
+        };
+        CancelInvoice::$afterCancel[] = function (Invoice $invoice): void {
+            if ($invoice->claim_id !== null) {
+                Claim::query()->whereKey($invoice->claim_id)->where('status', ClaimStatus::Invoiced->value)->update(['status' => ClaimStatus::Approved->value]);
+            }
+        };
         $this->registerDashboard();
     }
 

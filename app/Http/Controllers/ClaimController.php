@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Site\ApproveClaim;
 use App\Actions\Site\ReturnClaim;
 use App\Actions\Site\SaveClaim;
 use App\Actions\Site\StartClaim;
@@ -124,6 +125,20 @@ class ClaimController extends Controller
         }
 
         return redirect()->route('claims.show', $claim)->with('success', __('site.claims.returned'));
+    }
+
+    public function approve(Request $request, Claim $claim, ApproveClaim $approve): RedirectResponse
+    {
+        Gate::authorize('claims.approve');
+        $this->ensureVisible($request, $claim);
+
+        try {
+            $approve->handle($claim, $request->user());
+        } catch (DomainException $exception) {
+            return redirect()->route('claims.show', $claim)->with('error', $exception->getMessage());
+        }
+
+        return redirect()->route('claims.show', $claim)->with('success', __('site.claims.approved'));
     }
 
     private function locked(Claim $claim): RedirectResponse

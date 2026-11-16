@@ -120,6 +120,11 @@ return [
         'not_submitted' => 'The claim is not submitted.',
         'beyond_contract' => 'The cumulative of :line must be between zero and the contract quantity.',
         'negative_net' => 'The net is negative. Check the quantities.',
+        'approve' => 'Approve',
+        'approve_confirm' => 'Approving creates a draft invoice for the claim amount.',
+        'approved' => 'Claim approved and a draft invoice created',
+        'draft_invoice' => 'Draft invoice',
+        'invoice_line' => 'Progress claim :number for :from - :to',
         'statuses' => [
             'draft' => 'Draft',
             'submitted' => 'Submitted',

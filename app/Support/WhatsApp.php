@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\Claim;
 use App\Models\Client;
 use App\Models\Invoice;
 use App\Models\Quotation;
@@ -44,6 +45,19 @@ final class WhatsApp
             ':number' => (string) $invoice->number,
             ':total' => self::amount((string) $invoice->total, $language),
             ':due' => fmt_date($invoice->due_date),
+            ':link' => $url,
+        ]);
+    }
+
+    public static function claimMessage(Claim $claim, string $language, string $url): string
+    {
+        $templates = app(TemplateSettings::class);
+        $template = $language === 'en' ? $templates->whatsapp_claim_en : $templates->whatsapp_claim_ar;
+
+        return strtr($template, [
+            ':client' => self::clientName($claim->client, $language),
+            ':number' => (string) $claim->number,
+            ':total' => self::amount((string) $claim->total, $language),
             ':link' => $url,
         ]);
     }

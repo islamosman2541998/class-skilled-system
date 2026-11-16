@@ -62,6 +62,12 @@
                 <x-field name="whatsapp_invoice_en" :label="__('settings.templates.whatsapp_invoice_en')" required>
                     <textarea id="whatsapp_invoice_en" name="whatsapp_invoice_en" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_invoice_en')]) rows="3" dir="ltr">{{ old('whatsapp_invoice_en', $settings->whatsapp_invoice_en) }}</textarea>
                 </x-field>
+                <x-field name="whatsapp_claim_ar" :label="__('settings.templates.whatsapp_claim_ar')" required>
+                    <textarea id="whatsapp_claim_ar" name="whatsapp_claim_ar" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_claim_ar')]) rows="3" dir="rtl">{{ old('whatsapp_claim_ar', $settings->whatsapp_claim_ar) }}</textarea>
+                </x-field>
+                <x-field name="whatsapp_claim_en" :label="__('settings.templates.whatsapp_claim_en')" required>
+                    <textarea id="whatsapp_claim_en" name="whatsapp_claim_en" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_claim_en')]) rows="3" dir="ltr">{{ old('whatsapp_claim_en', $settings->whatsapp_claim_en) }}</textarea>
+                </x-field>
                 <x-field name="whatsapp_receipt_ar" :label="__('settings.templates.whatsapp_receipt_ar')" required>
                     <textarea id="whatsapp_receipt_ar" name="whatsapp_receipt_ar" @class(['form-control', 'is-invalid' => $errors->has('whatsapp_receipt_ar')]) rows="3" dir="rtl">{{ old('whatsapp_receipt_ar', $settings->whatsapp_receipt_ar) }}</textarea>
                 </x-field>
