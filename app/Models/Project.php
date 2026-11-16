@@ -295,6 +295,12 @@ class Project extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Subcontract::class);
     }
 
+    /** @return HasMany<Attendance, $this> */
+    public function attendances(): HasMany
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
     /** @return HasMany<Claim, $this> */
     public function claims(): HasMany
     {

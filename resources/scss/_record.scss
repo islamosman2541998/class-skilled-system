@@ -361,6 +361,34 @@
     }
 }
 
+.attendance-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .5rem 1rem;
+    padding-block: .75rem;
+    border-block-end: 1px solid var(--c-line);
+
+    &:last-child {
+        border-block-end: 0;
+    }
+
+    .btn {
+        min-height: 44px;
+    }
+}
+
+.attendance-name {
+    display: flex;
+    flex: 1 1 12rem;
+    flex-direction: column;
+}
+
+.attendance-overtime {
+    inline-size: 7rem;
+    min-height: 44px;
+}
+
 @media (max-width: 767.98px) {
     .sticky-actions-mobile {
         position: fixed;

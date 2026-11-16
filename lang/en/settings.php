@@ -112,6 +112,9 @@ return [
         'invoice_due_days' => 'Invoice due in days',
         'retention_percent' => 'Default retention %',
         'retention_percent_hint' => 'Copied into each new project and editable there.',
+        'labour_hours_per_day' => 'Working hours a day',
+        'overtime_multiplier' => 'Overtime multiplier',
+        'overtime_multiplier_hint' => 'Overtime hour = daily wage ÷ working hours × multiplier.',
     ],
     'uploads' => [
         'images' => 'Images',

@@ -2,18 +2,23 @@
 
 namespace App\Providers;
 
+use App\Enums\LookupType;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
+use App\Models\Attendance;
+use App\Models\Lookup;
 use App\Models\Project;
 use App\Models\Purchase;
 use App\Models\Subcontract;
 use App\Models\Supplier;
+use App\Models\Worker;
 use App\Search\PaymentVoucherSearchProvider;
 use App\Search\PurchaseSearchProvider;
 use App\Search\SearchRegistry;
 use App\Search\SupplierSearchProvider;
 use App\Services\Finance\ProjectLedger;
+use App\Support\LookupUsage;
 use App\Support\Menu;
 use App\Support\PermissionRegistry;
 use App\Support\ReportRegistry;
@@ -94,6 +99,19 @@ class ResourcesServiceProvider extends ServiceProvider
 
         ReportRegistry::register('supplier-statement', 'tables.reports.supplier-statement-report', 'finance', ['purchases.view', 'payment_vouchers.view']);
         SupplierController::$actionViews[] = 'suppliers.partials.statement-actions';
+
+        PermissionRegistry::register('workers');
+        PermissionRegistry::register('attendance', ['view', 'create', 'update', 'delete', 'export']);
+        Menu::register('resources', ['label' => 'resources.workers.workers', 'icon' => 'users-group', 'route' => 'workers.index', 'permission' => 'workers.view']);
+        Menu::register('resources', ['label' => 'resources.attendance.attendance', 'icon' => 'calendar-check', 'route' => 'attendance.index', 'permission' => 'attendance.view']);
+        TrashRegistry::register(Worker::class);
+        Project::$linkedRelations[] = 'attendances';
+        ProjectController::$tabPermissions['resources'] = ['attendance.view'];
+        LookupUsage::register(LookupType::WorkerTrade, fn (Lookup $lookup) => Worker::withTrashed()->where('trade_id', $lookup->id)->exists());
+        LookupUsage::register(LookupType::SupplierSpecialty, fn (Lookup $lookup) => Supplier::withTrashed()->where('specialty_id', $lookup->id)->exists());
+
+        // Project cost: labour from attendance at the wage of each day (spec §8.17).
+        ProjectLedger::$costSources['labour'] = fn (Project $project) => (string) Attendance::query()->where('project_id', $project->id)->sum('cost');
 
         // Project cost: purchase invoices before VAT (spec §8.16).
         ProjectLedger::$costSources['purchases'] = fn (Project $project) => (string) Purchase::query()->where('project_id', $project->id)->sum('subtotal');

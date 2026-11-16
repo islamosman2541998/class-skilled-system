@@ -112,6 +112,9 @@ return [
         'invoice_due_days' => 'استحقاق الفاتورة بالأيام',
         'retention_percent' => 'نسبة المحتجز الافتراضية %',
         'retention_percent_hint' => 'تنسخ إلى كل مشروع جديد، ويمكن تعديلها في المشروع.',
+        'labour_hours_per_day' => 'ساعات العمل في اليوم',
+        'overtime_multiplier' => 'معامل الساعة الإضافية',
+        'overtime_multiplier_hint' => 'الساعة الإضافية = اليومية ÷ ساعات العمل × المعامل.',
     ],
     'uploads' => [
         'images' => 'الصور',

@@ -28,7 +28,7 @@ function financePayload(array $overrides = []): array
 {
     return $overrides + [
         'currency_code' => 'AED', 'currency_symbol_ar' => 'د.إ', 'currency_symbol_en' => 'AED', 'decimals' => 2,
-        'vat_rate' => '5', 'quotation_validity_days' => 30, 'invoice_due_days' => 14, 'retention_percent' => '5',
+        'vat_rate' => '5', 'quotation_validity_days' => 30, 'invoice_due_days' => 14, 'retention_percent' => '5', 'labour_hours_per_day' => 8, 'overtime_multiplier' => '1.25',
     ];
 }
 

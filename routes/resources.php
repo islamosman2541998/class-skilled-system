@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\PaymentVoucherController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SubcontractController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\SupplierStatementController;
+use App\Http\Controllers\WorkerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +28,8 @@ Route::resource('payment-vouchers', PaymentVoucherController::class)->except(['d
 Route::put('/payment-vouchers/{payment_voucher}/allocations', [PaymentVoucherController::class, 'allocate'])->name('payment-vouchers.allocations.update');
 Route::patch('/payment-vouchers/{payment_voucher}/cancel', [PaymentVoucherController::class, 'cancel'])->name('payment-vouchers.cancel');
 Route::post('/payment-vouchers/{payment_voucher}/attachments', [PaymentVoucherController::class, 'attach'])->name('payment-vouchers.attachments.store');
+
+Route::resource('workers', WorkerController::class)->except(['show', 'destroy']);
+Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+Route::get('/attendance/sheet', [AttendanceController::class, 'sheet'])->name('attendance.sheet');
+Route::post('/attendance', [AttendanceController::class, 'store'])->name('attendance.store');

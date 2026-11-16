@@ -32,6 +32,12 @@
             <x-field name="retention_percent" :label="__('settings.finance.retention_percent')" :hint="__('settings.finance.retention_percent_hint')" required>
                 <input id="retention_percent" type="number" name="retention_percent" value="{{ old('retention_percent', $settings->retention_percent) }}" @class(['form-control', 'is-invalid' => $errors->has('retention_percent')]) required min="0" max="100" step="0.01" dir="ltr">
             </x-field>
+            <x-field name="labour_hours_per_day" :label="__('settings.finance.labour_hours_per_day')" required>
+                <input id="labour_hours_per_day" type="number" name="labour_hours_per_day" value="{{ old('labour_hours_per_day', $settings->labour_hours_per_day) }}" @class(['form-control', 'is-invalid' => $errors->has('labour_hours_per_day')]) required min="1" max="24" step="1" dir="ltr">
+            </x-field>
+            <x-field name="overtime_multiplier" :label="__('settings.finance.overtime_multiplier')" :hint="__('settings.finance.overtime_multiplier_hint')" required>
+                <input id="overtime_multiplier" type="number" name="overtime_multiplier" value="{{ old('overtime_multiplier', $settings->overtime_multiplier) }}" @class(['form-control', 'is-invalid' => $errors->has('overtime_multiplier')]) required min="1" max="5" step="0.05" dir="ltr">
+            </x-field>
         </div>
     </x-panel>
 @endsection

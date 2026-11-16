@@ -23,6 +23,12 @@ class FinanceSettings extends Settings
     /** Default retention percent copied into new projects (spec §5.9). */
     public string $retention_percent;
 
+    /** Working hours in a day, for the overtime hour cost (spec §8.17). */
+    public int $labour_hours_per_day;
+
+    /** Overtime hour = daily wage ÷ working hours × this multiplier. */
+    public string $overtime_multiplier;
+
     public static function group(): string
     {
         return 'finance';

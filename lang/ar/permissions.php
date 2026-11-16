@@ -7,6 +7,8 @@ return [
         'purchases' => 'فواتير الشراء',
         'subcontracts' => 'عقود الباطن',
         'payment_vouchers' => 'سندات الصرف',
+        'workers' => 'العمال',
+        'attendance' => 'الحضور',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

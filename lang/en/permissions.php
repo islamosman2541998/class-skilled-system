@@ -7,6 +7,8 @@ return [
         'purchases' => 'Purchase invoices',
         'subcontracts' => 'Subcontracts',
         'payment_vouchers' => 'Payment vouchers',
+        'workers' => 'Workers',
+        'attendance' => 'Attendance',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',
