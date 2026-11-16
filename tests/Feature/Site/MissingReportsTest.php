@@ -43,7 +43,7 @@ it('changing the weekly days off changes the days', function () {
         ->toBe(['2026-11-09', '2026-11-11', '2026-11-13']);
 
     actingAs(scopedUser(['settings.manage']))
-        ->put(route('settings.update', 'system'), ['session_idle_minutes' => 60, 'public_link_hours' => 72, 'weekly_days_off' => ['5', '6']])
+        ->put(route('settings.update', 'system'), ['session_idle_minutes' => 60, 'public_link_hours' => 72, 'backup_keep' => 7, 'weekly_days_off' => ['5', '6']])
         ->assertSessionHasNoErrors();
     expect(app(SystemSettings::class)->weekly_days_off)->toBe([5, 6]);
 });

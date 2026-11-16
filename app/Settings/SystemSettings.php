@@ -15,6 +15,9 @@ class SystemSettings extends Settings
     /** @var list<int> ISO weekdays (1 = Monday ... 7 = Sunday) not counted as days without a daily report. */
     public array $weekly_days_off;
 
+    /** Successful backups kept of each type (spec §13). */
+    public int $backup_keep;
+
     public static function group(): string
     {
         return 'system';

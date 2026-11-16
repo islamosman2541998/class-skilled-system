@@ -137,6 +137,8 @@ return [
         'public_link_hours' => 'Public link lifetime (hours)',
         'public_link_hours_hint' => 'Links to documents sent to clients.',
         'weekly_days_off' => 'Weekly days off',
+        'backup_keep' => 'Backups kept',
+        'backup_keep_hint' => 'Of each type. The oldest are removed after each successful backup.',
         'weekly_days_off_hint' => 'Not counted as days without a daily report.',
     ],
     'documents' => [
@@ -233,5 +235,18 @@ return [
         'last_sync_never' => 'Never synced',
         'sync_ok' => 'Successful',
         'sync_count' => 'New requests: :count',
+    ],
+    'backups' => [
+        'backups' => 'Backups',
+        'running' => 'A backup of this type is already running.',
+        'types' => [
+            'database' => 'Database',
+            'files' => 'Uploaded files',
+        ],
+        'statuses' => [
+            'running' => 'Running',
+            'success' => 'Successful',
+            'failed' => 'Failed',
+        ],
     ],
 ];

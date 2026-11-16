@@ -165,7 +165,7 @@ it('saves upload limits and refuses executable file types', function () {
 
 it('saves system settings and allows an empty trash retention', function () {
     actingAs(settingsAdmin())->put(route('settings.update', 'system'), [
-        'trash_retention_days' => '', 'session_idle_minutes' => 60, 'public_link_hours' => 48,
+        'trash_retention_days' => '', 'session_idle_minutes' => 60, 'public_link_hours' => 48, 'backup_keep' => 7,
     ])->assertSessionHasNoErrors();
 
     app()->forgetInstance(SystemSettings::class);

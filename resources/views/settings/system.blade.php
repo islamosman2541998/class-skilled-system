@@ -9,6 +9,9 @@
             <x-field name="trash_retention_days" :label="__('settings.system.trash_retention_days')" :hint="__('settings.system.trash_retention_days_hint')">
                 <input id="trash_retention_days" type="number" name="trash_retention_days" value="{{ old('trash_retention_days', $settings->trash_retention_days) }}" @class(['form-control', 'is-invalid' => $errors->has('trash_retention_days')]) min="1" max="3650" dir="ltr">
             </x-field>
+            <x-field name="backup_keep" :label="__('settings.system.backup_keep')" :hint="__('settings.system.backup_keep_hint')" required>
+                <input id="backup_keep" type="number" name="backup_keep" value="{{ old('backup_keep', $settings->backup_keep) }}" @class(['form-control', 'is-invalid' => $errors->has('backup_keep')]) required min="1" max="60" dir="ltr">
+            </x-field>
             <x-field name="public_link_hours" :label="__('settings.system.public_link_hours')" :hint="__('settings.system.public_link_hours_hint')" required>
                 <input id="public_link_hours" type="number" name="public_link_hours" value="{{ old('public_link_hours', $settings->public_link_hours) }}" @class(['form-control', 'is-invalid' => $errors->has('public_link_hours')]) required min="1" max="720" dir="ltr">
             </x-field>

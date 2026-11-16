@@ -15,6 +15,7 @@ class SystemSettingsRequest extends SettingsRequest
             'public_link_hours' => ['required', 'integer', 'between:1,720'],
             'weekly_days_off' => ['nullable', 'array'],
             'weekly_days_off.*' => ['integer', 'between:1,7', 'distinct'],
+            'backup_keep' => ['required', 'integer', 'between:1,60'],
         ];
     }
 
@@ -26,6 +27,7 @@ class SystemSettingsRequest extends SettingsRequest
             'trash_retention_days' => filled($retention) ? (int) $retention : null,
             'session_idle_minutes' => (int) $this->validated('session_idle_minutes'),
             'public_link_hours' => (int) $this->validated('public_link_hours'),
+            'backup_keep' => (int) $this->validated('backup_keep'),
             'weekly_days_off' => collect($this->validated('weekly_days_off', []))->map(fn ($day) => (int) $day)->unique()->sort()->values()->all(),
         ];
     }

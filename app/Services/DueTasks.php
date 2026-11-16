@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\BackupType;
+use App\Services\Backup\BackupRunner;
 use App\Services\Uploads\TemporaryUpload;
 use App\Settings\SystemSettings;
 use App\Support\TrashRegistry;
@@ -43,6 +45,10 @@ class DueTasks
     {
         self::register('purge-trash', 1440, fn () => self::purgeTrash());
         self::register('purge-temp-uploads', 60, fn () => self::purgeTempUploads());
+
+        if (config('system.backup_daily')) {
+            self::register('backup-database', 1440, fn () => app(BackupRunner::class)->run(BackupType::Database));
+        }
     }
 
     public function runDue(): void
