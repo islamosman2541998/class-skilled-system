@@ -3,6 +3,7 @@
 return [
     'modules' => [
         'claims' => 'المستخلصات',
+        'suppliers' => 'الموردون ومقاولو الباطن',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

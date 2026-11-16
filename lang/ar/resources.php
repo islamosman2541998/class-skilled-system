@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'suppliers' => [
+        'suppliers' => 'الموردون',
+        'supplier' => 'مورد',
+        'new' => 'مورد جديد',
+        'edit' => 'تعديل المورد',
+        'name' => 'الاسم',
+        'name_ar' => 'الاسم بالعربية',
+        'name_en' => 'الاسم بالإنجليزية',
+        'type' => 'النوع',
+        'specialty' => 'التخصص',
+        'trn' => 'الرقم الضريبي',
+        'trn_hint' => '15 رقما',
+        'address' => 'العنوان',
+        'identity' => 'البيانات',
+        'bank' => 'البيانات البنكية',
+        'bank_name' => 'البنك',
+        'bank_account_name' => 'اسم الحساب',
+        'bank_iban' => 'رقم الآيبان',
+        'no_bank' => 'لا توجد بيانات بنكية',
+        'notes' => 'ملاحظات',
+        'active' => 'الحالة',
+        'is_active' => 'مفعل',
+        'is_inactive' => 'موقوف',
+        'has_records' => 'للمورد سجلات مرتبطة؛ يمكن إيقافه لا حذفه.',
+        'types' => [
+            'supplier' => 'مورد',
+            'subcontractor' => 'مقاول باطن',
+        ],
+        'tabs' => [
+            'overview' => 'نظرة عامة',
+            'purchases' => 'المشتريات',
+            'subcontracts' => 'عقود الباطن',
+            'payment_vouchers' => 'سندات الصرف',
+            'projects' => 'المشاريع',
+            'attachments' => 'المرفقات',
+            'activity' => 'النشاط',
+        ],
+        'figures' => [
+            'purchases_total' => 'المشتريات',
+            'paid' => 'المدفوع',
+            'due' => 'المستحق',
+            'projects' => 'المشاريع',
+        ],
+    ],
+];

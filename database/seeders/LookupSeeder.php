@@ -89,6 +89,31 @@ class LookupSeeder extends Seeder
                 ['تحويل بنكي', 'Bank transfer', 'transfer'],
                 ['شيك', 'Cheque', 'cheque'],
             ],
+            LookupType::SupplierSpecialty->value => [
+                ['مواد بناء', 'Building materials'],
+                ['حديد وخرسانة', 'Steel and concrete'],
+                ['كهرباء', 'Electrical'],
+                ['سباكة', 'Plumbing'],
+                ['دهانات', 'Paints'],
+                ['جبس وأسقف', 'Gypsum and ceilings'],
+                ['تأجير معدات', 'Equipment hire'],
+            ],
+            LookupType::WorkerTrade->value => [
+                ['بناء', 'Mason'],
+                ['نجار', 'Carpenter'],
+                ['حداد', 'Steel fixer'],
+                ['كهربائي', 'Electrician'],
+                ['سباك', 'Plumber'],
+                ['دهان', 'Painter'],
+                ['عامل', 'Labourer'],
+            ],
+            LookupType::EquipmentType->value => [
+                ['رافعة', 'Crane'],
+                ['حفار', 'Excavator'],
+                ['خلاطة', 'Mixer'],
+                ['سقالات', 'Scaffolding'],
+                ['مولد', 'Generator'],
+            ],
         ];
 
         foreach ($lists as $type => $rows) {

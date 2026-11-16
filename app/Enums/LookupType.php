@@ -19,6 +19,7 @@ enum LookupType: string
     case PaymentMethod = 'payment_method';
     case WorkerTrade = 'worker_trade';
     case EquipmentType = 'equipment_type';
+    case SupplierSpecialty = 'supplier_specialty';
 
     public function label(): string
     {

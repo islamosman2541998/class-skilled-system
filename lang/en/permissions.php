@@ -3,6 +3,7 @@
 return [
     'modules' => [
         'claims' => 'Claims',
+        'suppliers' => 'Suppliers and subcontractors',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',

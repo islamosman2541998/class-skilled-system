@@ -70,6 +70,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     require __DIR__.'/projects.php';
     require __DIR__.'/finance.php';
     require __DIR__.'/site.php';
+    require __DIR__.'/resources.php';
 
     Route::get('/design', [DesignController::class, 'index'])->name('design.index');
     Route::get('/design/record', [DesignController::class, 'record'])->name('design.record');

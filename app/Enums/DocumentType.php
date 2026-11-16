@@ -19,6 +19,7 @@ enum DocumentType: string
     case Purchase = 'purchase';
     case PaymentVoucher = 'payment_voucher';
     case Maintenance = 'maintenance';
+    case Subcontract = 'subcontract';
 
     public function defaultPrefix(): string
     {
@@ -35,6 +36,7 @@ enum DocumentType: string
             self::Purchase => 'PB',
             self::PaymentVoucher => 'PV',
             self::Maintenance => 'MR',
+            self::Subcontract => 'SC',
         };
     }
 

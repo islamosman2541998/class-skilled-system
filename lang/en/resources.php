@@ -1,0 +1,48 @@
+<?php
+
+return [
+    'suppliers' => [
+        'suppliers' => 'Suppliers',
+        'supplier' => 'Supplier',
+        'new' => 'New supplier',
+        'edit' => 'Edit supplier',
+        'name' => 'Name',
+        'name_ar' => 'Name in Arabic',
+        'name_en' => 'Name in English',
+        'type' => 'Type',
+        'specialty' => 'Specialty',
+        'trn' => 'TRN',
+        'trn_hint' => '15 digits',
+        'address' => 'Address',
+        'identity' => 'Details',
+        'bank' => 'Bank details',
+        'bank_name' => 'Bank',
+        'bank_account_name' => 'Account name',
+        'bank_iban' => 'IBAN',
+        'no_bank' => 'No bank details',
+        'notes' => 'Notes',
+        'active' => 'Status',
+        'is_active' => 'Active',
+        'is_inactive' => 'Inactive',
+        'has_records' => 'The supplier has linked records; deactivate it instead of deleting.',
+        'types' => [
+            'supplier' => 'Supplier',
+            'subcontractor' => 'Subcontractor',
+        ],
+        'tabs' => [
+            'overview' => 'Overview',
+            'purchases' => 'Purchases',
+            'subcontracts' => 'Subcontracts',
+            'payment_vouchers' => 'Payment vouchers',
+            'projects' => 'Projects',
+            'attachments' => 'Attachments',
+            'activity' => 'Activity',
+        ],
+        'figures' => [
+            'purchases_total' => 'Purchases',
+            'paid' => 'Paid',
+            'due' => 'Due',
+            'projects' => 'Projects',
+        ],
+    ],
+];
