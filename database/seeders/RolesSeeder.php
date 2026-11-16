@@ -30,6 +30,13 @@ class RolesSeeder extends Seeder
             'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
             'daily_reports.view', 'daily_reports.create', 'daily_reports.update', 'daily_reports.delete', 'daily_reports.restore', 'daily_reports.force-delete', 'daily_reports.export', 'daily_reports.print',
             'claims.view', 'claims.create', 'claims.update', 'claims.delete', 'claims.export', 'claims.print', 'claims.approve',
+            'suppliers.view', 'suppliers.create', 'suppliers.update', 'suppliers.delete', 'suppliers.restore', 'suppliers.export',
+            'purchases.view', 'purchases.create', 'purchases.update', 'purchases.delete', 'purchases.restore', 'purchases.export', 'purchases.print',
+            'subcontracts.view', 'subcontracts.create', 'subcontracts.update', 'subcontracts.delete', 'subcontracts.restore', 'subcontracts.export',
+            'payment_vouchers.view', 'payment_vouchers.create', 'payment_vouchers.update', 'payment_vouchers.export', 'payment_vouchers.print', 'payment_vouchers.cancel',
+            'workers.view', 'workers.create', 'workers.update', 'workers.delete', 'workers.restore', 'workers.export',
+            'attendance.view', 'attendance.create', 'attendance.update', 'attendance.delete', 'attendance.export',
+            'equipment.view', 'equipment.create', 'equipment.update', 'equipment.delete', 'equipment.restore', 'equipment.export',
         ]],
         'sales' => ['مبيعات', 'Sales', 'all', false, [
             'lookups.view',
@@ -46,6 +53,8 @@ class RolesSeeder extends Seeder
             'expenses.view', 'expenses.create',
             'daily_reports.view', 'daily_reports.create', 'daily_reports.update',
             'claims.view', 'claims.create', 'claims.update',
+            'suppliers.view', 'purchases.view', 'purchases.create',
+            'workers.view', 'attendance.view', 'attendance.create', 'attendance.update', 'equipment.view',
         ]],
         'accountant' => ['محاسب', 'Accountant', 'all', false, [
             'lookups.view', 'clients.view', 'price_items.view', 'quotations.view', 'quotations.export', 'quotations.print',
@@ -56,6 +65,11 @@ class RolesSeeder extends Seeder
             'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
             'daily_reports.view',
             'claims.view', 'claims.export', 'claims.print',
+            'suppliers.view', 'suppliers.create', 'suppliers.update', 'suppliers.export',
+            'purchases.view', 'purchases.create', 'purchases.update', 'purchases.delete', 'purchases.export', 'purchases.print',
+            'subcontracts.view', 'subcontracts.create', 'subcontracts.update', 'subcontracts.export',
+            'payment_vouchers.view', 'payment_vouchers.create', 'payment_vouchers.update', 'payment_vouchers.export', 'payment_vouchers.print', 'payment_vouchers.cancel',
+            'workers.view', 'workers.export', 'attendance.view', 'attendance.export', 'equipment.view', 'equipment.export',
         ]],
     ];
 

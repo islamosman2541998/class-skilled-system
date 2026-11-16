@@ -113,3 +113,17 @@ Final self-review against the Review Focus (no separate reviewer): duplicate rep
 Deferred: a draft claim is a snapshot of the items when it started (items added later need the draft deleted and started again); a claim's draft invoice stays editable like other draft invoices; a claim period may overlap the previous claim; restoring a deleted draft claim from the trash can leave two open claims; retention release at handover is Stage 5.
 
 Pending: `migrate:fresh --seed` and `DemoSeeder` on MySQL (needs the go-ahead, it resets the local data); visual pass at 375 px and 1440 px (needs a signed-in browser session).
+
+## Stage 5 — Resources (code complete; MySQL gate and visual pass pending)
+
+Plan: `docs/plans/2026-11-16-stage-5-resources.md`.
+
+Delivered: suppliers and subcontractors (type, specialty list, contact, TRN, bank details, page with purchases, paid, due and projects); purchase invoices on projects (lines, VAT at the settings rate or none, attachment, payment status from vouchers, subtotal charged to project cost, input VAT in the VAT summary); subcontracts (scope, value, payment lines never above the value, "bill" per line making one purchase invoice, billed lines locked); payment vouchers allocated over the supplier's invoices under row locks, cancelled with a reason and never deleted; supplier statement report and PDF in Arabic / English / both; workers and a phone-first attendance sheet (present, half day, absent, overtime) with each day's cost stored at that day's wage, a worker on one project a day; equipment (owned or rented) assigned to projects for a period without overlaps; project cost = expenses + purchases + labour + equipment, and profitability cost by type (materials, subcontracts, labour, equipment, expenses); the retention release invoice after handover of a claims project (deferred from Stage 4); resources demo data; default role permissions.
+
+Checked so far: Pint and PHPStan clean; the build succeeds; every task's full suite passed (627 tests after Task 8).
+
+Final self-review against the Review Focus (no separate reviewer): voucher allocation locking, single bill per subcontract line, one attendance row per worker and day with the wage of the day, paid purchases locked, and cost / VAT movement are each covered by tests. Fixed in the review: a deleted subcontract bill kept its payment line linked, so the line could not be billed again.
+
+Deferred: a voucher's unallocated amount is not yet shown as a supplier credit on the supplier page (it is in the statement); equipment assignments need an end date (no open-ended hire); attendance has no edit screen per row (the sheet is re-saved).
+
+Pending: `migrate:fresh --seed` and `DemoSeeder` on MySQL (needs the go-ahead, it resets the local data); visual pass at 375 px and 1440 px (needs a signed-in browser session). Stage 4's pending gate items are still open as well.

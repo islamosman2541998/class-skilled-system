@@ -125,3 +125,17 @@ it('cancelled subcontract cannot be billed', function () {
 
     expect(Purchase::query()->count())->toBe(0);
 });
+
+it('a deleted bill frees its line to be billed again', function () {
+    actingAs($this->user)->post(route('subcontracts.store'), subcontractPayload());
+    $payment = Subcontract::query()->sole()->payments()->orderBy('sort_order')->firstOrFail();
+    $first = app(BillSubcontractPayment::class)->handle($payment, $this->user);
+
+    $first->delete();
+    $second = app(BillSubcontractPayment::class)->handle($payment->fresh(), $this->user);
+
+    expect($second->id)->not->toBe($first->id)
+        ->and($second->subcontract_payment_id)->toBe($payment->id)
+        ->and(Purchase::query()->count())->toBe(1)
+        ->and($this->project->fresh()->cost_total)->toBe('6000.00');
+});

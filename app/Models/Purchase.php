@@ -77,6 +77,14 @@ class Purchase extends Model implements GuardsDeletion, HasMedia
         static::saved($refresh);
         static::deleted($refresh);
         static::restored($refresh);
+
+        // A deleted subcontract bill frees its payment line, so the line can be billed again.
+        static::deleting(function (Purchase $purchase) {
+            if ($purchase->subcontract_payment_id !== null) {
+                $purchase->subcontract_payment_id = null;
+                $purchase->saveQuietly();
+            }
+        });
     }
 
     /** @return BelongsTo<Supplier, $this> */
