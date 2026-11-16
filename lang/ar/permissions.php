@@ -5,6 +5,7 @@ return [
         'claims' => 'المستخلصات',
         'suppliers' => 'الموردون ومقاولو الباطن',
         'purchases' => 'فواتير الشراء',
+        'subcontracts' => 'عقود الباطن',
         'daily_reports' => 'التقارير اليومية',
         'reports' => 'التقارير',
         'expenses' => 'المصروفات',

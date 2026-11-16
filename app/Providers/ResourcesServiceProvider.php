@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SupplierController;
 use App\Models\Project;
 use App\Models\Purchase;
+use App\Models\Subcontract;
 use App\Models\Supplier;
 use App\Search\PurchaseSearchProvider;
 use App\Search\SearchRegistry;
@@ -53,6 +55,14 @@ class ResourcesServiceProvider extends ServiceProvider
             'permission' => 'purchases.view',
             'value' => fn (Supplier $supplier) => money((string) $supplier->purchases()->visibleTo(auth()->user())->sum('total')),
         ];
+
+        PermissionRegistry::register('subcontracts');
+        Menu::register('resources', ['label' => 'resources.subcontracts.subcontracts', 'icon' => 'file-text', 'route' => 'subcontracts.index', 'permission' => 'subcontracts.view']);
+        TrashRegistry::register(Subcontract::class);
+        Supplier::$linkedRelations[] = 'subcontracts';
+        Project::$linkedRelations[] = 'subcontracts';
+        SupplierController::$tabs['subcontracts'] = ['subcontracts.view'];
+        PurchaseController::$projectViews[] = 'subcontracts.partials.project-panel';
 
         // Project cost: purchase invoices before VAT (spec §8.16).
         ProjectLedger::$costSources['purchases'] = fn (Project $project) => (string) Purchase::query()->where('project_id', $project->id)->sum('subtotal');

@@ -5,6 +5,7 @@ return [
         'claims' => 'Claims',
         'suppliers' => 'Suppliers and subcontractors',
         'purchases' => 'Purchase invoices',
+        'subcontracts' => 'Subcontracts',
         'daily_reports' => 'Daily reports',
         'reports' => 'Reports',
         'expenses' => 'Expenses',

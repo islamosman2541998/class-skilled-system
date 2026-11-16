@@ -76,6 +76,12 @@ class Supplier extends Model implements GuardsDeletion, HasMedia
         return $this->hasMany(Purchase::class);
     }
 
+    /** @return HasMany<Subcontract, $this> */
+    public function subcontracts(): HasMany
+    {
+        return $this->hasMany(Subcontract::class);
+    }
+
     public function deletionBlockedReason(User $by): ?string
     {
         foreach (self::$linkedRelations as $relation) {
