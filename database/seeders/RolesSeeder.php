@@ -28,6 +28,8 @@ class RolesSeeder extends Seeder
             'receipts.view', 'receipts.create', 'receipts.update', 'receipts.export', 'receipts.print', 'receipts.cancel',
             'expenses.view', 'expenses.create', 'expenses.update', 'expenses.delete', 'expenses.restore', 'expenses.force-delete', 'expenses.export', 'expenses.print',
             'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
+            'daily_reports.view', 'daily_reports.create', 'daily_reports.update', 'daily_reports.delete', 'daily_reports.restore', 'daily_reports.force-delete', 'daily_reports.export', 'daily_reports.print',
+            'claims.view', 'claims.create', 'claims.update', 'claims.delete', 'claims.export', 'claims.print', 'claims.approve',
         ]],
         'sales' => ['مبيعات', 'Sales', 'all', false, [
             'lookups.view',
@@ -42,6 +44,8 @@ class RolesSeeder extends Seeder
             'clients.view', 'leads.view', 'site_visits.view', 'site_visits.update', 'quotations.view',
             'projects.view', 'projects.update', 'maintenance.view', 'maintenance.create', 'maintenance.update',
             'expenses.view', 'expenses.create',
+            'daily_reports.view', 'daily_reports.create', 'daily_reports.update',
+            'claims.view', 'claims.create', 'claims.update',
         ]],
         'accountant' => ['محاسب', 'Accountant', 'all', false, [
             'lookups.view', 'clients.view', 'price_items.view', 'quotations.view', 'quotations.export', 'quotations.print',
@@ -50,6 +54,8 @@ class RolesSeeder extends Seeder
             'receipts.view', 'receipts.create', 'receipts.update', 'receipts.export', 'receipts.print', 'receipts.cancel',
             'expenses.view', 'expenses.create', 'expenses.update', 'expenses.delete', 'expenses.restore', 'expenses.export', 'expenses.print',
             'reports.view', 'reports.export', 'finance.costs', 'finance.profitability',
+            'daily_reports.view',
+            'claims.view', 'claims.export', 'claims.print',
         ]],
     ];
 

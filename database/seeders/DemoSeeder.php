@@ -46,7 +46,7 @@ class DemoSeeder extends Seeder
 
         $this->seedLookups(50000);
 
-        $this->call([SalesDemoSeeder::class, ProjectsDemoSeeder::class, FinanceDemoSeeder::class]);
+        $this->call([SalesDemoSeeder::class, ProjectsDemoSeeder::class, FinanceDemoSeeder::class, SiteDemoSeeder::class]);
     }
 
     private function seedLookups(int $count): void

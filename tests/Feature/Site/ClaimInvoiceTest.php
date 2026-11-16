@@ -115,3 +115,14 @@ it('the next claim takes previous from an invoiced claim', function () {
         ->and($next->lines()->where('project_item_id', $this->lump->id)->value('previous_quantity'))->toBe('0.500')
         ->and($next->period_from->toDateString())->toBe('2026-11-16');
 });
+
+it('an approved claim whose draft invoice was deleted offers to create it again', function () {
+    $claim = submittedClaim();
+    app(ApproveClaim::class)->handle($claim, $this->user)->delete();
+
+    actingAs($this->user)->get(route('claims.show', $claim))->assertOk()->assertSee(__('site.claims.create_invoice'));
+    actingAs($this->user)->patch(route('claims.approve', $claim))->assertRedirect(route('claims.show', $claim));
+
+    expect(Invoice::query()->where('claim_id', $claim->id)->count())->toBe(1)
+        ->and($claim->fresh()->status)->toBe(ClaimStatus::Approved);
+});

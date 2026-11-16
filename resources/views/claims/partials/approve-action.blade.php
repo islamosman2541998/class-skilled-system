@@ -7,6 +7,14 @@
             <button type="submit" class="btn btn-primary"><x-icon name="check" :size="16" /> {{ __('site.claims.approve') }}</button>
         </form>
     @endcan
+@elseif ($claim->status === \App\Enums\ClaimStatus::Approved && ! $claim->invoice)
+    @can('claims.approve')
+        <form method="POST" action="{{ route('claims.approve', $claim) }}">
+            @csrf
+            @method('PATCH')
+            <button type="submit" class="btn btn-primary"><x-icon name="file-invoice" :size="16" /> {{ __('site.claims.create_invoice') }}</button>
+        </form>
+    @endcan
 @elseif ($claim->invoice)
     @can('invoices.view')
         <a href="{{ route('invoices.show', $claim->invoice) }}" class="btn btn-outline"><x-icon name="file-invoice" :size="16" /> {{ $claim->invoice->number ?? __('site.claims.draft_invoice') }}</a>

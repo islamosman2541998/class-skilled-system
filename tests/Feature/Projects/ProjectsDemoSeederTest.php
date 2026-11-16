@@ -30,7 +30,7 @@ it('seeds projects demo data that renders every projects page', function () {
         ->and($statuses->sort()->values()->all())->toBe(collect(ProjectStatus::cases())->map->value->sort()->values()->all())
         ->and(Project::query()->get()->filter->isLate()->count())->toBeGreaterThanOrEqual(2)
         ->and(Project::query()->doesntHave('stages')->exists())->toBeFalse()
-        ->and(Project::query()->doesntHave('installments')->exists())->toBeFalse()
+        ->and(Project::query()->where('billing_method', 'installments')->doesntHave('installments')->exists())->toBeFalse()
         ->and(Variation::query()->count())->toBeGreaterThanOrEqual(3)
         ->and(ProjectHandover::query()->count())->toBe(3)
         ->and(MaintenanceRequest::query()->count())->toBe(10)

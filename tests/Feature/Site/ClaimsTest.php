@@ -2,6 +2,7 @@
 
 use App\Actions\Projects\DecideVariation;
 use App\Actions\Projects\SaveVariation;
+use App\Actions\Site\SaveClaim;
 use App\Enums\ClaimStatus;
 use App\Models\Claim;
 use App\Models\Project;
@@ -30,6 +31,16 @@ function startClaim(Project $project): Claim
     actingAs(test()->user)->post(route('claims.store', $project))->assertRedirect();
 
     return Claim::query()->latest('id')->firstOrFail();
+}
+
+/** Enters some work on the first line so the claim can be submitted. */
+function workOn(Claim $claim): void
+{
+    $line = $claim->lines()->orderBy('sort_order')->firstOrFail();
+    app(SaveClaim::class)->handle($claim, [
+        'period_from' => $claim->period_from->toDateString(), 'period_to' => $claim->period_to->toDateString(),
+        'lines' => [$line->id => ['current_quantity' => '1']],
+    ], test()->user);
 }
 
 /** Line id of a claim for a project item. */
@@ -132,6 +143,7 @@ it('submitting reserves PC-2026-0001 and freezes the lines', function () {
 
 it('returning to draft keeps the number and records the note', function () {
     $claim = startClaim($this->project);
+    workOn($claim);
     actingAs($this->user)->patch(route('claims.submit', $claim));
 
     actingAs($this->user)->patch(route('claims.return', $claim), ['return_note' => 'راجع كمية البلاط'])->assertRedirect(route('claims.show', $claim));
@@ -141,6 +153,7 @@ it('returning to draft keeps the number and records the note', function () {
         ->and($claim->number)->toBe('PC-2026-0001')
         ->and($claim->return_note)->toBe('راجع كمية البلاط');
 
+    workOn($claim);
     actingAs($this->user)->patch(route('claims.submit', $claim));
     expect($claim->fresh()->number)->toBe('PC-2026-0001');
 });
@@ -166,6 +179,7 @@ it('engineer prepares claims of own projects, approve needs claims.approve', fun
     actingAs($engineer)->post(route('claims.store', $own))->assertRedirect();
     $claim = Claim::query()->where('project_id', $own->id)->firstOrFail();
     actingAs($engineer)->get(route('claims.edit', $claim))->assertOk();
+    workOn($claim);
     actingAs($engineer)->patch(route('claims.submit', $claim))->assertRedirect();
     actingAs($engineer)->patch(route('claims.return', $claim), ['return_note' => 'ملاحظة'])->assertForbidden();
 
@@ -176,6 +190,7 @@ it('engineer prepares claims of own projects, approve needs claims.approve', fun
 
 it('cannot delete a submitted claim', function () {
     $claim = startClaim($this->project);
+    workOn($claim);
     actingAs($this->user)->patch(route('claims.submit', $claim));
 
     actingAs($this->user)->delete(route('claims.destroy', $claim))->assertSessionHas('error');
@@ -190,6 +205,7 @@ it('claims setup and contract items are locked once a claim was submitted', func
     $claim = startClaim($this->project);
 
     expect($this->project->fresh()->hasLockedClaims())->toBeFalse();
+    workOn($claim);
     actingAs($this->user)->patch(route('claims.submit', $claim));
     expect($this->project->fresh()->hasLockedClaims())->toBeTrue();
 
@@ -201,4 +217,12 @@ it('claims setup and contract items are locked once a claim was submitted', func
     actingAs($this->user)->get(route('projects.show', [$this->project, 'tab' => 'claims']))->assertOk()
         ->assertSee(__('site.setup.locked'))
         ->assertSee('PC-2026-0001');
+});
+
+it('refuses to submit a claim without work', function () {
+    $claim = startClaim($this->project);
+
+    actingAs($this->user)->patch(route('claims.submit', $claim))->assertSessionHas('error', __('site.claims.no_work'));
+
+    expect($claim->fresh()->status)->toBe(ClaimStatus::Draft)->and($claim->fresh()->number)->toBeNull();
 });

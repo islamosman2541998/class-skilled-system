@@ -99,3 +99,17 @@ Added beyond the plan: an installments report (the list behind the "due installm
 Known gaps: starting role permissions apply to new installs only (existing roles keep their set); dashboards per role were checked by tests, visually only as the system administrator (demo users have random passwords); the client statement PDF prints all dates from the client page, a period PDF needs the `from` / `to` query; supplier statements (§9.2) wait for suppliers; "reports not sent" on the engineer dashboard arrives with daily reports in Stage 4; the Tajawal OFL licence text is still to add.
 
 Next: Stage 4 plan.
+
+## Stage 4 — Site (code complete; MySQL gate and visual pass pending)
+
+Plan: `docs/plans/2026-11-16-stage-4-site.md`.
+
+Delivered: daily reports (one per project per day with a link to the existing report, no future dates, stage progress from the latest-dated report, photos and video, list with filters, project tab, global search); days without a report (weekly days off in the system settings, default Friday; a "days without a report" panel on the project tab with a link per day; the "daily reports not sent" report and the engineer dashboard figure linking to it); projects billed by claims (no payment schedule, conversion copies items and the quotation discount rate, approved variations add no installment, claims tab instead of payments, retention / contract discount / advance setup and contract items editable until a claim is submitted, the billing method fixed after creation, default retention in the finance settings); claims (one open claim per project, previous quantities from approved or invoiced claims, entry by current quantity or cumulative percent, bounds against the contract quantity, server totals work → discount → gross → retention → advance recovery → net → VAT, numbers reserved at submission, return to draft with a note, approval creating a draft invoice equal to the claim total, issuing / cancelling that invoice moving the claim, claim PDF in Arabic / English / both with WhatsApp signed links); site demo data; default role permissions.
+
+Checked so far: Pint and PHPStan clean; 575 tests pass on SQLite; build succeeds.
+
+Final self-review against the Review Focus (no separate reviewer): duplicate reports, stage order, claim bounds, one open claim, recovery cap, net 10,000.01 rounding, double approval and the cancel / replacement link are each covered by tests. Fixed in the review: a claim without any quantity could be submitted (it took a number and led to an empty invoice); an approved claim whose draft invoice was deleted had no button to create it again.
+
+Deferred: a draft claim is a snapshot of the items when it started (items added later need the draft deleted and started again); a claim's draft invoice stays editable like other draft invoices; a claim period may overlap the previous claim; restoring a deleted draft claim from the trash can leave two open claims; retention release at handover is Stage 5.
+
+Pending: `migrate:fresh --seed` and `DemoSeeder` on MySQL (needs the go-ahead, it resets the local data); visual pass at 375 px and 1440 px (needs a signed-in browser session).

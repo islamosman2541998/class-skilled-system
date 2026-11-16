@@ -163,11 +163,14 @@ class ProjectsDemoSeeder extends Seeder
                 'description' => 'مشروع '.$service->name_ar.' للعميل '.$client->name_ar,
             ], $admin);
 
-            InstallmentSchedule::fromPercents($project, [
-                ['label_ar' => 'دفعة مقدمة', 'label_en' => 'Advance payment', 'percent' => '30'],
-                ['label_ar' => 'عند إنجاز الأعمال الرئيسية', 'label_en' => 'On main works completion', 'percent' => '50'],
-                ['label_ar' => 'عند التسليم', 'label_en' => 'On handover', 'percent' => '20'],
-            ]);
+            // A project billed by claims has no payment schedule (Stage 4).
+            if (! $project->isClaimsBilled()) {
+                InstallmentSchedule::fromPercents($project, [
+                    ['label_ar' => 'دفعة مقدمة', 'label_en' => 'Advance payment', 'percent' => '30'],
+                    ['label_ar' => 'عند إنجاز الأعمال الرئيسية', 'label_en' => 'On main works completion', 'percent' => '50'],
+                    ['label_ar' => 'عند التسليم', 'label_en' => 'On handover', 'percent' => '20'],
+                ]);
+            }
 
             $plans[$project->id] = $plan;
             $projects->push($project);

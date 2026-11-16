@@ -124,6 +124,8 @@ return [
         'approve_confirm' => 'Approving creates a draft invoice for the claim amount.',
         'approved' => 'Claim approved and a draft invoice created',
         'draft_invoice' => 'Draft invoice',
+        'create_invoice' => 'Create invoice',
+        'no_work' => 'Enter a current quantity for at least one item before submitting.',
         'invoice_line' => 'Progress claim :number for :from - :to',
         'statuses' => [
             'draft' => 'Draft',

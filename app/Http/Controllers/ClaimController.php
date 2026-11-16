@@ -109,7 +109,11 @@ class ClaimController extends Controller
         Gate::authorize('claims.update');
         $this->ensureVisible($request, $claim);
 
-        $submit->handle($claim, $request->user());
+        try {
+            $submit->handle($claim, $request->user());
+        } catch (DomainException $exception) {
+            return redirect()->route('claims.show', $claim)->with('error', $exception->getMessage());
+        }
 
         return redirect()->route('claims.show', $claim)->with('success', __('site.claims.submitted'));
     }

@@ -8,6 +8,7 @@ use App\Models\Claim;
 use App\Models\User;
 use App\Services\ActivityLogger;
 use App\Services\NumberGenerator;
+use DomainException;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -18,6 +19,9 @@ class SubmitClaim
 {
     public function __construct(private readonly NumberGenerator $numbers) {}
 
+    /**
+     * @throws DomainException when no line has a current quantity
+     */
     public function handle(Claim $claim, User $by): Claim
     {
         return DB::transaction(function () use ($claim, $by) {
@@ -25,6 +29,11 @@ class SubmitClaim
 
             if ($locked->status !== ClaimStatus::Draft) {
                 return $locked;
+            }
+
+            // A claim without work would take a number and lead to an empty invoice.
+            if (! $locked->lines()->where('current_quantity', '!=', 0)->exists()) {
+                throw new DomainException(__('site.claims.no_work'));
             }
 
             $locked->number ??= $this->numbers->next(DocumentType::Claim, $locked->period_to);
