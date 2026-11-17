@@ -1,8 +1,11 @@
 # Website link — changes needed in the website project
 
-Spec §10. This system's side is built (Stage 1, Task 10). The website project
-(`D:\laragon\www\class-skilled`) was **not** edited, by decision of 2026-11-14. These are the exact changes
-to make there, kept small as the spec requires: one send action, one `synced_at` column, two endpoints.
+Spec §10. This system's side is built (Stage 1, Task 10). The website side was added on 2026-11-17 in
+`D:\laragon\www\class-skilled` (recorded in its `_design/PROGRESS.md` under "Changes to earlier phases",
+tests in `tests/Feature/SystemLinkTest.php`) and checked end to end locally: a request sent by the website
+became a lead, and "fetch requests" pulled a missed one and marked it synced. The sections below describe
+what the website does. To go live, set `SYSTEM_URL` and `SYSTEM_KEY` in the website's `.env` and generate
+the key in System → Settings → Website link (both sites on https; attachment links are fetched over https only).
 
 ## 1. Settings on the website
 
