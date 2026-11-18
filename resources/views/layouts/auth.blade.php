@@ -11,13 +11,12 @@
 <body>
     <main class="auth-page">
         <div class="auth-card">
-            <div class="auth-brand">
+            <div @class(['auth-brand', 'has-logo' => $logo])>
                 @if ($logo)
-                    <img src="{{ route('branding.show', ['filename' => basename($logo)]) }}" alt="">
+                    <img src="{{ route('branding.show', ['filename' => basename($logo)]) }}" alt="{{ $companyName }}">
                 @else
                     <span class="brand-mark" aria-hidden="true">{{ __('app.brand_mark') }}</span>
                 @endif
-                <span>{{ $companyName }}</span>
             </div>
 
             @yield('content')

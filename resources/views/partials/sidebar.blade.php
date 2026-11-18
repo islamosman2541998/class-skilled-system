@@ -3,13 +3,13 @@
     $companyName = app()->getLocale() === 'ar' ? $company->name_ar : ($company->name_en ?: $company->name_ar);
 @endphp
 <aside class="app-sidebar" id="app-sidebar">
-    <a class="sidebar-brand" href="{{ route('home') }}">
+    <a @class(['sidebar-brand', 'has-logo' => $company->logo_path]) href="{{ route('home') }}">
         @if ($company->logo_path)
-            <img src="{{ route('branding.show', ['filename' => basename($company->logo_path)]) }}" alt="">
+            <img src="{{ route('branding.show', ['filename' => basename($company->logo_path)]) }}" alt="{{ $companyName }}">
         @else
             <span class="brand-mark" aria-hidden="true">{{ __('app.brand_mark') }}</span>
+            <span class="brand-name">{{ $companyName }}</span>
         @endif
-        <span class="brand-name">{{ $companyName }}</span>
     </a>
 
     <nav class="sidebar-nav" aria-label="{{ __('app.menu') }}">

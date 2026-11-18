@@ -38,6 +38,18 @@
         .sidebar-brand {
             padding-inline: 1rem;
         }
+
+        .sidebar-brand.has-logo {
+            height: 104px;
+            justify-content: center;
+            padding: .875rem 1rem;
+
+            img {
+                height: 100%;
+                padding: .45rem;
+                border-radius: 10px;
+            }
+        }
     }
 
     .app.sidebar-open {
@@ -68,6 +80,24 @@
 }
 
 @media (max-width: 575.98px) {
+    .auth-page {
+        padding: 1rem .75rem;
+    }
+
+    .auth-card {
+        padding: 1.5rem 1.25rem;
+    }
+
+    .auth-brand.has-logo {
+        min-height: 112px;
+        margin-bottom: 1.5rem;
+
+        img {
+            width: min(100%, 260px);
+            max-height: 112px;
+        }
+    }
+
     .page-title {
         font-size: 1.1875rem;
     }

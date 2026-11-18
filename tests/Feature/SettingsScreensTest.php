@@ -118,10 +118,15 @@ it('saves both logos and serves them on public pages without a storage link', fu
     expect($brandUrl)->not->toBe($loginUrl);
     Storage::disk('public')->assertExists([$company->logo_path, $company->login_logo_path, $company->stamp_path]);
     actingAs($admin)->get(route('settings.edit', 'company'))->assertSee($brandUrl, false)->assertSee($loginUrl, false)->assertSee($stampUrl, false);
-    actingAs($admin)->get(route('home'))->assertSee($brandUrl, false);
+    actingAs($admin)->get(route('home'))
+        ->assertSee($brandUrl, false)
+        ->assertDontSee('class="brand-name"', false);
 
     auth()->logout();
-    $this->get(route('login'))->assertSee($loginUrl, false);
+    $this->get(route('login'))
+        ->assertSee($loginUrl, false)
+        ->assertSee('class="auth-brand has-logo"', false)
+        ->assertDontSee('<span>Company</span>', false);
     $this->get($brandUrl)->assertOk()->assertHeader('Content-Type', 'image/png');
     $this->get($loginUrl)->assertOk()->assertHeader('Content-Type', 'image/png');
     $this->get($stampUrl)->assertNotFound();
