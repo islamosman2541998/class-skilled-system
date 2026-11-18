@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Actions\Leads\ReceiveWebsiteLead;
+use App\Exceptions\InvalidUploadException;
 use App\Http\Requests\Api\WebsiteLeadRequest;
 use App\Services\Uploads\UploadValidator;
 use App\Settings\IntegrationSettings;
@@ -99,10 +100,39 @@ class WebsiteSync
                 continue;
             }
 
-            $files[] = ['path' => $path, 'name' => basename((string) parse_url($url, PHP_URL_PATH)) ?: 'file'];
+            // The website's links end with an id, so the real name comes from its response header.
+            $name = self::fileName($response->header('Content-Disposition')) ?? (basename((string) parse_url($url, PHP_URL_PATH)) ?: 'file');
+
+            // A file of a type the system refuses is left out; the request itself still arrives.
+            try {
+                $this->uploads->kind($path, $name);
+            } catch (InvalidUploadException $e) {
+                Log::info('Website file skipped: '.$e->getMessage());
+                @unlink($path);
+
+                continue;
+            }
+
+            $files[] = ['path' => $path, 'name' => $name];
         }
 
         return $files;
+    }
+
+    /** The file name of a Content-Disposition header (filename*=UTF-8'' or filename=), without any folder. */
+    private static function fileName(string $header): ?string
+    {
+        if (preg_match("/filename\\*=UTF-8''([^;]+)/i", $header, $match) === 1) {
+            $name = rawurldecode(trim($match[1], " \"'"));
+        } elseif (preg_match('/filename="?([^";]+)"?/i', $header, $match) === 1) {
+            $name = trim($match[1]);
+        } else {
+            return null;
+        }
+
+        $name = basename(str_replace('\\', '/', $name));
+
+        return $name !== '' ? $name : null;
     }
 
     private function record(string $status, int $count): void

@@ -64,6 +64,35 @@ it('downloads files only from the website host', function () {
     expect(Lead::query()->count())->toBe(2);
 });
 
+it('names a downloaded file from the website response, not from its link', function () {
+    Http::fake([
+        'class-skilled.example/api/system/quote-requests/unsynced' => Http::response(unsyncedPayload(['https://class-skilled.example/api/system/quote-requests/files/45?signature=abc'])),
+        'class-skilled.example/api/system/quote-requests/files/*' => Http::response('%PDF-1.4 test', 200, ['Content-Type' => 'application/pdf', 'Content-Disposition' => 'attachment; filename=plan.pdf']),
+        'class-skilled.example/api/system/quote-requests/synced' => Http::response(['ok' => true]),
+    ]);
+
+    expect(app(WebsiteSync::class)->fetch())->toBe(2);
+
+    $lead = Lead::query()->where('external_id', 'QR-0100')->sole();
+    expect($lead->getMedia('attachments'))->toHaveCount(1)
+        ->and($lead->getFirstMedia('attachments')->file_name)->toEndWith('.pdf')
+        ->and(app(IntegrationSettings::class)->last_sync_status)->toBe('ok');
+});
+
+it('a refused file is skipped and the request still arrives', function () {
+    Http::fake([
+        'class-skilled.example/api/system/quote-requests/unsynced' => Http::response(unsyncedPayload(['https://class-skilled.example/api/system/quote-requests/files/46?signature=abc'])),
+        'class-skilled.example/api/system/quote-requests/files/*' => Http::response('MZ binary', 200, ['Content-Disposition' => 'attachment; filename=setup.exe']),
+        'class-skilled.example/api/system/quote-requests/synced' => Http::response(['ok' => true]),
+    ]);
+
+    expect(app(WebsiteSync::class)->fetch())->toBe(2);
+
+    expect(Lead::query()->where('external_id', 'QR-0100')->sole()->getMedia('attachments'))->toHaveCount(0)
+        ->and(app(IntegrationSettings::class)->last_sync_status)->toBe('ok');
+    Http::assertSent(fn ($request) => str_ends_with($request->url(), '/synced'));
+});
+
 it('generates a key once and stores only its hash', function () {
     $response = actingAs(scopedUser(['settings.manage']))->post(route('settings.integration.key'));
 
