@@ -97,12 +97,45 @@ it('replaces the logo and deletes the old file', function () {
     Storage::disk('public')->assertMissing($second);
 });
 
+it('saves both logos and serves them on public pages without a storage link', function () {
+    Storage::fake('public');
+    $admin = settingsAdmin();
+
+    actingAs($admin)->put(route('settings.update', 'company'), [
+        'name_ar' => 'Company',
+        'name_en' => 'Company',
+        'logo' => UploadedFile::fake()->image('brand.png', 200, 80),
+        'login_logo' => UploadedFile::fake()->image('sign-in.png', 200, 80),
+        'stamp' => UploadedFile::fake()->image('stamp.png', 80, 80),
+    ])->assertRedirect(route('settings.edit', 'company'))->assertSessionHasNoErrors();
+
+    app()->forgetInstance(CompanySettings::class);
+    $company = app(CompanySettings::class);
+    $brandUrl = route('branding.show', ['filename' => basename($company->logo_path)]);
+    $loginUrl = route('branding.show', ['filename' => basename($company->login_logo_path)]);
+    $stampUrl = route('branding.show', ['filename' => basename($company->stamp_path)]);
+
+    expect($brandUrl)->not->toBe($loginUrl);
+    Storage::disk('public')->assertExists([$company->logo_path, $company->login_logo_path, $company->stamp_path]);
+    actingAs($admin)->get(route('settings.edit', 'company'))->assertSee($brandUrl, false)->assertSee($loginUrl, false)->assertSee($stampUrl, false);
+    actingAs($admin)->get(route('home'))->assertSee($brandUrl, false);
+
+    auth()->logout();
+    $this->get(route('login'))->assertSee($loginUrl, false);
+    $this->get($brandUrl)->assertOk()->assertHeader('Content-Type', 'image/png');
+    $this->get($loginUrl)->assertOk()->assertHeader('Content-Type', 'image/png');
+    $this->get($stampUrl)->assertNotFound();
+    $this->get('/branding/missing.png')->assertNotFound();
+});
+
 it('rejects a logo that is not an image', function () {
     Storage::fake('public');
 
     actingAs(settingsAdmin())->put(route('settings.update', 'company'), [
         'name_ar' => 'x', 'name_en' => 'x', 'logo' => UploadedFile::fake()->create('logo.svg', 10, 'image/svg+xml'),
     ])->assertSessionHasErrors('logo');
+
+    $this->get(route('settings.edit', 'company'))->assertSee(__('settings.validation_failed'));
 });
 
 it('rejects an invalid colour', function () {

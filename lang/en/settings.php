@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'validation_failed' => 'Changes were not saved. Review the errors shown beside the fields.',
     'settings' => 'Settings',
     'lists_title' => 'Lists',
     'lists' => [
@@ -78,6 +79,7 @@ return [
         'stamp' => 'Stamp',
         'signature' => 'Signature',
         'image_hint' => 'PNG, JPG or WebP, up to 2 MB.',
+        'upload_failed' => 'Could not save the image. Check storage folder permissions and try again.',
         'remove_image' => 'Remove the current image',
     ],
     'appearance' => [

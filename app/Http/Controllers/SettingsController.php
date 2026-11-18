@@ -18,8 +18,10 @@ use App\Settings\UploadSettings;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Spatie\LaravelSettings\Settings;
+use Throwable;
 
 class SettingsController extends Controller
 {
@@ -60,11 +62,23 @@ class SettingsController extends Controller
             $settings->{$key} = $value;
         }
 
-        if ($settings instanceof CompanySettings) {
-            $this->storeBrandingImages($request, $settings);
+        [$oldImages, $newImages] = $settings instanceof CompanySettings
+            ? $this->storeBrandingImages($request, $settings)
+            : [[], []];
+
+        try {
+            $settings->save();
+        } catch (Throwable $e) {
+            foreach ($newImages as $path) {
+                Storage::disk('public')->delete($path);
+            }
+
+            throw $e;
         }
 
-        $settings->save();
+        foreach ($oldImages as $path) {
+            Storage::disk('public')->delete($path);
+        }
 
         ActivityLogger::recordChange('settings_updated', $before, $settings->toArray(), null, ['group' => $group], 'settings');
 
@@ -76,24 +90,45 @@ class SettingsController extends Controller
         return app(self::GROUPS[$group][0]);
     }
 
-    private function storeBrandingImages(SettingsRequest $request, CompanySettings $settings): void
+    /** @return array{list<string>, list<string>} */
+    private function storeBrandingImages(SettingsRequest $request, CompanySettings $settings): array
     {
         $disk = Storage::disk('public');
+        $oldImages = [];
+        $newImages = [];
 
         foreach (CompanySettingsRequest::IMAGES as $field => $property) {
             $current = $settings->{$property};
 
             if ($request->hasFile($field)) {
-                $settings->{$property} = $request->file($field)->store('branding', 'public');
+                try {
+                    $path = $request->file($field)->store('branding', 'public');
+                } catch (Throwable $e) {
+                    report($e);
+                    $path = false;
+                }
+
+                if ($path === false) {
+                    foreach ($newImages as $newPath) {
+                        $disk->delete($newPath);
+                    }
+
+                    throw ValidationException::withMessages([$field => __('settings.company.upload_failed')]);
+                }
+
+                $settings->{$property} = $path;
+                $newImages[] = $path;
             } elseif ($request->boolean('remove_'.$field)) {
                 $settings->{$property} = null;
             } else {
                 continue;
             }
 
-            if ($current && $disk->exists($current)) {
-                $disk->delete($current);
+            if ($current) {
+                $oldImages[] = $current;
             }
         }
+
+        return [$oldImages, $newImages];
     }
 }

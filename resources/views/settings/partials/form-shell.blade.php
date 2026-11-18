@@ -6,6 +6,10 @@
 @section('content')
     <x-page-header :title="__('settings.groups.'.$group)" :breadcrumbs="[__('settings.settings') => route('settings.index')]" />
 
+    @if ($errors->any())
+        <div class="alert alert-danger" role="alert">{{ __('settings.validation_failed') }}</div>
+    @endif
+
     <form method="POST" action="{{ route('settings.update', $group) }}" enctype="multipart/form-data" data-dirty-check novalidate>
         @csrf
         @method('PUT')

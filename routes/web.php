@@ -3,6 +3,7 @@
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BackupController;
+use App\Http\Controllers\BrandingImageController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegrationController;
@@ -25,6 +26,10 @@ use App\Http\Controllers\UserController;
 use App\Http\Middleware\EnsureUserIsActive;
 use App\Http\Middleware\IdleTimeout;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/branding/{filename}', BrandingImageController::class)
+    ->where('filename', '[A-Za-z0-9_-]+\.(?:png|jpe?g|webp)')
+    ->name('branding.show');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [LoginController::class, 'create'])->name('login');

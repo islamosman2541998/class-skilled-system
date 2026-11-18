@@ -65,7 +65,7 @@
                 <x-field :name="$field" :label="__($label)" :hint="__('settings.company.image_hint')">
                     @if ($settings->{$property})
                         <div class="image-current">
-                            <img src="{{ Storage::disk('public')->url($settings->{$property}) }}" alt="">
+                            <img src="{{ route('branding.show', ['filename' => basename($settings->{$property})]) }}" alt="">
                             <div class="form-check">
                                 <input class="form-check-input" type="checkbox" name="remove_{{ $field }}" value="1" id="remove_{{ $field }}">
                                 <label class="form-check-label" for="remove_{{ $field }}">{{ __('settings.company.remove_image') }}</label>

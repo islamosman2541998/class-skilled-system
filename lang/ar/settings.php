@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'validation_failed' => 'لم تُحفظ التغييرات. راجع الأخطاء الموضحة في الحقول.',
     'settings' => 'الإعدادات',
     'lists_title' => 'القوائم',
     'lists' => [
@@ -78,6 +79,7 @@ return [
         'stamp' => 'الختم',
         'signature' => 'التوقيع',
         'image_hint' => 'PNG أو JPG أو WebP، حتى 2 ميجابايت.',
+        'upload_failed' => 'تعذر حفظ الصورة. تحقق من صلاحيات مجلد التخزين ثم حاول مجددًا.',
         'remove_image' => 'حذف الصورة الحالية',
     ],
     'appearance' => [

@@ -71,8 +71,8 @@ php artisan app:install
 links `public/storage`, and caches config, routes and views. Running it again is safe: nothing is duplicated and
 the administrator's password is never replaced. After the first sign-in, remove `ADMIN_PASSWORD` from `.env`.
 
-If the host refuses symbolic links, `app:install` says so. Then copy `storage/app/public` into `public/storage`
-after each upload of branding images, or ask the host to allow `storage:link`.
+If the host refuses symbolic links, `app:install` says so. Company branding images are served by the application
+without the link. Other public storage files may still need `public/storage`; ask the host to allow `storage:link`.
 
 ## 4. Folders that must be writable
 

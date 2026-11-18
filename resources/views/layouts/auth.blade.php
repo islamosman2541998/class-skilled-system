@@ -13,7 +13,7 @@
         <div class="auth-card">
             <div class="auth-brand">
                 @if ($logo)
-                    <img src="{{ Storage::disk('public')->url($logo) }}" alt="">
+                    <img src="{{ route('branding.show', ['filename' => basename($logo)]) }}" alt="">
                 @else
                     <span class="brand-mark" aria-hidden="true">{{ __('app.brand_mark') }}</span>
                 @endif
