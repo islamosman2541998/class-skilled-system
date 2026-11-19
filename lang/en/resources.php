@@ -84,6 +84,8 @@ return [
         'edit' => 'Edit subcontract',
         'number' => 'Number',
         'subcontractor' => 'Subcontractor',
+        'subcontractor_hint' => 'Only active records with the subcontractor type appear here.',
+        'add_subcontractor' => 'Add subcontractor',
         'project' => 'Project',
         'scope' => 'Scope of work',
         'value' => 'Value before VAT',

@@ -20,13 +20,17 @@
 
         <x-panel :title="__('resources.subcontracts.subcontract')">
             <div class="form-grid">
-                <x-field name="supplier_id" :label="__('resources.subcontracts.subcontractor')" required>
-                    <select id="supplier_id" name="supplier_id" class="form-select" data-select required>
+                <x-field name="supplier_id" :label="__('resources.subcontracts.subcontractor')" :hint="__('resources.subcontracts.subcontractor_hint')" required>
+                    <select id="supplier_id" name="supplier_id" class="form-select" data-select
+                        data-remote="{{ route('suppliers.options', ['type' => 'subcontractor']) }}" required>
                         <option value=""></option>
                         @foreach ($suppliers as $supplier)
                             <option value="{{ $supplier->id }}" @selected((int) old('supplier_id', $subcontract->supplier_id) === $supplier->id)>{{ $supplier->name }}</option>
                         @endforeach
                     </select>
+                    @can('suppliers.create')
+                        <a href="{{ route('suppliers.create', ['type' => 'subcontractor']) }}" class="form-text d-inline-block" target="_blank" rel="noopener">{{ __('resources.subcontracts.add_subcontractor') }}</a>
+                    @endcan
                 </x-field>
                 <x-field name="project_id" :label="__('resources.subcontracts.project')" required>
                     <select id="project_id" name="project_id" class="form-select" data-select required>
@@ -99,7 +103,11 @@
 
             form.addEventListener('click', (event) => {
                 if (event.target.closest('[data-row-add]')) {
-                    rows.insertAdjacentHTML('beforeend', form.querySelector('template[data-row-template]').innerHTML.replaceAll('__I__', String(next++)));
+                    const holder = document.createElement('div');
+                    holder.innerHTML = form.querySelector('template[data-row-template]').innerHTML.replaceAll('__I__', String(next++));
+                    const row = holder.firstElementChild;
+                    rows.append(row);
+                    window.initUi?.(row);
                 }
                 const remove = event.target.closest('[data-row-remove]');
                 if (remove) remove.closest('[data-repeater-row]').remove();

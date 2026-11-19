@@ -1,12 +1,18 @@
 @php($billed = (bool) ($payment['billed'] ?? false))
-<div class="repeater-row" data-repeater-row>
+<div class="repeater-row subcontract-payment-row" data-repeater-row>
     @if (! empty($payment['id']))
         <input type="hidden" name="payments[{{ $i }}][id]" value="{{ $payment['id'] }}">
     @endif
-    <div class="form-grid v-item">
-        <input name="payments[{{ $i }}][label_ar]" value="{{ $payment['label_ar'] ?? '' }}" class="form-control" placeholder="{{ __('resources.subcontracts.payment_label') }}" aria-label="{{ __('resources.subcontracts.payment_label') }}" maxlength="190" required @readonly($billed)>
-        <input name="payments[{{ $i }}][amount]" value="{{ $payment['amount'] ?? '' }}" class="form-control text-end" placeholder="{{ __('resources.subcontracts.amount') }}" aria-label="{{ __('resources.subcontracts.amount') }}" dir="ltr" inputmode="decimal" required @readonly($billed)>
-        <input name="payments[{{ $i }}][due_date]" value="{{ $payment['due_date'] ?? '' }}" class="form-control" aria-label="{{ __('resources.subcontracts.due_date') }}" data-date dir="ltr">
+    <div class="subcontract-payment-grid">
+        <x-field name="payments[{{ $i }}][label_ar]" :label="__('resources.subcontracts.payment_label')" for="payment-label-{{ $i }}" required>
+            <input id="payment-label-{{ $i }}" name="payments[{{ $i }}][label_ar]" value="{{ $payment['label_ar'] ?? '' }}" class="form-control" maxlength="190" required @readonly($billed)>
+        </x-field>
+        <x-field name="payments[{{ $i }}][amount]" :label="__('resources.subcontracts.amount')" for="payment-amount-{{ $i }}" required>
+            <input id="payment-amount-{{ $i }}" name="payments[{{ $i }}][amount]" value="{{ $payment['amount'] ?? '' }}" class="form-control text-end" dir="ltr" inputmode="decimal" required @readonly($billed)>
+        </x-field>
+        <x-field name="payments[{{ $i }}][due_date]" :label="__('resources.subcontracts.due_date')" for="payment-due-date-{{ $i }}">
+            <input id="payment-due-date-{{ $i }}" name="payments[{{ $i }}][due_date]" value="{{ $payment['due_date'] ?? '' }}" class="form-control" data-date dir="ltr">
+        </x-field>
         @if ($billed)
             <span class="text-muted small">{{ __('resources.subcontracts.billed_line') }}</span>
         @endif

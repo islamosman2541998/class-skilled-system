@@ -236,6 +236,24 @@
     }
 }
 
+.subcontract-payment-grid {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) minmax(160px, .45fr) minmax(160px, .45fr);
+    gap: .75rem;
+    flex: 1;
+}
+
+.subcontract-payment-row > .btn-icon {
+    flex: 0 0 auto;
+    margin-block-start: 1.75rem;
+}
+
+@media (max-width: 767.98px) {
+    .subcontract-payment-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 .contact-list {
     margin: 0;
     padding: 0;

@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Route;
 | Included from routes/web.php inside the authenticated group.
 */
 
+Route::get('/suppliers/options', [SupplierController::class, 'options'])->name('suppliers.options');
 Route::resource('suppliers', SupplierController::class)->except(['destroy']);
 Route::post('/suppliers/{supplier}/attachments', [SupplierController::class, 'attach'])->name('suppliers.attachments.store');
 Route::get('/suppliers/{supplier}/statement/pdf', [SupplierStatementController::class, 'pdf'])->name('suppliers.statement.pdf');

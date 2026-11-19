@@ -15,7 +15,7 @@ use function Pest\Laravel\actingAs;
 beforeEach(function () {
     Carbon::setTestNow('2026-11-16 10:00');
     $this->seed([LookupSeeder::class, DocumentSequenceSeeder::class]);
-    $this->user = scopedUser(['projects.view', 'suppliers.view', 'subcontracts.view', 'subcontracts.create', 'subcontracts.update', 'purchases.view', 'purchases.create']);
+    $this->user = scopedUser(['projects.view', 'suppliers.view', 'suppliers.create', 'subcontracts.view', 'subcontracts.create', 'subcontracts.update', 'purchases.view', 'purchases.create']);
     $this->project = Project::factory()->create();
     $this->sub = Supplier::factory()->subcontractor()->create(['name_ar' => 'مقاولات الريم للجبس']);
 });
@@ -58,6 +58,25 @@ it('refuses payment lines above the value and a supplier that is not a subcontra
     actingAs($this->user)->post(route('subcontracts.store'), subcontractPayload(['supplier_id' => Supplier::factory()->create()->id]))->assertSessionHasErrors('supplier_id');
 
     expect(Subcontract::query()->count())->toBe(0);
+});
+
+it('searches active subcontractors and renders labelled payment fields', function () {
+    Supplier::factory()->create(['name_ar' => 'مورد الريم']);
+    Supplier::factory()->subcontractor()->create(['name_ar' => 'مقاولات الريم الموقوفة', 'is_active' => false]);
+
+    actingAs($this->user)->getJson(route('suppliers.options', ['type' => 'subcontractor', 'q' => 'الريم']))
+        ->assertOk()
+        ->assertJsonCount(1)
+        ->assertJsonPath('0.text', 'مقاولات الريم للجبس');
+
+    actingAs($this->user)->get(route('subcontracts.create'))
+        ->assertOk()
+        ->assertSee(route('suppliers.options', ['type' => 'subcontractor']), false)
+        ->assertSee(route('suppliers.create', ['type' => 'subcontractor']), false)
+        ->assertSee('subcontract-payment-grid', false)
+        ->assertSee(__('resources.subcontracts.payment_label'))
+        ->assertSee(__('resources.subcontracts.amount'))
+        ->assertSee(__('resources.subcontracts.due_date'));
 });
 
 it('billing a line creates one purchase invoice and a second click returns it', function () {

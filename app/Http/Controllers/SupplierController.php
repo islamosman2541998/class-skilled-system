@@ -9,7 +9,9 @@ use App\Http\Requests\SaveSupplierRequest;
 use App\Http\Requests\StoreAttachmentsRequest;
 use App\Models\Lookup;
 use App\Models\Supplier;
+use App\Support\Like;
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -56,6 +58,24 @@ class SupplierController extends Controller
         Gate::authorize('suppliers.create');
 
         return $this->form(new Supplier(['type' => $request->query('type') === 'subcontractor' ? SupplierType::Subcontractor : SupplierType::Supplier, 'is_active' => true]));
+    }
+
+    /** Options for searchable supplier and subcontractor fields: [{value, text}]. */
+    public function options(Request $request): JsonResponse
+    {
+        abort_unless($request->user()->can('suppliers.view') || $request->user()->can('purchases.create')
+            || $request->user()->can('subcontracts.create') || $request->user()->can('payment_vouchers.create'), 403);
+
+        $type = SupplierType::tryFrom((string) $request->query('type'));
+        $term = trim((string) $request->query('q', ''));
+        $query = Supplier::query()->where('is_active', true)->when($type, fn ($query) => $query->where('type', $type->value));
+
+        if ($term !== '') {
+            Like::any($query, ['name_ar', 'name_en', 'phone'], $term);
+        }
+
+        return response()->json($query->orderBy('name_ar')->limit(20)->get()
+            ->map(fn (Supplier $supplier) => ['value' => $supplier->id, 'text' => $supplier->name])->values());
     }
 
     public function store(SaveSupplierRequest $request): RedirectResponse
