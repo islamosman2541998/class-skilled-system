@@ -5,6 +5,7 @@ use App\Enums\ReceiptStatus;
 use App\Livewire\Tables\InvoicesTable;
 use App\Livewire\Tables\LeadsTable;
 use App\Livewire\Tables\Reports\InstallmentsReport;
+use App\Models\DashboardPreference;
 use App\Models\Expense;
 use App\Models\Invoice;
 use App\Models\Lead;
@@ -134,4 +135,40 @@ it('chart has six months of revenue and cost', function () {
         ->and(array_column($chart, 'month'))->toBe(['2026-06', '2026-07', '2026-08', '2026-09', '2026-10', '2026-11'])
         ->and($chart[0]['cost'])->toBe('400.00')
         ->and($chart[5]['revenue'])->toBe('1000.00');
+});
+
+it('shows project and sales charts with data allowed by permissions', function () {
+    $user = ($this->management)();
+    Project::factory()->count(2)->create(['status' => 'in_progress']);
+    Project::factory()->create(['status' => 'completed']);
+    Lead::factory()->count(3)->create([
+        'assigned_to' => $user->id,
+        'created_at' => '2026-11-10 09:00:00',
+    ]);
+
+    $response = actingAs($user)->get(route('home'))->assertOk()
+        ->assertSee('donut-chart', false)
+        ->assertSee('horizontal-chart', false);
+    $charts = $response->viewData('charts');
+
+    expect($charts)->toHaveKeys(['revenue_cost', 'project_status', 'sales_pipeline'])
+        ->and(collect($charts['project_status']['data'])->sum('value'))->toBe(3)
+        ->and(collect($charts['sales_pipeline']['data'])->sum('value'))->toBe(3);
+});
+
+it('stores each user chart visibility preferences', function () {
+    $user = ($this->management)();
+
+    actingAs($user)->put(route('dashboard.widgets.update'), [
+        'visible_widgets' => ['project_status'],
+        'from' => '2026-11-01',
+        'to' => '2026-11-30',
+    ])->assertRedirect(route('home', ['from' => '2026-11-01', 'to' => '2026-11-30']));
+
+    expect(DashboardPreference::query()->where('user_id', $user->id)->first()->hidden_widgets)
+        ->toEqualCanonicalizing(['revenue_cost', 'sales_pipeline']);
+
+    $response = $this->get(route('home'))->assertOk();
+    expect(array_keys($response->viewData('charts')))->toBe(['project_status'])
+        ->and($response->viewData('chart'))->toBeNull();
 });

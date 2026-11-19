@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DashboardPreference;
 use App\Services\Dashboard\DashboardRegistry;
 use App\Services\Dashboard\Period;
 use App\Services\Dashboard\Widgets;
@@ -25,11 +26,19 @@ class HomeController extends Controller
 
         $figures = DashboardRegistry::for($user, $period);
         uksort($figures, fn (string $a, string $b) => self::rank($a) <=> self::rank($b));
+        $chartOptions = Widgets::available($user);
+        $hiddenCharts = DashboardPreference::query()
+            ->where('user_id', $user->id)
+            ->first()?->hidden_widgets ?? [];
+        $charts = Widgets::for($user, $period, $hiddenCharts);
 
         return view('home', [
             'period' => $period,
             'figures' => $figures,
-            'chart' => $user->can('finance.profitability') ? Widgets::revenueVsCost($user, $period) : null,
+            'chartOptions' => $chartOptions,
+            'hiddenCharts' => $hiddenCharts,
+            'charts' => $charts,
+            'chart' => $charts['revenue_cost']['data'] ?? null,
             'notifications' => $user->unreadNotifications()->latest()->limit(10)->get(),
             'activities' => Activity::query()
                 ->where('causer_type', $user->getMorphClass())

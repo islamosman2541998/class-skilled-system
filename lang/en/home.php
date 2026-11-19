@@ -42,4 +42,25 @@ return [
     'cost' => 'Cost before VAT',
     'show_table' => 'Show as table',
     'month' => 'Month',
+    'analytics' => 'Visual analytics',
+    'analytics_hint' => 'A quick view of the most important trends and distributions.',
+    'customize_charts' => 'Customize charts',
+    'customize_charts_hint' => 'Choose the charts you want to see on your dashboard.',
+    'save_charts' => 'Save display',
+    'widgets_saved' => 'Dashboard charts updated.',
+    'projects_total' => 'Projects',
+    'charts' => [
+        'revenue_cost' => [
+            'title' => 'Revenue and cost trend',
+            'description' => 'A six-month comparison of invoiced revenue and recorded costs before VAT.',
+        ],
+        'project_status' => [
+            'title' => 'Project status distribution',
+            'description' => 'The current distribution of the projects you can access.',
+        ],
+        'sales_pipeline' => [
+            'title' => 'Request pipeline',
+            'description' => 'Requests created during the selected period, grouped by status.',
+        ],
+    ],
 ];

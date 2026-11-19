@@ -4,6 +4,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\BackupController;
 use App\Http\Controllers\BrandingImageController;
+use App\Http\Controllers\DashboardWidgetController;
 use App\Http\Controllers\DesignController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\IntegrationController;
@@ -46,6 +47,7 @@ Route::middleware(['auth', EnsureUserIsActive::class, IdleTimeout::class])->grou
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::get('/', HomeController::class)->name('home');
+    Route::put('/dashboard/widgets', DashboardWidgetController::class)->name('dashboard.widgets.update');
     Route::post('/locale/{locale}', LocaleController::class)->whereIn('locale', ['ar', 'en'])->name('locale.switch');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -31,7 +31,7 @@ const OPEN_ROUTE_PREFIXES = ['login', 'logout', 'public.', 'livewire.', 'default
 
 /** Routes every signed-in user may open: their own home, profile, notifications, search, language. */
 const SIGNED_IN_ROUTES = [
-    'home', 'profile.edit', 'profile.update', 'profile.password', 'notifications.index', 'notifications.latest', 'notifications.read-all',
+    'home', 'dashboard.widgets.update', 'profile.edit', 'profile.update', 'profile.password', 'notifications.index', 'notifications.latest', 'notifications.read-all',
     'notifications.read', 'search', 'locale.switch', 'uploads.store', 'uploads.patch', 'uploads.head', 'uploads.destroy',
     'tables.preferences', 'tables.filters.store', 'tables.filters.destroy',
 ];
