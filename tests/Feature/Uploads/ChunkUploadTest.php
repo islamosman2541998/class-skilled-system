@@ -125,6 +125,24 @@ it('stores a small file sent whole', function () {
     expect($upload->isComplete())->toBeTrue()->and($upload->name())->toBe('receipt.jpg')->and($upload->ownerId())->toBe($user->id);
 });
 
+it('stores a whole file sent with the uploader input name', function () {
+    $user = userWith();
+    actingAs($user);
+
+    $file = UploadedFile::fake()->createWithContent('مخطط.pdf', "%PDF-1.4\n%%EOF");
+    $response = $this->post('/uploads', ['uploads' => [$file]], [
+        'Upload-Length' => $file->getSize(),
+        'Upload-Name' => rawurlencode($file->getClientOriginalName()),
+    ]);
+    $response->assertOk();
+
+    $upload = TemporaryUpload::find(trim($response->getContent()));
+
+    expect($upload->isComplete())->toBeTrue()
+        ->and($upload->name())->toBe('مخطط.pdf')
+        ->and($upload->ownerId())->toBe($user->id);
+});
+
 it('reverts a transfer', function () {
     actingAs(userWith());
     $id = startTransfer($this, 10);

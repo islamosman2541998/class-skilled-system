@@ -22,6 +22,15 @@ class UploadController extends Controller
     {
         $file = $request->file('filepond');
 
+        // FilePond uses the original input name for non-chunked uploads (for example
+        // "uploads[]"), while chunked uploads start with headers only. Accept the
+        // single uploaded file regardless of that form field name.
+        if (! $file instanceof UploadedFile) {
+            $file = collect($request->allFiles())
+                ->flatten()
+                ->first(fn (mixed $value) => $value instanceof UploadedFile);
+        }
+
         if ($file instanceof UploadedFile) {
             return $this->storeWhole($request, $file);
         }
