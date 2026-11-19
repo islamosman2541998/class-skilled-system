@@ -20,7 +20,7 @@ class Menu
         'admin' => 'menu.admin',
     ];
 
-    /** @var array<string, list<array{label: string, icon: string, route: string, permission: ?string, params?: array<string, mixed>}>> */
+    /** @var array<string, list<array{label: string, icon: string, route: string, permission: ?string, params?: array<string, mixed>, active_routes?: string|list<string>}>> */
     private static array $items = [
         'main' => [
             ['label' => 'app.home', 'icon' => 'home', 'route' => 'home', 'permission' => null],
@@ -28,7 +28,7 @@ class Menu
     ];
 
     /**
-     * @param  array{label: string, icon: string, route: string, permission?: ?string, params?: array<string, mixed>}  $item
+     * @param  array{label: string, icon: string, route: string, permission?: ?string, params?: array<string, mixed>, active_routes?: string|list<string>}  $item
      */
     public static function register(string $group, array $item): void
     {
@@ -85,6 +85,10 @@ class Menu
 
         if ($item['route'] === 'home') {
             return $request->routeIs('home');
+        }
+
+        if (isset($item['active_routes'])) {
+            return $request->routeIs(...(array) $item['active_routes']);
         }
 
         // A section stays highlighted on all of its pages (index, create, edit, other lists).

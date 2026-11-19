@@ -68,8 +68,20 @@ class FinanceServiceProvider extends ServiceProvider
 
         Menu::register('finance', ['label' => 'finance.invoices.invoices', 'icon' => 'file-invoice', 'route' => 'invoices.index', 'permission' => 'invoices.view']);
         Menu::register('finance', ['label' => 'finance.receipts.receipts', 'icon' => 'cash', 'route' => 'receipts.index', 'permission' => 'receipts.view']);
-        Menu::register('finance', ['label' => 'finance.expenses.expenses', 'icon' => 'receipt', 'route' => 'expenses.index', 'permission' => 'expenses.view']);
-        Menu::register('finance', ['label' => 'finance.expenses.quick', 'icon' => 'camera', 'route' => 'expenses.quick', 'permission' => 'expenses.create']);
+        Menu::register('finance', [
+            'label' => 'finance.expenses.expenses',
+            'icon' => 'receipt',
+            'route' => 'expenses.index',
+            'permission' => 'expenses.view',
+            'active_routes' => ['expenses.index', 'expenses.create', 'expenses.show', 'expenses.edit'],
+        ]);
+        Menu::register('finance', [
+            'label' => 'finance.expenses.quick',
+            'icon' => 'camera',
+            'route' => 'expenses.quick',
+            'permission' => 'expenses.create',
+            'active_routes' => 'expenses.quick',
+        ]);
         Menu::register('finance', ['label' => 'reports.reports', 'icon' => 'chart-bar', 'route' => 'reports.index', 'permission' => 'reports.view']);
         TrashRegistry::register(Invoice::class);
         TrashRegistry::register(Expense::class);

@@ -56,6 +56,16 @@ it('pays two purchase invoices partly and fully and their statuses follow', func
     actingAs($this->user)->get(route('payment-vouchers.show', $voucher))->assertOk()->assertSee($this->first->number);
 });
 
+it('renders the payment vouchers list with allocated totals', function () {
+    actingAs($this->user)->post(route('payment-vouchers.store'), voucherPayload(['allocations' => [
+        $this->first->id => '1050', $this->second->id => '950',
+    ]]))->assertRedirect();
+
+    actingAs($this->user)->get(route('payment-vouchers.index'))
+        ->assertOk()
+        ->assertSee('PV-2026-0001');
+});
+
 it('refuses more than an invoice remaining or the voucher amount', function () {
     actingAs($this->user)->post(route('payment-vouchers.store'), voucherPayload(['allocations' => [$this->first->id => '1100']]))
         ->assertSessionHasErrors('allocations');

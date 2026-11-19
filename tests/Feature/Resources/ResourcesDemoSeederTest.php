@@ -70,7 +70,9 @@ it('seeds resources demo data that renders every resources page', function () {
 
     $project = Attendance::query()->firstOrFail()->project;
     foreach (['purchases', 'resources'] as $tab) {
-        $this->get(route('projects.show', [$project, 'tab' => $tab]))->assertOk();
+        $this->get(route('projects.show', [$project, 'tab' => $tab]))
+            ->assertOk()
+            ->assertDontSee('projects.tabs.', false);
     }
 });
 

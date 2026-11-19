@@ -103,6 +103,18 @@ it('engineer adds a quick expense with a photo to own project only', function ()
     actingAs($engineer)->post(route('expenses.quick.store'), ['project_id' => $this->project->id, 'category_id' => $this->category, 'amount' => '50'])->assertSessionHasErrors('project_id');
 });
 
+it('highlights only the current expense sidebar item', function () {
+    actingAs($this->user)->get(route('expenses.index'))
+        ->assertOk()
+        ->assertSee('href="'.route('expenses.index').'" class="side-link is-active"', false)
+        ->assertDontSee('href="'.route('expenses.quick').'" class="side-link is-active"', false);
+
+    actingAs($this->user)->get(route('expenses.quick'))
+        ->assertOk()
+        ->assertSee('href="'.route('expenses.quick').'" class="side-link is-active"', false)
+        ->assertDontSee('href="'.route('expenses.index').'" class="side-link is-active"', false);
+});
+
 it('deleting an expense lowers cost_total and restoring raises it', function () {
     actingAs($this->user)->post(route('expenses.store'), ($this->payload)());
     $expense = Expense::query()->firstOrFail();

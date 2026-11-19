@@ -327,7 +327,8 @@ abstract class DataTable extends Component
             return [];
         }
 
-        $query = $this->filteredQuery()->reorder()->toBase();
+        $filtered = $this->filteredQuery()->reorder()->toBase();
+        $query = $filtered->newQuery()->fromSub($filtered, 'table_totals');
         $grammar = $query->getGrammar();
         $selects = [];
 

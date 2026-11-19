@@ -139,3 +139,22 @@ it('a deleted bill frees its line to be billed again', function () {
         ->and(Purchase::query()->count())->toBe(1)
         ->and($this->project->fresh()->cost_total)->toBe('6000.00');
 });
+
+it('renders the subcontract list and project tab with calculated totals', function () {
+    actingAs($this->user)->post(route('subcontracts.store'), subcontractPayload())->assertRedirect();
+
+    actingAs($this->user)->get(route('subcontracts.index'))
+        ->assertOk()
+        ->assertSee('SC-2026-0001');
+
+    actingAs($this->user)
+        ->get(route('projects.show', [$this->project, 'tab' => 'purchases']))
+        ->assertOk()
+        ->assertSee(__('projects.tabs.purchases'))
+        ->assertDontSee('projects.tabs.', false);
+
+    foreach (['daily_reports', 'claims', 'purchases', 'resources'] as $tab) {
+        expect(__('projects.tabs.'.$tab, [], 'ar'))->not->toBe('projects.tabs.'.$tab)
+            ->and(__('projects.tabs.'.$tab, [], 'en'))->not->toBe('projects.tabs.'.$tab);
+    }
+});
