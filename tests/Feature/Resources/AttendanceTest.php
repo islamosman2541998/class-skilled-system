@@ -72,6 +72,21 @@ it('blank status removes the row', function () {
     expect(Attendance::query()->count())->toBe(0)->and($this->project->fresh()->cost_total)->toBe('0.00');
 });
 
+it('renders the saved attendance status as selected', function () {
+    $worker = $this->workers->first();
+    actingAs($this->engineer)->post(route('attendance.store'), [
+        'project_id' => $this->project->id,
+        'work_date' => '2026-11-15',
+        'rows' => sheet([$worker->id => ['half']]),
+    ]);
+
+    actingAs($this->engineer)
+        ->get(route('attendance.sheet', ['project' => $this->project->id, 'date' => '2026-11-15']))
+        ->assertOk()
+        ->assertSee('class="btn-group attendance-status-options"', false)
+        ->assertSee('value="half" checked', false);
+});
+
 it('a later wage change does not change past cost', function () {
     $worker = $this->workers->first();
     actingAs($this->engineer)->post(route('attendance.store'), ['project_id' => $this->project->id, 'work_date' => '2026-11-15', 'rows' => sheet([$worker->id => ['present']])]);

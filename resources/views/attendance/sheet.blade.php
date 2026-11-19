@@ -49,7 +49,7 @@
                             @error("rows.{$worker->id}")<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
                         </div>
                         @unless ($elsewhere)
-                            <div class="btn-group" role="group" aria-label="{{ __('resources.attendance.status') }} {{ $worker->name }}">
+                            <div class="btn-group attendance-status-options" role="group" aria-label="{{ __('resources.attendance.status') }} {{ $worker->name }}">
                                 @foreach (['present', 'half', 'absent', ''] as $value)
                                     <input type="radio" class="btn-check" name="rows[{{ $worker->id }}][status]" id="st-{{ $worker->id }}-{{ $value ?: 'none' }}" value="{{ $value }}" @checked((string) $status === $value)>
                                     <label class="btn btn-outline" for="st-{{ $worker->id }}-{{ $value ?: 'none' }}">{{ $value === '' ? __('resources.attendance.none') : __('resources.attendance.statuses.'.$value) }}</label>
