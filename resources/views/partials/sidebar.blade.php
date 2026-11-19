@@ -5,9 +5,7 @@
 <aside class="app-sidebar" id="app-sidebar">
     <a @class(['sidebar-brand', 'has-logo' => $company->logo_path]) href="{{ route('home') }}">
         @if ($company->logo_path)
-            <span class="sidebar-logo-frame">
-                <img src="{{ route('branding.show', ['filename' => basename($company->logo_path)]) }}" alt="{{ $companyName }}">
-            </span>
+            <img src="{{ route('branding.show', ['filename' => basename($company->logo_path)]) }}" alt="{{ $companyName }}">
         @else
             <span class="brand-mark" aria-hidden="true">{{ __('app.brand_mark') }}</span>
             <span class="brand-name">{{ $companyName }}</span>
